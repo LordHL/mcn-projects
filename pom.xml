@@ -127,19 +127,7 @@
     </build>
 
 
-    <distributionManagement>
-        <repository>
-            <id>user-release</id>
-            <name>User Project Release</name>
-            <url>http://hiekn.hiekn.com:19162/nexus/content/repositories/releases/</url>
-        </repository>
 
-        <snapshotRepository>
-            <id>user-snapshots</id>
-            <name>User Project SNAPSHOTS</name>
-            <url>http://hiekn.hiekn.com:19162/nexus/content/repositories/snapshots/</url>
-        </snapshotRepository>
-    </distributionManagement>
 
 
 
