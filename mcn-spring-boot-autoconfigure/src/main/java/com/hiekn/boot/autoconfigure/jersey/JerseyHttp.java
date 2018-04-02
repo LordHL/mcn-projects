@@ -5,6 +5,8 @@ import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.client.JerseyClient;
 import org.glassfish.jersey.client.JerseyClientBuilder;
+import org.glassfish.jersey.media.multipart.FormDataMultiPart;
+import org.glassfish.jersey.media.multipart.MultiPartFeature;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
@@ -31,7 +33,7 @@ public class JerseyHttp {
         ClientConfig clientConfig = new ClientConfig();
         clientConfig.property(ClientProperties.CONNECT_TIMEOUT, clientProperties.getConnectTimeout())
                 .property(ClientProperties.READ_TIMEOUT, clientProperties.getReadTimeout())
-                .register(JacksonJsonProvider.class);
+                .register(JacksonJsonProvider.class).register(MultiPartFeature.class);
         client = JerseyClientBuilder.createClient(clientConfig);
     }
 
@@ -112,6 +114,32 @@ public class JerseyHttp {
 
     public String sendJsonPost(String url,MultivaluedMap<String,Object> headers, MultivaluedMap<String,Object> query,MultivaluedMap<String,Object> post){
         return sendHttp(url,getDefaultRequestHeader(),query,post,MediaType.APPLICATION_JSON_TYPE,String.class);
+    }
+
+    /**
+     * <p>
+     *     构造FormDataMultiPart
+     *     FormDataMultiPart multipart = new FormDataMultiPart();
+     *     1.以file方式
+     *          multipart.bodyPart(new FileDataBodyPart("fileData", file));
+     *     2.直接以流的方式
+     *          multipart.bodyPart(new StreamDataBodyPart("fileData", MetaBootApplication.class.getClassLoader().getResourceAsStream("logback-spring.xml"),"logback-spring.xml"));
+     *     3.额外的post参数
+     *        multipart.bodyPart(new FormDataBodyPart("param", "param"));
+     * </p>
+     *
+     * @param url
+     * @param query
+     * @param multipart
+     * @return
+     */
+    public String sendUpload(String url, MultivaluedMap<String,Object> query,FormDataMultiPart multipart){
+        return sendUpload(url,getDefaultRequestHeader(),query, multipart);
+    }
+
+    public String sendUpload(String url,MultivaluedMap<String,Object> headers, MultivaluedMap<String,Object> query,FormDataMultiPart multipart){
+        WebTarget webTarget = parseQueryParams(url,query);
+        return webTarget.request().headers(headers).post(Entity.entity(multipart,multipart.getMediaType()),String.class);
     }
 
     private <T> T sendHttp(String url,MultivaluedMap<String,Object> headers, MultivaluedMap<String,Object> query,MultivaluedMap<String,Object> post,final MediaType mediaType,Class<T> cls){
