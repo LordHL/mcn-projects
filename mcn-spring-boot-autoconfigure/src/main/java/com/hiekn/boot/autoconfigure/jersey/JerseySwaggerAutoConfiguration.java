@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 @ConditionalOnMissingBean(
         type = {"org.glassfish.jersey.server.ResourceConfig"}
 )
-@EnableConfigurationProperties({JerseySwaggerProperties.class})
+@EnableConfigurationProperties({JerseySwaggerProperties.class,JerseyClientProperties.class})
 @AutoConfigureBefore(JerseyAutoConfiguration.class)
 public class JerseySwaggerAutoConfiguration extends ResourceConfig {
 
@@ -86,6 +86,13 @@ public class JerseySwaggerAutoConfiguration extends ResourceConfig {
         corsConfiguration.setMaxAge(3600L);
         source.registerCorsConfiguration("/**", corsConfiguration);
         return new CorsFilter(source);
+    }
+
+    @Bean
+    @ConditionalOnClass(JerseyHttp.class)
+    @ConditionalOnMissingBean(name="jerseyHttp")
+    public JerseyHttp jerseyHttp(JerseyClientProperties clientProperties) {
+        return new JerseyHttp(clientProperties);
     }
 
 }
