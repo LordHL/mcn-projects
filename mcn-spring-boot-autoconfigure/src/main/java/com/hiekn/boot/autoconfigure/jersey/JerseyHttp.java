@@ -79,7 +79,7 @@ public class JerseyHttp {
     }
 
     public String sendPost(String url,MultivaluedMap<String,Object> headers,MultivaluedMap<String,Object> query, MultivaluedMap<String, Object> post){
-        return sendPost(url,getDefaultRequestHeader(),query,post,String.class);
+        return sendPost(url,headers,query,post,String.class);
     }
 
     public <T> T sendPost(String url,MultivaluedMap<String,Object> query, MultivaluedMap<String, Object> post,Class<T> cls){
@@ -105,7 +105,7 @@ public class JerseyHttp {
     }
 
     public String sendTextPost(String url,MultivaluedMap<String,Object> headers, MultivaluedMap<String,Object> query,MultivaluedMap<String,Object> post){
-        return sendHttp(url,getDefaultRequestHeader(),query,post,MediaType.TEXT_PLAIN_TYPE,String.class);
+        return sendHttp(url,headers,query,post,MediaType.TEXT_PLAIN_TYPE,String.class);
     }
 
     public String sendJsonPost(String url, MultivaluedMap<String,Object> query,MultivaluedMap<String,Object> post){
@@ -113,7 +113,7 @@ public class JerseyHttp {
     }
 
     public String sendJsonPost(String url,MultivaluedMap<String,Object> headers, MultivaluedMap<String,Object> query,MultivaluedMap<String,Object> post){
-        return sendHttp(url,getDefaultRequestHeader(),query,post,MediaType.APPLICATION_JSON_TYPE,String.class);
+        return sendHttp(url,headers,query,post,MediaType.APPLICATION_JSON_TYPE,String.class);
     }
 
     /**
