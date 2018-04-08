@@ -27,7 +27,7 @@ public class JwtToken {
         this.jwtProperties = jwtProperties;
     }
 
-    public String createToken(Map<String,String> data) {
+    public String createToken(Map<String,Object> data) {
         if(Objects.isNull(data) || data.isEmpty())return null;
         //签发时间
         Date iaDate = new Date();
@@ -40,13 +40,13 @@ public class JwtToken {
         Map<String,Object> map = Maps.newHashMap();
         map.put("alg","HS256");
         map.put("typ","JWT");
-
+        //Integer Double Date Boolean String
         JWTCreator.Builder builder = JWT.create()
                 .withHeader(map)
                 .withExpiresAt(expireDate)
                 .withIssuedAt(iaDate)
                 .withIssuer(jwtProperties.getIssuer());
-        data.forEach((k,v) -> builder.withClaim(k,v));
+        data.forEach((k,v) -> builder.withClaim(k,v.toString()));
         return builder.sign(getAlgorithm());
     }
 
@@ -54,8 +54,12 @@ public class JwtToken {
         Date issuedAt = jwt.getIssuedAt();
         if(System.currentTimeMillis() - issuedAt.getTime() > jwtProperties.getRefreshInterval()){
             Map<String, Claim> claims = jwt.getClaims();
-            Map<String,String> data = Maps.newHashMap();
-            claims.forEach((k,v) -> data.put(k,v.asString()));
+            Map<String,Object> data = Maps.newHashMap();
+            claims.forEach((k,v) -> {
+                if(!"iat".equals(k) && !"exp".equals(k) && !"iss".equals(k)){
+                    data.put(k,v.asString());
+                }
+            });
             return createToken(data);
         }
         return null;
@@ -83,20 +87,31 @@ public class JwtToken {
         return jwt;
     }
 
-
     public Integer getCurrentUserId() {
-        return getClaim("userId").asInt();
+        return getValueByKey("userId",Integer.class);
+    }
+    public Integer getValueAsInt(String key) {
+        return getValueByKey(key,Integer.class);
+    }
+    public Long getValueAsLong(String key) {
+        return getValueByKey(key,Long.class);
+    }
+    public Double getValueAsDouble(String key) {
+        return getValueByKey(key,Double.class);
+    }
+    public Boolean getValueAsBoolean(String key) {
+        return getValueByKey(key,Boolean.class);
     }
 
-    public String getDataByKey(String key) {
-        return getDataByKey(key,String.class);
+    public String getValueByKey(String key) {
+        return getValueByKey(key,String.class);
     }
 
-    public <T> T getDataByKey(String key,Class<T> cls) {
+    private <T> T getValueByKey(String key,Class<T> cls) {
         return getClaim(key).as(cls);
     }
 
-    public Claim getClaim(String key) {
+    private Claim getClaim(String key) {
         return checkToken(getToken()).getClaim(key);
     }
 
