@@ -27,6 +27,12 @@ public class JwtToken {
         this.jwtProperties = jwtProperties;
     }
 
+    public String createToken(Object identifier) {
+        Map<String,Object> data = Maps.newHashMap();
+        data.put("userId",identifier.toString());
+        return createToken(data);
+    }
+
     public String createToken(Map<String,Object> data) {
         if(Objects.isNull(data) || data.isEmpty())return null;
         //签发时间
