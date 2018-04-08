@@ -1,8 +1,10 @@
 package com.hiekn.boot.autoconfigure.jwt;
 
 import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTCreator;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
@@ -15,6 +17,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 
 public class JwtToken {
 
@@ -24,8 +27,8 @@ public class JwtToken {
         this.jwtProperties = jwtProperties;
     }
 
-
-    public String createToken(Integer userId) {
+    public String createToken(Map<String,String> data) {
+        if(Objects.isNull(data) || data.isEmpty())return null;
         //签发时间
         Date iaDate = new Date();
 
@@ -37,19 +40,23 @@ public class JwtToken {
         Map<String,Object> map = Maps.newHashMap();
         map.put("alg","HS256");
         map.put("typ","JWT");
-        return JWT.create()
+
+        JWTCreator.Builder builder = JWT.create()
                 .withHeader(map)
-                .withClaim("userId",userId)
                 .withExpiresAt(expireDate)
                 .withIssuedAt(iaDate)
-                .withIssuer(jwtProperties.getIssuer())
-                .sign(getAlgorithm());
+                .withIssuer(jwtProperties.getIssuer());
+        data.forEach((k,v) -> builder.withClaim(k,v));
+        return builder.sign(getAlgorithm());
     }
 
     private String createNewToken(DecodedJWT jwt) {
         Date issuedAt = jwt.getIssuedAt();
         if(System.currentTimeMillis() - issuedAt.getTime() > jwtProperties.getRefreshInterval()){
-            return createToken(jwt.getClaim("userId").asInt());
+            Map<String, Claim> claims = jwt.getClaims();
+            Map<String,String> data = Maps.newHashMap();
+            claims.forEach((k,v) -> data.put(k,v.asString()));
+            return createToken(data);
         }
         return null;
     }
@@ -78,9 +85,20 @@ public class JwtToken {
 
 
     public Integer getCurrentUserId() {
-        return checkToken(getToken()).getClaim("userId").asInt();
+        return getClaim("userId").asInt();
     }
 
+    public String getDataByKey(String key) {
+        return getDataByKey(key,String.class);
+    }
+
+    public <T> T getDataByKey(String key,Class<T> cls) {
+        return getClaim(key).as(cls);
+    }
+
+    public Claim getClaim(String key) {
+        return checkToken(getToken()).getClaim(key);
+    }
 
     public String getToken(){
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
