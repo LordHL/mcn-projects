@@ -5,35 +5,35 @@
     <groupId>com.hiekn.boot</groupId>
     <artifactId>mcn-projects</artifactId>
     <packaging>pom</packaging>
-    <version>2.1.3</version>
+    <version>${mcn.version}</version>
     <modules>
         <module>mcn-spring-boot-starter</module>
         <module>mcn-spring-boot-autoconfigure</module>
     </modules>
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.5.11.RELEASE</version>
+        <relativePath/>
+    </parent>
+
     <properties>
         <project.build.sourceEncoding>UTF8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
-        <spring-boot.version>1.5.10.RELEASE</spring-boot.version>
         <jersey-swagger.version>1.5.18</jersey-swagger.version>
         <elasticsearch.version>5.5.3</elasticsearch.version>
         <mybatis-spring-boot.version>1.3.2</mybatis-spring-boot.version>
         <guava.version>23.0</guava.version>
         <jwt.version>3.1.0</jwt.version>
+        <mcn.version>2.2.3</mcn.version>
     </properties>
 
     <dependencyManagement>
 
         <dependencies>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-dependencies</artifactId>
-                <version>${spring-boot.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
@@ -68,12 +68,12 @@
             <dependency>
                 <groupId>com.hiekn.boot</groupId>
                 <artifactId>mcn-spring-boot-starter</artifactId>
-                <version>${project.version}</version>
+                <version>${mcn.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.hiekn.boot</groupId>
                 <artifactId>mcn-spring-boot-autoconfigure</artifactId>
-                <version>${project.version}</version>
+                <version>${mcn.version}</version>
             </dependency>
 
             <dependency>
@@ -125,5 +125,7 @@
             </plugins>
         </pluginManagement>
     </build>
+
+
 
 </project>
