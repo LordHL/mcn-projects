@@ -28,7 +28,7 @@ Spring Boot自身继承的可直接查看其pom.xml
 ```
 
 ### 四、案例
-1. 以meta-boot为例
+1. 以[meta-boot](https://github.com/kse-music/meta-boot)为例
 2. 引入mcn-projects作为父依赖
 
 ```
