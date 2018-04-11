@@ -53,7 +53,7 @@
         <!-- 对应的dao接口 -->
         <javaClientGenerator type="XMLMAPPER" targetPackage="com.hiekn.metaboot.dao" targetProject="src/main/java">
             <property name="enableSubPackages" value="true"/>
-            <property name="rootInterface" value="com.hiekn.boot.com.hiekn.boot.autoconfigure.base.mapper.BaseMapper"/>
+            <property name="rootInterface" value="com.hiekn.boot.autoconfigure.base.mapper.BaseMapper"/>
             <property name="repository" value="org.springframework.stereotype.Repository"/>
         </javaClientGenerator>
 
