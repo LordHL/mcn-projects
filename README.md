@@ -244,3 +244,5 @@ jersey.swagger.base-path=${spring.jersey.application-path}
 jersey.swagger.resource-package=${jersey.swagger.base-package}.rest
 ```
 
+### 五、与spring cloud集成
+1. 去掉pom和application.properties注释部分即可，别忘记修改注册中心地址
