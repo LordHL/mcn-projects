@@ -12,9 +12,9 @@
 
         <!-- 这个插件给由MBG生成的Java模型对象增加了equals和hashCode方法 -->
         <!--<plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"/>-->
-        <plugin type="com.hiekn.boot.com.hiekn.boot.autoconfigure.base.plugin.GenerateBaseMapperAndPagePlugin"/>
-        <plugin type="com.hiekn.boot.com.hiekn.boot.autoconfigure.base.plugin.GenerateBaseServiceAndImplementPlugin">
-            <property name="rootInterface" value="com.hiekn.boot.com.hiekn.boot.autoconfigure.base.service.BaseService"/>
+        <plugin type="com.hiekn.boot.autoconfigure.base.plugin.GenerateBaseMapperAndPagePlugin"/>
+        <plugin type="com.hiekn.boot.autoconfigure.base.plugin.GenerateBaseServiceAndImplementPlugin">
+            <property name="rootInterface" value="com.hiekn.boot.autoconfigure.base.service.BaseService"/>
             <property name="service" value="org.springframework.stereotype.Service"/>
             <property name="targetProject" value="src/main/java"/>
             <property name="targetPackage" value="com.hiekn.metaboot.service"/>
