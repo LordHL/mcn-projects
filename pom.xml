@@ -31,6 +31,8 @@
         <guava.version>23.0</guava.version>
         <jwt.version>3.1.0</jwt.version>
         <commons-lang.version>3.7</commons-lang.version>
+        <commons-io.version>2.6</commons-io.version>
+        <fastjson.version>1.2.47</fastjson.version>
     </properties>
 
     <dependencyManagement>
@@ -47,6 +49,11 @@
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
                 <version>${commons-lang.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons-io.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.google.guava</groupId>
@@ -106,6 +113,12 @@
                 <groupId>org.elasticsearch</groupId>
                 <artifactId>elasticsearch</artifactId>
                 <version>${elasticsearch.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>${fastjson.version}</version>
             </dependency>
 
         </dependencies>
