@@ -22,6 +22,8 @@
 6. elasticsearch 5.5.3
 7. mybatis-generator-core 1.3.6
 8. mybatis-spring-boot-starter 1.3.2
+9. commons-io 2.6
+10. fastjson 1.2.47
 
 ```
 Spring Boot自身继承的可直接查看其pom.xml
