@@ -3,15 +3,61 @@
 
 
 ### 二、当前已内置开箱即用的配置
-1. 【**必选**】jersey、jersey-swagger以及jersey-client
+1. jersey、jersey-swagger以及jersey-client
+```
+须引入以下jar：
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-jersey</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>io.swagger</groupId>
+        <artifactId>swagger-jersey2-jaxrs</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>com.hiekn.boot</groupId>
+        <artifactId>mcn-spring-boot-starter</artifactId>
+    </dependency>
+```
 2. elasticsearch client
+```
+须引入以下jar：
+    <dependency>
+        <groupId>org.elasticsearch.client</groupId>
+        <artifactId>transport</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.elasticsearch</groupId>
+        <artifactId>elasticsearch</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>com.hiekn.boot</groupId>
+        <artifactId>mcn-spring-boot-starter</artifactId>
+    </dependency>
+```
 3. jwt
-
+```
+须引入以下jar：
+    <dependency>
+        <groupId>com.auth0</groupId>
+        <artifactId>java-jwt</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>com.hiekn.boot</groupId>
+        <artifactId>mcn-spring-boot-starter</artifactId>
+    </dependency>
+```
 ### 三、内置一个公用的基础模型
 1. 【**建议继承**】BaseMapper
+- 定义通用实体增删改查
 2. 【**建议实现**】BaseService
-3. CacheUtils
-4. Mybatis相关自动生成器MybatisGenUtil
+- 定义通用实体增删改查
+3. 【**建议继承**】BaseServiceImpl
+- 实现通用实体增删改查
+4. CacheUtils
+5. Mybatis相关自动生成器MybatisGenUtil
+- 配置好generator.properties和generatorConfig.xml相关项
+- 执行MybatisGenUtil.genMapperAndXml()
 
 ### 三、内置部分Boot未集成的框架版本
 1. Jdk1.8
