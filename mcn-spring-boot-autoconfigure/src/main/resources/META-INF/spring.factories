@@ -10,4 +10,4 @@ org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   com.hiekn.boot.autoconfigure.elasticsearch.ElasticsearchAutoConfiguration
 
 org.springframework.boot.env.EnvironmentPostProcessor=\
-com.hiekn.boot.autoconfigure.context.McnPropertiesPostProcessor
+  com.hiekn.boot.autoconfigure.context.McnPropertiesPostProcessor
