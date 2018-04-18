@@ -26,7 +26,6 @@ public class McnPropertiesPostProcessor implements EnvironmentPostProcessor,Orde
         source.put("jersey.swagger.base-package",pkg);
         MapPropertySource mapPropertySource = new MapPropertySource("mcn-map",source);
         try {
-            System.out.println(this.getClass().getResource("").getPath());
             String path=this.getClass().getResource("").getPath();
             path=path.replace("file:", "jar:file:");
             path=path.replace("com/hiekn/boot/autoconfigure/context", "META-INF");
