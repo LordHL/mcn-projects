@@ -7,6 +7,7 @@ import io.swagger.jaxrs.listing.ApiListingResource;
 import io.swagger.jaxrs.listing.SwaggerSerializers;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
+import org.springframework.beans.BeanUtils;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -14,16 +15,22 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.jersey.JerseyAutoConfiguration;
 import org.springframework.boot.autoconfigure.jersey.ResourceConfigCustomizer;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.ApplicationContextException;
+import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.GenericTypeResolver;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
+import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 import javax.ws.rs.Path;
+import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -56,7 +63,26 @@ public class JerseySwaggerAutoConfiguration extends ResourceConfig {
                     .collect(Collectors.toSet());
             collect.addAll(Sets.newHashSet(MultiPartFeature.class, JacksonJsonProvider.class));
             registerClasses(collect);
+            //添加异常处理器
+            String classes = jersey.getExceptionHandler();
+            if (StringUtils.hasLength(classes)) {
+                Class<?> cls = getExceptionHandlerClass(classes);
+                registerClasses(cls);
+            }
         };
+    }
+
+    private Class<?> getExceptionHandlerClass(String className) throws LinkageError {
+        try {
+            Class<?> exceptionClass = ClassUtils.forName(className,
+                    ClassUtils.getDefaultClassLoader());
+            Assert.isAssignable(ExceptionMapper.class, exceptionClass);
+            return exceptionClass;
+        }
+        catch (ClassNotFoundException ex) {
+            throw new ApplicationContextException(
+                    "Failed to load exception handler class [" + className + "]", ex);
+        }
     }
 
     @Bean

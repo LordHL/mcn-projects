@@ -3,7 +3,7 @@ package com.hiekn.boot.autoconfigure.jersey;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties(
-        prefix = "jersey.swagger"
+   prefix = "jersey.swagger"
 )
 public class JerseySwaggerProperties {
 
@@ -15,6 +15,8 @@ public class JerseySwaggerProperties {
     private Integer port = 8080;
     private String basePath = "/";
     private String resourcePackage;
+
+    private String exceptionHandler;
 
     public String getBasePackage() {
         return basePackage;
@@ -78,5 +80,13 @@ public class JerseySwaggerProperties {
 
     public void setResourcePackage(String resourcePackage) {
         this.resourcePackage = resourcePackage;
+    }
+
+    public String getExceptionHandler() {
+        return exceptionHandler;
+    }
+
+    public void setExceptionHandler(String exceptionHandler) {
+        this.exceptionHandler = exceptionHandler;
     }
 }
