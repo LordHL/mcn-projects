@@ -15,7 +15,6 @@ import org.springframework.core.io.support.ResourcePropertySource;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Properties;
 
 public class McnPropertiesPostProcessor implements EnvironmentPostProcessor,Ordered {
 
