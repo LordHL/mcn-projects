@@ -22,8 +22,7 @@ import java.util.Map.Entry;
 public class JerseyHttp {
 
     private JerseyClient client;
-    private final String DEFAULT_ACCEPT_CONTENT_TYPE = MediaType.APPLICATION_JSON+";"+MediaType.CHARSET_PARAMETER+"=utf-8";
-    private final String DEFAULT_REQUEST_CONTENT_ENCODE = MediaType.APPLICATION_FORM_URLENCODED+";"+MediaType.CHARSET_PARAMETER+"=utf-8";
+    private JerseyClientProperties clientProperties;
 
     public JerseyHttp(){
         this(new JerseyClientProperties());
@@ -35,11 +34,12 @@ public class JerseyHttp {
                 .property(ClientProperties.READ_TIMEOUT, clientProperties.getReadTimeout())
                 .register(JacksonJsonProvider.class).register(MultiPartFeature.class);
         client = JerseyClientBuilder.createClient(clientConfig);
+        this.clientProperties = clientProperties;
     }
 
     private MultivaluedMap<String,Object> getDefaultRequestHeader(){
         MultivaluedMap<String,Object> headers = new MultivaluedHashMap<>();
-        headers.add("Accept",DEFAULT_ACCEPT_CONTENT_TYPE);
+        headers.add("Accept",clientProperties.getAcceptContentType());
         return headers;
     }
 
@@ -88,7 +88,7 @@ public class JerseyHttp {
 
     public <T> T sendPost(String url,MultivaluedMap<String,Object> headers,MultivaluedMap<String,Object> query, MultivaluedMap<String, Object> post,Class<T> cls){
         WebTarget webTarget = parseQueryParams(url,query);
-        return webTarget.request().headers(headers).post(Entity.entity(parsePostParams(post),DEFAULT_REQUEST_CONTENT_ENCODE),cls);
+        return webTarget.request().headers(headers).post(Entity.entity(parsePostParams(post),clientProperties.getRequestContentEncode()),cls);
     }
 
     public <T> T sendPost(String url,MultivaluedMap<String,Object> query, MultivaluedMap<String, Object> post,GenericType<T> hsp){
@@ -97,7 +97,7 @@ public class JerseyHttp {
 
     public <T> T sendPost(String url,MultivaluedMap<String,Object> headers,MultivaluedMap<String,Object> query, MultivaluedMap<String, Object> post,GenericType<T> hsp){
         WebTarget webTarget = parseQueryParams(url,query);
-        return webTarget.request().headers(headers).post(Entity.entity(parsePostParams(post),DEFAULT_REQUEST_CONTENT_ENCODE),hsp);
+        return webTarget.request().headers(headers).post(Entity.entity(parsePostParams(post),clientProperties.getRequestContentEncode()),hsp);
     }
 
     public String sendTextPost(String url, MultivaluedMap<String,Object> query,MultivaluedMap<String,Object> post){
