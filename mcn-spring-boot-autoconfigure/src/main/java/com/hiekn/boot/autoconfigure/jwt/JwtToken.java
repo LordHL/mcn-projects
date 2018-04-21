@@ -93,8 +93,11 @@ public class JwtToken {
         return jwt;
     }
 
-    public Integer getCurrentUserId() {
-        return getValueByKey("userId",Integer.class);
+    public Integer getUserIdAsInt() {
+        return getValueAsInt("userId");
+    }
+    public String getUserIdAsString() {
+        return getValueByKey("userId");
     }
     public Integer getValueAsInt(String key) {
         return getValueByKey(key,Integer.class);

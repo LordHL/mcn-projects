@@ -17,6 +17,10 @@ public class JerseySwaggerProperties {
     private String resourcePackage;
 
     private String exceptionHandler;
+    /*
+    扫描指定包下的资源并将其注册进jersey
+     */
+    private String otherResourcePackage;
 
     public String getBasePackage() {
         return basePackage;
@@ -88,5 +92,13 @@ public class JerseySwaggerProperties {
 
     public void setExceptionHandler(String exceptionHandler) {
         this.exceptionHandler = exceptionHandler;
+    }
+
+    public String getOtherResourcePackage() {
+        return otherResourcePackage;
+    }
+
+    public void setOtherResourcePackage(String otherResourcePackage) {
+        this.otherResourcePackage = otherResourcePackage;
     }
 }

@@ -58,11 +58,21 @@ public class JerseySwaggerAutoConfiguration extends ResourceConfig {
             ClassPathScanningCandidateComponentProvider scanner = new ClassPathScanningCandidateComponentProvider(false);
             scanner.addIncludeFilter(new AnnotationTypeFilter(Path.class));
             scanner.addIncludeFilter(new AnnotationTypeFilter(Provider.class));
-            Set<Class<?>> collect = scanner.findCandidateComponents(jersey.getBasePackage()).stream()
-                    .map(beanDefinition -> ClassUtils.resolveClassName(beanDefinition.getBeanClassName(), this.getClassLoader()))
-                    .collect(Collectors.toSet());
-            collect.addAll(Sets.newHashSet(MultiPartFeature.class, JacksonJsonProvider.class));
-            registerClasses(collect);
+            String otherResourcePackage = jersey.getOtherResourcePackage();
+            Set<String> packages = Sets.newHashSet(jersey.getBasePackage());
+            if(StringUtils.hasLength(otherResourcePackage)){
+                for (String className : StringUtils.tokenizeToStringArray(otherResourcePackage, ",")) {
+                    packages.add(className);
+                }
+            }
+            for (String pkg : packages) {
+                Set<Class<?>> collect = scanner.findCandidateComponents(pkg).stream()
+                        .map(beanDefinition -> ClassUtils.resolveClassName(beanDefinition.getBeanClassName(), this.getClassLoader()))
+                        .collect(Collectors.toSet());
+                registerClasses(collect);
+            }
+            registerClasses(MultiPartFeature.class, JacksonJsonProvider.class);
+
             //添加异常处理器
             String classes = jersey.getExceptionHandler();
             if (StringUtils.hasLength(classes)) {
