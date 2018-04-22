@@ -19,6 +19,8 @@ public interface ExceptionKeys {
     Integer USER_EXIST_ERROR = 50007;
     Integer UN_LOGIN_ERROR = 50008;
     Integer USER_PWD_ERROR = 50009;
+    Integer INIT_ERROR = 50010;
+    Integer UPLOAD_ERROR = 50011;
     Integer AUTHENTICATION_ERROR = 50012;
     Integer TOKEN_CREATE_ERROR = 50013;
 
