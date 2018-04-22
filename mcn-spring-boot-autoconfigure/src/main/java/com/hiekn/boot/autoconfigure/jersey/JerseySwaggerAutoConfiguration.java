@@ -14,6 +14,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
+import org.glassfish.jersey.server.ServerProperties;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -47,7 +48,7 @@ import java.util.stream.Collectors;
 @ConditionalOnMissingBean(
         type = {"org.glassfish.jersey.server.ResourceConfig"}
 )
-@EnableConfigurationProperties({JerseySwaggerProperties.class,JerseyClientProperties.class})
+@EnableConfigurationProperties({JerseySwaggerProperties.class, JerseyClientProperties.class})
 @AutoConfigureBefore(JerseyAutoConfiguration.class)
 public class JerseySwaggerAutoConfiguration extends ResourceConfig {
 
@@ -65,7 +66,7 @@ public class JerseySwaggerAutoConfiguration extends ResourceConfig {
             scanner.addIncludeFilter(new AnnotationTypeFilter(Provider.class));
             String otherResourcePackage = jersey.getOtherResourcePackage();
             Set<String> packages = Sets.newHashSet(jersey.getBasePackage());
-            if(StringUtils.hasLength(otherResourcePackage)){
+            if (StringUtils.hasLength(otherResourcePackage)) {
                 for (String className : StringUtils.tokenizeToStringArray(otherResourcePackage, ",")) {
                     packages.add(className);
                 }
@@ -74,15 +75,18 @@ public class JerseySwaggerAutoConfiguration extends ResourceConfig {
                 Set<Class<?>> collect = scanner.findCandidateComponents(pkg).stream()
                         .map(beanDefinition -> ClassUtils.resolveClassName(beanDefinition.getBeanClassName(), this.getClassLoader()))
                         .collect(Collectors.toSet());
-                registerClasses(collect);
+                config.registerClasses(collect);
             }
-            registerClasses(MultiPartFeature.class, JacksonJsonProvider.class);
+
+            config.registerClasses(MultiPartFeature.class, JacksonJsonProvider.class)
+                    .property(ServerProperties.BV_SEND_ERROR_IN_RESPONSE, true)
+                    .property(ServerProperties.BV_DISABLE_VALIDATE_ON_EXECUTABLE_OVERRIDE_CHECK, true);
 
             //添加异常处理器
             String classes = jersey.getSingleResource();
             if (StringUtils.hasLength(classes)) {
                 Class<?> cls = getExceptionHandlerClass(classes);
-                registerClasses(cls);
+                config.registerClasses(cls);
             }
         };
     }
@@ -93,10 +97,8 @@ public class JerseySwaggerAutoConfiguration extends ResourceConfig {
                     ClassUtils.getDefaultClassLoader());
             Assert.isAssignable(ExceptionMapper.class, exceptionClass);
             return exceptionClass;
-        }
-        catch (ClassNotFoundException ex) {
-            throw new ApplicationContextException(
-                    "Failed to load exception handler class [" + className + "]", ex);
+        } catch (ClassNotFoundException ex) {
+            throw new ApplicationContextException("Failed to load exception handler class [" + className + "]", ex);
         }
     }
 
@@ -108,7 +110,7 @@ public class JerseySwaggerAutoConfiguration extends ResourceConfig {
         BeanConfig beanConfig = new BeanConfig();
         beanConfig.setVersion(jersey.getVersion());
         beanConfig.setTitle(jersey.getTitle());
-        beanConfig.setHost(jersey.getIp()+":"+jersey.getPort());
+        beanConfig.setHost(jersey.getIp() + ":" + jersey.getPort());
         beanConfig.setBasePath(jersey.getBasePath());
         beanConfig.setResourcePackage(jersey.getResourcePackage());
         beanConfig.setScan();
@@ -131,13 +133,13 @@ public class JerseySwaggerAutoConfiguration extends ResourceConfig {
 
     @Bean
     @ConditionalOnClass(JerseyHttp.class)
-    @ConditionalOnMissingBean(name="jerseyHttp")
+    @ConditionalOnMissingBean(name = "jerseyHttp")
     public JerseyHttp jerseyHttp(JerseyClientProperties clientProperties) {
         return new JerseyHttp(clientProperties);
     }
 
     @Configuration
-    @ConditionalOnMissingBean(type={"javax.ws.rs.ext.ExceptionMapper"})
+    @ConditionalOnMissingBean(type = {"javax.ws.rs.ext.ExceptionMapper"})
     private class ExceptionHandler implements ExceptionMapper<Exception> {
 
         private final Log logger;
@@ -178,7 +180,7 @@ public class JerseySwaggerAutoConfiguration extends ResourceConfig {
 
         @Bean
         public ResourceConfigCustomizer registerExceptionHandler() {
-            return config -> registerClasses(ExceptionHandler.class);
+            return config -> config.registerClasses(ExceptionHandler.class);
         }
     }
 }

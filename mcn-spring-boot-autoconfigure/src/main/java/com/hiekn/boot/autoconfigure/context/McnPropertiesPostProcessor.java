@@ -23,9 +23,7 @@ public class McnPropertiesPostProcessor implements EnvironmentPostProcessor,Orde
         MutablePropertySources propertySources = environment.getPropertySources();
         //add map config
         Map<String, Object> mapProp = Maps.newHashMap();
-        String name = application.getMainApplicationClass().getName();
-        String pkg = name.substring(0,name.lastIndexOf("."));
-        mapProp.put("jersey.swagger.base-package",pkg);
+        mapProp.put("jersey.swagger.base-package",application.getMainApplicationClass().getPackage().getName());
         propertySources.addLast(new MapPropertySource("mcn-map",mapProp));
 
         try {
