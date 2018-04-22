@@ -168,7 +168,7 @@ public class JerseySwaggerAutoConfiguration extends ResourceConfig {
                 }
             }
 
-            errMsg = org.apache.commons.lang3.StringUtils.isBlank(errMsg) ? ErrorMsgUtil.getErrMsg(code) : errMsg;
+            errMsg = StringUtils.hasLength(errMsg) ? errMsg : ErrorMsgUtil.getErrMsg(code);
 
             //只打印业务代码异常栈
             exception.setStackTrace(Lists.newArrayList(exception.getStackTrace()).stream().filter(s -> s.getClassName().contains(jersey.getBasePackage())).collect(Collectors.toList()).toArray(new StackTraceElement[]{}));
