@@ -11,7 +11,7 @@ public class ErrorMsgUtil {
 
     static {
         try {
-            propertiesPropertySource = new PropertiesPropertySource("errMsg",PropertiesLoaderUtils.loadAllProperties("messages_zh_CN.properties"));
+            propertiesPropertySource = new PropertiesPropertySource("errMsg",PropertiesLoaderUtils.loadAllProperties("mcn-error-msg.properties"));
         } catch (IOException e) {
 
         }

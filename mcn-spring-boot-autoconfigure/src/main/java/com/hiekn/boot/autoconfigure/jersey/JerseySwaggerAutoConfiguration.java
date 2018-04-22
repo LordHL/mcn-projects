@@ -140,9 +140,11 @@ public class JerseySwaggerAutoConfiguration extends ResourceConfig {
     @ConditionalOnMissingBean(type={"javax.ws.rs.ext.ExceptionMapper"})
     private class ExceptionHandler implements ExceptionMapper<Exception> {
 
-        private final Log logger = LogFactory.getLog(ExceptionHandler.class);
+        private final Log logger;
 
-        private String basePackage = jersey.getBasePackage();
+        public ExceptionHandler() {
+            logger = LogFactory.getLog(ExceptionHandler.class);
+        }
 
         @Override
         public Response toResponse(Exception exception) {
@@ -169,16 +171,14 @@ public class JerseySwaggerAutoConfiguration extends ResourceConfig {
             errMsg = org.apache.commons.lang3.StringUtils.isBlank(errMsg) ? ErrorMsgUtil.getErrMsg(code) : errMsg;
 
             //只打印业务代码异常栈
-            exception.setStackTrace(Lists.newArrayList(exception.getStackTrace()).stream().filter(s -> s.getClassName().contains(basePackage)).collect(Collectors.toList()).toArray(new StackTraceElement[]{}));
+            exception.setStackTrace(Lists.newArrayList(exception.getStackTrace()).stream().filter(s -> s.getClassName().contains(jersey.getBasePackage())).collect(Collectors.toList()).toArray(new StackTraceElement[]{}));
             logger.error(code, exception);
             return Response.ok(new RestResp<>(code, errMsg)).status(statusCode).build();
         }
 
         @Bean
         public ResourceConfigCustomizer registerExceptionHandler() {
-            return config -> {
-                registerClasses(ExceptionHandler.class);
-            };
+            return config -> registerClasses(ExceptionHandler.class);
         }
     }
 }
