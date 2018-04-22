@@ -65,8 +65,6 @@ public class JerseySwaggerAutoConfiguration extends ResourceConfig {
             scanner.addIncludeFilter(new AnnotationTypeFilter(Provider.class));
             String otherResourcePackage = jersey.getOtherResourcePackage();
             Set<String> packages = Sets.newHashSet(jersey.getBasePackage());
-            System.out.println(isRegistered(ExceptionHandler.class));
-            System.out.println(isRegistered(ExceptionMapper.class));
             if(StringUtils.hasLength(otherResourcePackage)){
                 for (String className : StringUtils.tokenizeToStringArray(otherResourcePackage, ",")) {
                     packages.add(className);
