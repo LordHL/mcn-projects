@@ -10,6 +10,5 @@ public class McnContextInitializer implements ApplicationContextInitializer{
 
     @Override
     public void initialize(ConfigurableApplicationContext configurableApplicationContext) {
-
     }
 }

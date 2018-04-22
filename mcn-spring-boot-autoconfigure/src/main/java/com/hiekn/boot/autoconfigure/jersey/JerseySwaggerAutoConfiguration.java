@@ -1,13 +1,19 @@
 package com.hiekn.boot.autoconfigure.jersey;
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.hiekn.boot.autoconfigure.base.exception.BaseException;
+import com.hiekn.boot.autoconfigure.base.exception.ExceptionKeys;
+import com.hiekn.boot.autoconfigure.base.model.result.RestResp;
+import com.hiekn.boot.autoconfigure.base.util.ErrorMsgUtil;
 import io.swagger.jaxrs.config.BeanConfig;
 import io.swagger.jaxrs.listing.ApiListingResource;
 import io.swagger.jaxrs.listing.SwaggerSerializers;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
-import org.springframework.beans.BeanUtils;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -16,11 +22,9 @@ import org.springframework.boot.autoconfigure.jersey.JerseyAutoConfiguration;
 import org.springframework.boot.autoconfigure.jersey.ResourceConfigCustomizer;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContextException;
-import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.GenericTypeResolver;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
@@ -29,7 +33,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
-import javax.ws.rs.Path;
+import javax.ws.rs.*;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 import java.util.Set;
@@ -60,6 +65,8 @@ public class JerseySwaggerAutoConfiguration extends ResourceConfig {
             scanner.addIncludeFilter(new AnnotationTypeFilter(Provider.class));
             String otherResourcePackage = jersey.getOtherResourcePackage();
             Set<String> packages = Sets.newHashSet(jersey.getBasePackage());
+            System.out.println(isRegistered(ExceptionHandler.class));
+            System.out.println(isRegistered(ExceptionMapper.class));
             if(StringUtils.hasLength(otherResourcePackage)){
                 for (String className : StringUtils.tokenizeToStringArray(otherResourcePackage, ",")) {
                     packages.add(className);
@@ -74,7 +81,7 @@ public class JerseySwaggerAutoConfiguration extends ResourceConfig {
             registerClasses(MultiPartFeature.class, JacksonJsonProvider.class);
 
             //添加异常处理器
-            String classes = jersey.getExceptionHandler();
+            String classes = jersey.getSingleResource();
             if (StringUtils.hasLength(classes)) {
                 Class<?> cls = getExceptionHandlerClass(classes);
                 registerClasses(cls);
@@ -131,4 +138,49 @@ public class JerseySwaggerAutoConfiguration extends ResourceConfig {
         return new JerseyHttp(clientProperties);
     }
 
+    @Configuration
+    @ConditionalOnMissingBean(type={"javax.ws.rs.ext.ExceptionMapper"})
+    private class ExceptionHandler implements ExceptionMapper<Exception> {
+
+        private final Log logger = LogFactory.getLog(ExceptionHandler.class);
+
+        private String basePackage = jersey.getBasePackage();
+
+        @Override
+        public Response toResponse(Exception exception) {
+            Integer code = ExceptionKeys.SERVICE_ERROR;
+            Response.Status statusCode = Response.Status.OK;
+            String errMsg = "";
+
+            if (exception instanceof BaseException) {
+                code = ((BaseException) exception).getCode();
+                errMsg = ((BaseException) exception).getMsg();
+            } else if (exception instanceof WebApplicationException) {
+                code = ExceptionKeys.HTTP_ERROR;
+                if (exception instanceof NotFoundException) {
+                    statusCode = Response.Status.NOT_FOUND;
+                } else if (exception instanceof NotAllowedException) {
+                    statusCode = Response.Status.METHOD_NOT_ALLOWED;
+                } else if (exception instanceof NotAcceptableException) {
+                    statusCode = Response.Status.NOT_ACCEPTABLE;
+                } else if (exception instanceof InternalServerErrorException) {
+                    statusCode = Response.Status.INTERNAL_SERVER_ERROR;
+                }
+            }
+
+            errMsg = org.apache.commons.lang3.StringUtils.isBlank(errMsg) ? ErrorMsgUtil.getErrMsg(code) : errMsg;
+
+            //只打印业务代码异常栈
+            exception.setStackTrace(Lists.newArrayList(exception.getStackTrace()).stream().filter(s -> s.getClassName().contains(basePackage)).collect(Collectors.toList()).toArray(new StackTraceElement[]{}));
+            logger.error(code, exception);
+            return Response.ok(new RestResp<>(code, errMsg)).status(statusCode).build();
+        }
+
+        @Bean
+        public ResourceConfigCustomizer registerExceptionHandler() {
+            return config -> {
+                registerClasses(ExceptionHandler.class);
+            };
+        }
+    }
 }

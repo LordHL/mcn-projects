@@ -15,8 +15,10 @@ public class JerseySwaggerProperties {
     private Integer port = 8080;
     private String basePath = "/";
     private String resourcePackage;
-
-    private String exceptionHandler;
+    /*
+        指定单个资源(全路径)并将其注册进jersey
+     */
+    private String singleResource;
     /*
     扫描指定包下的资源并将其注册进jersey
      */
@@ -86,12 +88,12 @@ public class JerseySwaggerProperties {
         this.resourcePackage = resourcePackage;
     }
 
-    public String getExceptionHandler() {
-        return exceptionHandler;
+    public String getSingleResource() {
+        return singleResource;
     }
 
-    public void setExceptionHandler(String exceptionHandler) {
-        this.exceptionHandler = exceptionHandler;
+    public void setSingleResource(String singleResource) {
+        this.singleResource = singleResource;
     }
 
     public String getOtherResourcePackage() {
