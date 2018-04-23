@@ -2,18 +2,14 @@ package com.hiekn.boot.autoconfigure.base.util;
 
 import com.google.gson.Gson;
 import com.hiekn.boot.autoconfigure.base.exception.JsonException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
 
 import java.lang.reflect.Type;
 
-@Configuration
 public class JsonUtils {
 
     private static Gson gson ;
 
-    @Autowired
-    public void setGson(Gson gson) {
+    public JsonUtils(Gson gson) {
         JsonUtils.gson = gson;
     }
 
