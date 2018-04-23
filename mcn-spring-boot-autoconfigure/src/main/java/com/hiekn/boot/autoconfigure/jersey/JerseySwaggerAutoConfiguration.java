@@ -1,17 +1,12 @@
 package com.hiekn.boot.autoconfigure.jersey;
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.hiekn.boot.autoconfigure.base.exception.BaseException;
-import com.hiekn.boot.autoconfigure.base.exception.ExceptionKeys;
-import com.hiekn.boot.autoconfigure.base.model.result.RestResp;
-import com.hiekn.boot.autoconfigure.base.util.ErrorMsgUtil;
+import com.hiekn.boot.autoconfigure.base.exception.ExceptionHandler;
+import com.hiekn.boot.autoconfigure.base.exception.ValidationExceptionMapper;
 import io.swagger.jaxrs.config.BeanConfig;
 import io.swagger.jaxrs.listing.ApiListingResource;
 import io.swagger.jaxrs.listing.SwaggerSerializers;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.ServerProperties;
@@ -34,8 +29,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.Response;
+import javax.ws.rs.Path;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 import java.util.Set;
@@ -78,7 +72,7 @@ public class JerseySwaggerAutoConfiguration extends ResourceConfig {
                 config.registerClasses(collect);
             }
 
-            config.registerClasses(MultiPartFeature.class, JacksonJsonProvider.class)
+            config.registerClasses(MultiPartFeature.class, JacksonJsonProvider.class,ValidationExceptionMapper.class,ExceptionHandler.class)
                     .property(ServerProperties.BV_SEND_ERROR_IN_RESPONSE, true)
                     .property(ServerProperties.BV_DISABLE_VALIDATE_ON_EXECUTABLE_OVERRIDE_CHECK, true);
 
@@ -137,49 +131,4 @@ public class JerseySwaggerAutoConfiguration extends ResourceConfig {
         return new JerseyHttp(clientProperties);
     }
 
-    @Configuration
-    @ConditionalOnMissingBean(type = {"javax.ws.rs.ext.ExceptionMapper"})
-    private class ExceptionHandler implements ExceptionMapper<Exception> {
-
-        private final Log logger;
-
-        public ExceptionHandler() {
-            logger = LogFactory.getLog(ExceptionHandler.class);
-        }
-
-        @Override
-        public Response toResponse(Exception exception) {
-            Integer code = ExceptionKeys.SERVICE_ERROR;
-            Response.Status statusCode = Response.Status.OK;
-            String errMsg = "";
-
-            if (exception instanceof BaseException) {
-                code = ((BaseException) exception).getCode();
-                errMsg = ((BaseException) exception).getMsg();
-            } else if (exception instanceof WebApplicationException) {
-                code = ExceptionKeys.HTTP_ERROR;
-                if (exception instanceof NotFoundException) {
-                    statusCode = Response.Status.NOT_FOUND;
-                } else if (exception instanceof NotAllowedException) {
-                    statusCode = Response.Status.METHOD_NOT_ALLOWED;
-                } else if (exception instanceof NotAcceptableException) {
-                    statusCode = Response.Status.NOT_ACCEPTABLE;
-                } else if (exception instanceof InternalServerErrorException) {
-                    statusCode = Response.Status.INTERNAL_SERVER_ERROR;
-                }
-            }
-
-            errMsg = StringUtils.hasLength(errMsg) ? errMsg : ErrorMsgUtil.getErrMsg(code);
-
-            //只打印业务代码异常栈
-            exception.setStackTrace(Lists.newArrayList(exception.getStackTrace()).stream().filter(s -> s.getClassName().contains(jersey.getBasePackage())).collect(Collectors.toList()).toArray(new StackTraceElement[]{}));
-            logger.error(code, exception);
-            return Response.ok(new RestResp<>(code, errMsg)).status(statusCode).build();
-        }
-
-        @Bean
-        public ResourceConfigCustomizer registerExceptionHandler() {
-            return config -> config.registerClasses(ExceptionHandler.class);
-        }
-    }
 }
