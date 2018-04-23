@@ -132,7 +132,6 @@ public class JerseySwaggerAutoConfiguration extends ResourceConfig {
     }
 
     @Bean
-    @ConditionalOnClass(JerseyHttp.class)
     @ConditionalOnMissingBean(name = "jerseyHttp")
     public JerseyHttp jerseyHttp(JerseyClientProperties clientProperties) {
         return new JerseyHttp(clientProperties);

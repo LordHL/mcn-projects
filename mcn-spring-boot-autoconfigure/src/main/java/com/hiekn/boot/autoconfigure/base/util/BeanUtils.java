@@ -20,8 +20,7 @@ public class BeanUtils implements ApplicationContextAware,ApplicationListener {
 		return ac.getBean(name);  
 	}  
 	
-	@SuppressWarnings("unchecked")
-	public static  <T> T getBean(String name,Class<T> clazz) {
+	public static <T> T getBean(String name,Class<T> clazz) {
 		checkApplicationContext();  
 		return (T)ac.getBean(name);  
 	} 
@@ -41,7 +40,7 @@ public class BeanUtils implements ApplicationContextAware,ApplicationListener {
 	
 	private static void checkApplicationContext() { 
 		if (ac == null) { 
-			throw new IllegalStateException("applicationContext未注入");
+			throw new IllegalStateException("applicationContext not inject yet");
 		}
 	}
 
