@@ -15,7 +15,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 @Configuration
-@ConditionalOnClass({Client.class})
+@ConditionalOnClass({Client.class,PreBuiltTransportClient.class})
 @ConditionalOnMissingBean(type = {"org.elasticsearch.client.transport.TransportClient"})
 @EnableConfigurationProperties({ElasticsearchProperties.class})
 public class ElasticsearchAutoConfiguration {
