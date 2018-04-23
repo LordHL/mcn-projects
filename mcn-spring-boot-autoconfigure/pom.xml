@@ -12,6 +12,11 @@
     <artifactId>mcn-spring-boot-autoconfigure</artifactId>
 
     <dependencies>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+        </dependency>
+
         <!-- Optional -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
