@@ -29,7 +29,7 @@ public class JwtToken {
 
     public String createToken(Object identifier) {
         Map<String,Object> data = Maps.newHashMap();
-        data.put("userId",identifier.toString());
+        data.put("userId",identifier);
         return createToken(data);
     }
 
@@ -46,14 +46,31 @@ public class JwtToken {
         Map<String,Object> map = Maps.newHashMap();
         map.put("alg","HS256");
         map.put("typ","JWT");
-        //Integer Double Date Boolean String
+
         JWTCreator.Builder builder = JWT.create()
                 .withHeader(map)
                 .withExpiresAt(expireDate)
                 .withIssuedAt(iaDate)
                 .withIssuer(jwtProperties.getIssuer());
-        data.forEach((k,v) -> builder.withClaim(k,v.toString()));
+        convertDataToActualType(data,builder);
         return builder.sign(getAlgorithm());
+    }
+
+    private void convertDataToActualType(Map<String,Object> data,JWTCreator.Builder builder){
+        //Integer Double Date Boolean String
+        data.forEach((k,v) -> {
+            if(v instanceof Integer){
+                builder.withClaim(k,((Integer) v).intValue());
+            }else if(v instanceof Double){
+                builder.withClaim(k,((Double) v).doubleValue());
+            }else if(v instanceof Date){
+                builder.withClaim(k,(Date)v);
+            }else if(v instanceof Boolean){
+                builder.withClaim(k,((Boolean) v).booleanValue());
+            }else {
+                builder.withClaim(k,v.toString());
+            }
+        });
     }
 
     private String createNewToken(DecodedJWT jwt) {
@@ -63,7 +80,7 @@ public class JwtToken {
             Map<String,Object> data = Maps.newHashMap();
             claims.forEach((k,v) -> {
                 if(!"iat".equals(k) && !"exp".equals(k) && !"iss".equals(k)){
-                    data.put(k,v.asString());
+                    data.put(k,v);
                 }
             });
             return createToken(data);
