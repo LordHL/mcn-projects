@@ -39,9 +39,10 @@ public class GenerateBaseMapperAndPagePlugin extends PluginAdapter {
             }
 
             FullyQualifiedJavaType baseMapper = new FullyQualifiedJavaType("BaseMapper<"
-                    + introspectedTable.getBaseRecordType() + ","
+                    + introspectedTable.getFullyQualifiedTable().getDomainObjectName() + ","
                     + pk+ ">");
             interfaze.addImportedType(new FullyQualifiedJavaType(rootInterface));
+            interfaze.addImportedType(new FullyQualifiedJavaType(introspectedTable.getBaseRecordType()));
             interfaze.addSuperInterface(baseMapper);
         }
 
