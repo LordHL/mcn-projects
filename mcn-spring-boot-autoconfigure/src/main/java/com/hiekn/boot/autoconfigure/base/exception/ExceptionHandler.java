@@ -10,6 +10,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.util.StringUtils;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import java.util.stream.Collectors;
@@ -47,7 +48,7 @@ public class ExceptionHandler implements ExceptionMapper<Exception> {
         //只打印业务代码异常栈
         exception.setStackTrace(Lists.newArrayList(exception.getStackTrace()).stream().filter(s -> s.getClassName().contains(basePackage)).collect(Collectors.toList()).toArray(new StackTraceElement[]{}));
         logger.error(code, exception);
-        return Response.ok(new RestResp<>(code, errMsg)).status(statusCode).build();
+        return Response.ok(new RestResp<>(code, errMsg)).status(statusCode).type(MediaType.APPLICATION_JSON_TYPE).build();
     }
 
 }

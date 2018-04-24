@@ -39,7 +39,7 @@ public class JerseyHttp {
 
     private MultivaluedMap<String,Object> getDefaultRequestHeader(){
         MultivaluedMap<String,Object> headers = new MultivaluedHashMap<>();
-        headers.add("Accept",clientProperties.getAcceptContentType());
+        headers.add(HttpHeaders.ACCEPT,clientProperties.getAcceptContentType());
         return headers;
     }
 
