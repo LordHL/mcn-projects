@@ -7,6 +7,7 @@ import com.hiekn.boot.autoconfigure.base.exception.ValidationExceptionMapper;
 import io.swagger.jaxrs.config.BeanConfig;
 import io.swagger.jaxrs.listing.ApiListingResource;
 import io.swagger.jaxrs.listing.SwaggerSerializers;
+import org.glassfish.jersey.client.JerseyClient;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.ServerProperties;
@@ -126,6 +127,7 @@ public class JerseySwaggerAutoConfiguration extends ResourceConfig {
     }
 
     @Bean
+    @ConditionalOnClass(JerseyClient.class)
     @ConditionalOnMissingBean(name = "jerseyHttp")
     public JerseyHttp jerseyHttp(JerseyClientProperties clientProperties) {
         return new JerseyHttp(clientProperties);
