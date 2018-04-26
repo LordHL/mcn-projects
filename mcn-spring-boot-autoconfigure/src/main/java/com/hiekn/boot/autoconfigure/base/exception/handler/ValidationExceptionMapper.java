@@ -1,6 +1,7 @@
-package com.hiekn.boot.autoconfigure.base.exception;
+package com.hiekn.boot.autoconfigure.base.exception.handler;
 
 import com.google.common.collect.Lists;
+import com.hiekn.boot.autoconfigure.base.exception.ExceptionKeys;
 import com.hiekn.boot.autoconfigure.base.model.ValidationErrorBean;
 import com.hiekn.boot.autoconfigure.base.model.result.RestResp;
 import com.hiekn.boot.autoconfigure.base.util.ErrorMsgUtil;

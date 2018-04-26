@@ -2,8 +2,9 @@ package com.hiekn.boot.autoconfigure.jersey;
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import com.google.common.collect.Sets;
-import com.hiekn.boot.autoconfigure.base.exception.ExceptionHandler;
-import com.hiekn.boot.autoconfigure.base.exception.ValidationExceptionMapper;
+import com.hiekn.boot.autoconfigure.base.exception.handler.BaseExceptionHandler;
+import com.hiekn.boot.autoconfigure.base.exception.handler.ExceptionHandler;
+import com.hiekn.boot.autoconfigure.base.exception.handler.ValidationExceptionMapper;
 import io.swagger.jaxrs.config.BeanConfig;
 import io.swagger.jaxrs.listing.ApiListingResource;
 import io.swagger.jaxrs.listing.SwaggerSerializers;
@@ -73,7 +74,7 @@ public class JerseySwaggerAutoConfiguration extends ResourceConfig {
                 config.registerClasses(collect);
             }
 
-            config.registerClasses(MultiPartFeature.class, JacksonJsonProvider.class,ValidationExceptionMapper.class,ExceptionHandler.class)
+            config.registerClasses(MultiPartFeature.class, JacksonJsonProvider.class,ValidationExceptionMapper.class,ExceptionHandler.class,BaseExceptionHandler.class)
                     .property(ServerProperties.BV_SEND_ERROR_IN_RESPONSE, true)
                     .property(ServerProperties.BV_DISABLE_VALIDATE_ON_EXECUTABLE_OVERRIDE_CHECK, true);
 
