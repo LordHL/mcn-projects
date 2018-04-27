@@ -5,6 +5,7 @@ import com.google.common.collect.Sets;
 import com.hiekn.boot.autoconfigure.base.exception.handler.BaseExceptionHandler;
 import com.hiekn.boot.autoconfigure.base.exception.handler.ExceptionHandler;
 import com.hiekn.boot.autoconfigure.base.exception.handler.ValidationExceptionMapper;
+import com.hiekn.boot.autoconfigure.base.exception.handler.WebApplicationExceptionHandler;
 import io.swagger.jaxrs.config.BeanConfig;
 import io.swagger.jaxrs.listing.ApiListingResource;
 import io.swagger.jaxrs.listing.SwaggerSerializers;
@@ -67,23 +68,25 @@ public class JerseySwaggerAutoConfiguration extends ResourceConfig {
                     packages.add(className);
                 }
             }
+
+            Set<Class<?>> allClasses = Sets.newHashSet(MultiPartFeature.class, JacksonJsonProvider.class,ValidationExceptionMapper.class,ExceptionHandler.class,BaseExceptionHandler.class, WebApplicationExceptionHandler.class);
+
             for (String pkg : packages) {
                 Set<Class<?>> collect = scanner.findCandidateComponents(pkg).stream()
                         .map(beanDefinition -> ClassUtils.resolveClassName(beanDefinition.getBeanClassName(), this.getClassLoader()))
                         .collect(Collectors.toSet());
-                config.registerClasses(collect);
+                allClasses.addAll(collect);
             }
-
-            config.registerClasses(MultiPartFeature.class, JacksonJsonProvider.class,ValidationExceptionMapper.class,ExceptionHandler.class,BaseExceptionHandler.class)
-                    .property(ServerProperties.BV_SEND_ERROR_IN_RESPONSE, true)
-                    .property(ServerProperties.BV_DISABLE_VALIDATE_ON_EXECUTABLE_OVERRIDE_CHECK, true);
 
             //添加异常处理器
             String classes = jersey.getSingleResource();
             if (StringUtils.hasLength(classes)) {
-                Class<?> cls = getExceptionHandlerClass(classes);
-                config.registerClasses(cls);
+                allClasses.add(getExceptionHandlerClass(classes));
             }
+
+            config.registerClasses(allClasses)
+                    .property(ServerProperties.BV_SEND_ERROR_IN_RESPONSE, true)
+                    .property(ServerProperties.BV_DISABLE_VALIDATE_ON_EXECUTABLE_OVERRIDE_CHECK, true);
         };
     }
 
