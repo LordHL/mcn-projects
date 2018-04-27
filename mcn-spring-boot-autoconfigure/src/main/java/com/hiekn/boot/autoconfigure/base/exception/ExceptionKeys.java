@@ -30,5 +30,6 @@ public interface ExceptionKeys {
     Integer SERVICE_ERROR = 90000;
     Integer THIRD_PARTY_ERROR = 90001;
     Integer REMOTE_SERVICE_ERROR = 90002;
+    Integer REMOTE_DATA_PARSE_ERROR = 90003;
 
 }
