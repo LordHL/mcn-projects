@@ -5,7 +5,7 @@
     <groupId>com.hiekn.boot</groupId>
     <artifactId>mcn-projects</artifactId>
     <packaging>pom</packaging>
-    <version>2.7.1</version>
+    <version>2.7.2</version>
     <modules>
         <module>mcn-spring-boot-starter</module>
         <module>mcn-spring-boot-autoconfigure</module>
@@ -20,7 +20,7 @@
     </parent>
 
     <properties>
-        <mcn.version>2.7.1</mcn.version>
+        <mcn.version>2.7.2</mcn.version>
         <project.build.sourceEncoding>UTF8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>

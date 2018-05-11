@@ -3,15 +3,13 @@ package com.hiekn.boot.autoconfigure.base.util;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.ApplicationEvent;
-import org.springframework.context.ApplicationListener;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-public class BeanUtils implements ApplicationContextAware,ApplicationListener {
+public class BeanUtils implements ApplicationContextAware {
 	
 	private static ApplicationContext ac;
 	
@@ -44,8 +42,4 @@ public class BeanUtils implements ApplicationContextAware,ApplicationListener {
 		}
 	}
 
-    @Override
-    public void onApplicationEvent(ApplicationEvent event) {
-
-    }
 }

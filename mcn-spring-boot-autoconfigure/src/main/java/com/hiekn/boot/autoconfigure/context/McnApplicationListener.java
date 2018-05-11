@@ -1,32 +1,51 @@
 package com.hiekn.boot.autoconfigure.context;
 
-import com.hiekn.boot.autoconfigure.base.util.BeanUtils;
+import com.google.gson.Gson;
+import com.hiekn.boot.autoconfigure.base.util.JsonUtils;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.springframework.beans.factory.support.GenericBeanDefinition;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;
 import org.springframework.boot.context.event.ApplicationFailedEvent;
 import org.springframework.boot.context.event.ApplicationPreparedEvent;
 import org.springframework.boot.context.event.ApplicationStartingEvent;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationEvent;
-import org.springframework.context.event.ContextClosedEvent;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.event.GenericApplicationListener;
 import org.springframework.core.Ordered;
 import org.springframework.core.ResolvableType;
 
 public class McnApplicationListener implements GenericApplicationListener {
 
-    private static Class<?>[] EVENT_TYPES = { ApplicationStartingEvent.class,
-            ApplicationEnvironmentPreparedEvent.class, ApplicationPreparedEvent.class,
-            ContextClosedEvent.class, ApplicationFailedEvent.class };
+    public static final int DEFAULT_ORDER = Ordered.HIGHEST_PRECEDENCE + 10;
+    private int order = DEFAULT_ORDER;
 
-    private static Class<?>[] SOURCE_TYPES = { SpringApplication.class,
-            ApplicationContext.class };
+    private static Class<?>[] EVENT_TYPES = { ApplicationStartingEvent.class, ApplicationEnvironmentPreparedEvent.class,
+            ApplicationPreparedEvent.class, ApplicationFailedEvent.class };
+
+    private static Class<?>[] SOURCE_TYPES = { SpringApplication.class};
 
     @Override
     public void onApplicationEvent(ApplicationEvent applicationEvent) {
+        if(applicationEvent instanceof ApplicationStartingEvent){
+
+        }
         if(applicationEvent instanceof ApplicationEnvironmentPreparedEvent){
-            ApplicationEnvironmentPreparedEvent event = (ApplicationEnvironmentPreparedEvent) applicationEvent;
-            event.getSpringApplication().addListeners(new BeanUtils());
+
+        }
+        if(applicationEvent instanceof ApplicationPreparedEvent){
+            ConfigurableApplicationContext applicationContext = ((ApplicationPreparedEvent) applicationEvent).getApplicationContext();
+            GenericBeanDefinition beanDefinition = new GenericBeanDefinition();
+            beanDefinition.setBeanClass(JsonUtils.class);
+            beanDefinition.getConstructorArgumentValues().addIndexedArgumentValue(0,new Gson());
+            beanDefinition.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
+            if(applicationContext instanceof BeanDefinitionRegistry){
+                ((BeanDefinitionRegistry)applicationContext).registerBeanDefinition("jsonUtils", beanDefinition);
+            }
+        }
+        if(applicationEvent instanceof ApplicationFailedEvent){
+
         }
     }
 
@@ -53,6 +72,10 @@ public class McnApplicationListener implements GenericApplicationListener {
 
     @Override
     public int getOrder() {
-        return Ordered.HIGHEST_PRECEDENCE + 9;
+        return this.order;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
     }
 }
