@@ -4,11 +4,6 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-
 public class BeanUtils implements ApplicationContextAware {
 	
 	private static ApplicationContext ac;
@@ -19,16 +14,13 @@ public class BeanUtils implements ApplicationContextAware {
 	}  
 	
 	public static <T> T getBean(String name,Class<T> clazz) {
-		checkApplicationContext();  
-		return (T)ac.getBean(name);  
+		checkApplicationContext();
+		return ac.getBean(name,clazz);
 	} 
 	
 	public static <T> T getBean(Class<T> clazz) {  
 		checkApplicationContext();  
-		Map<String, T> beanMap = ac.getBeansOfType(clazz);  
-		Collection<T> valueSet = beanMap.values();  
-		List<T> valueList = new ArrayList<T>(valueSet);  
-		return valueList.get(0) ; 
+		return ac.getBean(clazz);
 	} 
 
 	@Override

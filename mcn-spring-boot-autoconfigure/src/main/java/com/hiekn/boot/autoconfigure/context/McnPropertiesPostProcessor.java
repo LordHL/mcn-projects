@@ -19,7 +19,7 @@ import java.util.Objects;
 
 public class McnPropertiesPostProcessor implements EnvironmentPostProcessor,Ordered {
 
-    private static final String APP_BASE_PACKAGE_KEY = "jersey.swagger.base-package";
+    public static final String APP_BASE_PACKAGE_KEY = "jersey.swagger.base-package";
 
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {

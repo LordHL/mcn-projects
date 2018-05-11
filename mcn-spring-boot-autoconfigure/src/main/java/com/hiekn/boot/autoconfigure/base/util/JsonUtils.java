@@ -7,11 +7,7 @@ import java.lang.reflect.Type;
 
 public class JsonUtils {
 
-    private static Gson gson ;
-
-    public JsonUtils(Gson gson) {
-        JsonUtils.gson = gson;
-    }
+    private static Gson gson = new Gson();
 
     public static <T> T fromJson(String json, Class<T> cls) {
 		try {

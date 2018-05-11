@@ -1,17 +1,11 @@
 package com.hiekn.boot.autoconfigure.context;
 
-import com.google.gson.Gson;
-import com.hiekn.boot.autoconfigure.base.util.JsonUtils;
-import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.beans.factory.support.BeanDefinitionRegistry;
-import org.springframework.beans.factory.support.GenericBeanDefinition;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;
 import org.springframework.boot.context.event.ApplicationFailedEvent;
 import org.springframework.boot.context.event.ApplicationPreparedEvent;
 import org.springframework.boot.context.event.ApplicationStartingEvent;
 import org.springframework.context.ApplicationEvent;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.event.GenericApplicationListener;
 import org.springframework.core.Ordered;
 import org.springframework.core.ResolvableType;
@@ -24,7 +18,7 @@ public class McnApplicationListener implements GenericApplicationListener {
     private static Class<?>[] EVENT_TYPES = { ApplicationStartingEvent.class, ApplicationEnvironmentPreparedEvent.class,
             ApplicationPreparedEvent.class, ApplicationFailedEvent.class };
 
-    private static Class<?>[] SOURCE_TYPES = { SpringApplication.class};
+    private static Class<?>[] SOURCE_TYPES = { SpringApplication.class };
 
     @Override
     public void onApplicationEvent(ApplicationEvent applicationEvent) {
@@ -35,14 +29,7 @@ public class McnApplicationListener implements GenericApplicationListener {
 
         }
         if(applicationEvent instanceof ApplicationPreparedEvent){
-            ConfigurableApplicationContext applicationContext = ((ApplicationPreparedEvent) applicationEvent).getApplicationContext();
-            GenericBeanDefinition beanDefinition = new GenericBeanDefinition();
-            beanDefinition.setBeanClass(JsonUtils.class);
-            beanDefinition.getConstructorArgumentValues().addIndexedArgumentValue(0,new Gson());
-            beanDefinition.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-            if(applicationContext instanceof BeanDefinitionRegistry){
-                ((BeanDefinitionRegistry)applicationContext).registerBeanDefinition("jsonUtils", beanDefinition);
-            }
+
         }
         if(applicationEvent instanceof ApplicationFailedEvent){
 

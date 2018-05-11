@@ -11,10 +11,8 @@ public class McnContextInitializer implements ApplicationContextInitializer{
 
     @Override
     public void initialize(ConfigurableApplicationContext configurableApplicationContext) {
-
-        configurableApplicationContext.addApplicationListener((ContextRefreshedEvent event) -> {
-            new BeanUtils().setApplicationContext(event.getApplicationContext());
-        });
+        //init some util
+        configurableApplicationContext.addApplicationListener((ContextRefreshedEvent event) -> new BeanUtils().setApplicationContext(event.getApplicationContext()));
 
     }
 }
