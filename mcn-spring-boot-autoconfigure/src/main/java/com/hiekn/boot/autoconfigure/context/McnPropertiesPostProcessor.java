@@ -12,6 +12,7 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.core.io.support.ResourcePropertySource;
 import org.springframework.util.ClassUtils;
+import org.springframework.util.ResourceUtils;
 
 import java.io.IOException;
 import java.util.Map;
@@ -19,14 +20,14 @@ import java.util.Objects;
 
 public class McnPropertiesPostProcessor implements EnvironmentPostProcessor,Ordered {
 
-    public static final String APP_BASE_PACKAGE_KEY = "jersey.swagger.base-package";
+    public static final String APP_BASE_PACKAGE_PROPERTY = "jersey.swagger.base-package";
 
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
         MutablePropertySources propertySources = environment.getPropertySources();
         //add map config
         Map<String, Object> mapProp = Maps.newHashMap();
-        mapProp.put(APP_BASE_PACKAGE_KEY,ClassUtils.getPackageName(application.getMainApplicationClass()));
+        mapProp.put(APP_BASE_PACKAGE_PROPERTY,ClassUtils.getPackageName(application.getMainApplicationClass()));
         propertySources.addLast(new MapPropertySource("mcn-map",mapProp));
 
         try {
@@ -44,7 +45,7 @@ public class McnPropertiesPostProcessor implements EnvironmentPostProcessor,Orde
         try {
             //add mcn default config
             String path = this.getClass().getResource("").getPath();
-            path = path.replaceFirst("file:", "jar:file:");
+            path = path.replaceFirst(ResourceUtils.FILE_URL_PREFIX, ResourceUtils.JAR_URL_PREFIX+ResourceUtils.FILE_URL_PREFIX);
             path = path.replace(ClassUtils.getPackageName(this.getClass()).replace(".", "/"), "META-INF");
             propertySources.addLast(new PropertiesPropertySource("mcn-prop",PropertiesLoaderUtils.loadProperties(new UrlResource(path+"mcn.properties"))));
         } catch (IOException e) {
