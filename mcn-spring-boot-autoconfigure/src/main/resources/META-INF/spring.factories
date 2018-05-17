@@ -8,7 +8,8 @@ org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   com.hiekn.boot.autoconfigure.jersey.JerseySwaggerAutoConfiguration,\
   com.hiekn.boot.autoconfigure.jwt.JwtTokenAutoConfiguration,\
   com.hiekn.boot.autoconfigure.elasticsearch.ElasticsearchAutoConfiguration,\
-  com.hiekn.boot.autoconfigure.qiniu.QiNiuAutoConfiguration
+  com.hiekn.boot.autoconfigure.qiniu.QiNiuAutoConfiguration,\
+  com.hiekn.boot.autoconfigure.mybatis.MultiplyMybatisAutoConfiguration
 
 org.springframework.boot.env.EnvironmentPostProcessor=\
   com.hiekn.boot.autoconfigure.context.McnPropertiesPostProcessor

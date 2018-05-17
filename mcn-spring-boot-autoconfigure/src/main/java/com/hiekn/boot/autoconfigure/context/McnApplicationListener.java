@@ -1,14 +1,18 @@
 package com.hiekn.boot.autoconfigure.context;
 
+import com.hiekn.boot.autoconfigure.mybatis.MultiplyDataSourceInitializerPostProcessor;
+import com.hiekn.boot.autoconfigure.mybatis.MultiplyMybatisAutoConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;
 import org.springframework.boot.context.event.ApplicationFailedEvent;
 import org.springframework.boot.context.event.ApplicationPreparedEvent;
 import org.springframework.boot.context.event.ApplicationStartingEvent;
 import org.springframework.context.ApplicationEvent;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.event.GenericApplicationListener;
 import org.springframework.core.Ordered;
 import org.springframework.core.ResolvableType;
+import org.springframework.core.env.ConfigurableEnvironment;
 
 public class McnApplicationListener implements GenericApplicationListener {
 
@@ -29,7 +33,12 @@ public class McnApplicationListener implements GenericApplicationListener {
 
         }
         if(applicationEvent instanceof ApplicationPreparedEvent){
-
+            ConfigurableApplicationContext applicationContext = ((ApplicationPreparedEvent) applicationEvent).getApplicationContext();
+            ConfigurableEnvironment environment = applicationContext.getEnvironment();
+            String[] dbs = environment.getProperty(MultiplyMybatisAutoConfiguration.PREFIX+"name", String[].class);
+            if(dbs != null && dbs.length > 1){
+                applicationContext.addBeanFactoryPostProcessor(new MultiplyDataSourceInitializerPostProcessor(applicationContext.getEnvironment()));
+            }
         }
         if(applicationEvent instanceof ApplicationFailedEvent){
 
