@@ -20,6 +20,7 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 
 import java.beans.PropertyDescriptor;
+import java.util.Iterator;
 import java.util.Map;
 
 public class MultiplyDataSourceInitializerPostProcessor implements BeanDefinitionRegistryPostProcessor {
@@ -98,11 +99,24 @@ public class MultiplyDataSourceInitializerPostProcessor implements BeanDefinitio
             String name = descriptor.getName();
             if(!"class".equals(name)){
                 Iterable<String> relaxedTargetNames = new RelaxedNames(name);
-                for (String s : relaxedTargetNames) {
-                    String key = propertyPrefixKey + s;
+                Iterator<String> iterator = relaxedTargetNames.iterator();
+                while (iterator.hasNext()) {
+                    String key = propertyPrefixKey + iterator.next();
                     if(environment.containsProperty(key)){
                         map.put(name,environment.getProperty(key));
                         break;
+                    }else{
+                        iterator.remove();
+                    }
+                }
+                if(!iterator.hasNext()){//set default property
+                    Iterable<String> names = new RelaxedNames(name);
+                    for (String s : names) {
+                        String key = "spring.datasource.tomcat." + s;
+                        if(environment.containsProperty(key)){
+                            map.put(name,environment.getProperty(key));
+                            break;
+                        }
                     }
                 }
             }
