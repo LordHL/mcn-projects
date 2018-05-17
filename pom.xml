@@ -5,7 +5,7 @@
     <groupId>com.hiekn.boot</groupId>
     <artifactId>mcn-projects</artifactId>
     <packaging>pom</packaging>
-    <version>2.7.4</version>
+    <version>2.7.5</version>
     <modules>
         <module>mcn-spring-boot-starter</module>
         <module>mcn-spring-boot-autoconfigure</module>
@@ -20,7 +20,7 @@
     </parent>
 
     <properties>
-        <mcn.version>2.7.3</mcn.version>
+        <mcn.version>2.7.5</mcn.version>
         <project.build.sourceEncoding>UTF8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
@@ -162,6 +162,18 @@
         </pluginManagement>
     </build>
 
+    <distributionManagement>
+        <repository>
+            <id>user-release</id>
+            <name>User Project Release</name>
+            <url>http://hiekn.hiekn.com:19162/nexus/content/repositories/releases/</url>
+        </repository>
 
+        <snapshotRepository>
+            <id>user-snapshots</id>
+            <name>User Project SNAPSHOTS</name>
+            <url>http://hiekn.hiekn.com:19162/nexus/content/repositories/snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
 
 </project>
