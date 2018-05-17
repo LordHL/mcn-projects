@@ -47,6 +47,20 @@
         <artifactId>mcn-spring-boot-starter</artifactId>
     </dependency>
 ```
+4. 七牛上传
+```
+须引入以下jar：
+      <dependency>
+        <groupId>com.qiniu</groupId>
+        <artifactId>qiniu-java-sdk</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>com.hiekn.boot</groupId>
+        <artifactId>mcn-spring-boot-starter</artifactId>
+    </dependency>
+```
+5. 多数据源配置
+
 ### 三、内置一个公用的基础模型
 1. 【**建议继承**】BaseMapper
 - 定义通用实体增删改查
@@ -70,6 +84,7 @@
 8. mybatis-spring-boot-starter 1.3.2
 9. commons-io 2.6
 10. fastjson 1.2.47
+11. qiniu-java-sdk 7.0.7
 
 ```
 Spring Boot自身继承的可直接查看其pom.xml
@@ -156,7 +171,7 @@ jersey.swagger.resource-package=${jersey.swagger.base-package}.rest
     <parent>
         <groupId>com.hiekn.boot</groupId>
         <artifactId>mcn-projects</artifactId>
-        <version>2.4.1</version>
+        <version>2.7.3</version>
     </parent>
 
  <properties>
@@ -259,8 +274,6 @@ jersey.swagger.resource-package=${jersey.swagger.base-package}.rest
         </dependency>-->
 
     </dependencies>
-
-
 
     <build>
         <finalName>meta-boot</finalName>
