@@ -171,7 +171,7 @@ jersey.swagger.resource-package=${jersey.swagger.base-package}.rest
     <parent>
         <groupId>com.hiekn.boot</groupId>
         <artifactId>mcn-projects</artifactId>
-        <version>2.7.3</version>
+        <version>2.7.5</version>
     </parent>
 
  <properties>
