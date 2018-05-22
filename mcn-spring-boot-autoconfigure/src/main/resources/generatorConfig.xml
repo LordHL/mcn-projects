@@ -62,7 +62,7 @@
                enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false">
-            <property name="useActualColumnNames" value="true"/>
+            <!--<property name="useActualColumnNames" value="true"/>-->
             <generatedKey column="id" sqlStatement="JDBC"/>
         </table>
 
