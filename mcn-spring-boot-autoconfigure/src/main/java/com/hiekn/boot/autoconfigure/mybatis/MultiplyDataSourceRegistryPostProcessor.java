@@ -23,11 +23,11 @@ import java.beans.PropertyDescriptor;
 import java.util.Iterator;
 import java.util.Map;
 
-public class MultiplyDataSourceInitializerPostProcessor implements BeanDefinitionRegistryPostProcessor {
+public class MultiplyDataSourceRegistryPostProcessor implements BeanDefinitionRegistryPostProcessor {
 
     private Environment environment;
 
-    public MultiplyDataSourceInitializerPostProcessor(Environment environment) {
+    public MultiplyDataSourceRegistryPostProcessor(Environment environment) {
         this.environment = environment;
     }
 
