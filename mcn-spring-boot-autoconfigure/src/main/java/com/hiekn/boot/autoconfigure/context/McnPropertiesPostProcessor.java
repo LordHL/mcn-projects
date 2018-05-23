@@ -28,26 +28,35 @@ public class McnPropertiesPostProcessor implements EnvironmentPostProcessor,Orde
         //add map config
         Map<String, Object> mapProp = Maps.newHashMap();
         mapProp.put(APP_BASE_PACKAGE_PROPERTY,ClassUtils.getPackageName(application.getMainApplicationClass()));
+        mapProp.put("mcn.version",this.getClass().getPackage().getImplementationVersion());
         propertySources.addLast(new MapPropertySource("mcn-map",mapProp));
 
         try {
-            String[] activeProfiles = environment.getActiveProfiles();
-            //add global config
-            String globalConfigName = "mcn-global";
-            if(Objects.nonNull(activeProfiles)){
-                globalConfigName += "-"+activeProfiles[0];
-            }
-            propertySources.addLast(new ResourcePropertySource("mcn-global","classpath:"+globalConfigName+".properties"));
-        } catch (Exception e) {
+            //add global unique config file
+            propertySources.addLast(new ResourcePropertySource("mcn-global-unique","classpath:config/mcn.properties"));
+        } catch (IOException e) {
             //ignore file not found
         }
 
-        try {
-            //add mcn default config
+        try{
+            //add global config file diff environment
+            String[] activeProfiles = environment.getActiveProfiles();
+            StringBuilder globalConfigName = new StringBuilder("classpath:").append("mcn-global");
+            if(Objects.nonNull(activeProfiles) && activeProfiles.length > 0){
+                globalConfigName.append("-").append(activeProfiles[0]);
+            }
+            globalConfigName.append(".properties");
+            propertySources.addLast(new ResourcePropertySource("mcn-global",globalConfigName.toString()));
+        } catch (IOException e) {
+            //ignore file not found
+        }
+
+        try{
+            //add mcn default config can't override
             String path = this.getClass().getResource("").getPath();
             path = path.replaceFirst(ResourceUtils.FILE_URL_PREFIX, ResourceUtils.JAR_URL_PREFIX+ResourceUtils.FILE_URL_PREFIX);
             path = path.replace(ClassUtils.getPackageName(this.getClass()).replace(".", "/"), "META-INF");
-            propertySources.addLast(new PropertiesPropertySource("mcn-prop",PropertiesLoaderUtils.loadProperties(new UrlResource(path+"mcn.properties"))));
+            propertySources.addLast(new PropertiesPropertySource("mcn-default",PropertiesLoaderUtils.loadProperties(new UrlResource(path+"mcn-default.properties"))));
         } catch (IOException e) {
             //ignore file not found
         }
