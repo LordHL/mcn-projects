@@ -5,4 +5,5 @@
  _|      _|  _|        _|    _|_|
  _|      _|    _|_|_|  _|      _|
 
-${AnsiColor.BRIGHT_GREEN} :: MCN :: ${AnsiColor.DEFAULT}     (${mcn.version})
+${AnsiColor.BRIGHT_GREEN} :: Spring Boot :: ${AnsiColor.DEFAULT}    ${spring-boot.formatted-version}
+${AnsiColor.BRIGHT_GREEN} :: MCN :: ${AnsiColor.DEFAULT}    (${mcn.version})
