@@ -1,6 +1,5 @@
-package com.hiekn.boot.autoconfigure.base.annotation;
+package com.hiekn.boot.autoconfigure.mybatis;
 
-import com.hiekn.boot.autoconfigure.mybatis.MultiplyDataSourceRegistryPostProcessor;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.context.annotation.Condition;

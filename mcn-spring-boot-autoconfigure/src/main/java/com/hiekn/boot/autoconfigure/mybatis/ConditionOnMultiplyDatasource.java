@@ -1,4 +1,4 @@
-package com.hiekn.boot.autoconfigure.base.annotation;
+package com.hiekn.boot.autoconfigure.mybatis;
 
 import org.springframework.context.annotation.Conditional;
 
