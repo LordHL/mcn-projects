@@ -33,55 +33,53 @@ public class MultiplyDataSourceRegistryPostProcessor implements BeanDefinitionRe
 
     @Override
     public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) throws BeansException {
-        if(environment instanceof ConfigurableEnvironment){
-            ConfigurableEnvironment env = (ConfigurableEnvironment)environment;
-            String[] dbs = env.getProperty(MultiplyMybatisAutoConfiguration.PREFIX+"name", String[].class);
-            if(dbs != null && dbs.length > 1) {
-                String basePackage = env.getProperty((McnPropertiesPostProcessor.APP_BASE_PACKAGE_PROPERTY));
-                for (String db : dbs) {
-                    GenericBeanDefinition beanDefinition = new GenericBeanDefinition();
-                    beanDefinition.setBeanClass(org.apache.tomcat.jdbc.pool.DataSource.class);
-                    beanDefinition.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-                    beanDefinition.setSynthetic(true);
-                    configConnectPool(beanDefinition,db);
-                    StringBuilder sb = new StringBuilder();
-                    registry.registerBeanDefinition(sb.append(db).append("DataSource").toString(), beanDefinition);
+        if (environment instanceof ConfigurableEnvironment) {
+            ConfigurableEnvironment env = (ConfigurableEnvironment) environment;
+            String[] dbs = env.getProperty(MultiplyMybatisAutoConfiguration.PREFIX + "name", String[].class);
+            String basePackage = env.getProperty((McnPropertiesPostProcessor.APP_BASE_PACKAGE_PROPERTY));
+            for (String db : dbs) {
+                GenericBeanDefinition beanDefinition = new GenericBeanDefinition();
+                beanDefinition.setBeanClass(org.apache.tomcat.jdbc.pool.DataSource.class);
+                beanDefinition.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
+                beanDefinition.setSynthetic(true);
+                configConnectPool(beanDefinition, db);
+                StringBuilder sb = new StringBuilder();
+                registry.registerBeanDefinition(sb.append(db).append("DataSource").toString(), beanDefinition);
 
-                    try {
-                        SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
-                        factoryBean.setVfs(SpringBootVFS.class);
-                        ResourcePatternResolver pathResolver = new PathMatchingResourcePatternResolver();
-                        org.apache.ibatis.session.Configuration conf = new org.apache.ibatis.session.Configuration();
-                        conf.setMapUnderscoreToCamelCase(true);
+                try {
+                    SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
+                    factoryBean.setVfs(SpringBootVFS.class);
+                    ResourcePatternResolver pathResolver = new PathMatchingResourcePatternResolver();
+                    org.apache.ibatis.session.Configuration conf = new org.apache.ibatis.session.Configuration();
+                    conf.setMapUnderscoreToCamelCase(true);
 
-                        RootBeanDefinition rootBeanDefinition = new RootBeanDefinition(SqlSessionFactoryBean.class);
-                        rootBeanDefinition.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-                        Map<String,Object> map = Maps.newHashMap();
-                        map.put("vfs",SpringBootVFS.class);
-                        map.put("dataSource",new RuntimeBeanReference(sb.toString()));
+                    RootBeanDefinition rootBeanDefinition = new RootBeanDefinition(SqlSessionFactoryBean.class);
+                    rootBeanDefinition.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
+                    Map<String, Object> map = Maps.newHashMap();
+                    map.put("vfs", SpringBootVFS.class);
+                    map.put("dataSource", new RuntimeBeanReference(sb.toString()));
 
-                        sb.setLength(0);
-                        sb.append("classpath*:mapper/").append(db).append("/*.xml");
-                        map.put("mapperLocations",pathResolver.getResources(sb.toString()));
+                    sb.setLength(0);
+                    sb.append("classpath*:mapper/").append(db).append("/*.xml");
+                    map.put("mapperLocations", pathResolver.getResources(sb.toString()));
 
-                        sb.setLength(0);
-                        sb.append(basePackage).append(".bean");
-                        map.put("typeAliasesPackage",sb.toString());
+                    sb.setLength(0);
+                    sb.append(basePackage).append(".bean");
+                    map.put("typeAliasesPackage", sb.toString());
 
-                        sb.setLength(0);
-                        sb.append(basePackage).append(".dao.handler");
-                        map.put("typeHandlersPackage",sb.toString());
+                    sb.setLength(0);
+                    sb.append(basePackage).append(".dao.handler");
+                    map.put("typeHandlersPackage", sb.toString());
 
-                        map.put("configuration",conf);
-                        rootBeanDefinition.getPropertyValues().addPropertyValues(map);
+                    map.put("configuration", conf);
+                    rootBeanDefinition.getPropertyValues().addPropertyValues(map);
 
-                        sb.setLength(0);
-                        sb.append(db).append("SqlSessionFactory");
-                        registry.registerBeanDefinition(sb.toString(), rootBeanDefinition);
+                    sb.setLength(0);
+                    sb.append(db).append("SqlSessionFactory");
+                    registry.registerBeanDefinition(sb.toString(), rootBeanDefinition);
 
-                    } catch (Exception e) {
+                } catch (Exception e) {
 
-                    }
                 }
             }
         }
@@ -91,30 +89,30 @@ public class MultiplyDataSourceRegistryPostProcessor implements BeanDefinitionRe
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
     }
 
-    private void configConnectPool(GenericBeanDefinition beanDefinition,String db){
+    private void configConnectPool(GenericBeanDefinition beanDefinition, String db) {
         String propertyPrefixKey = new StringBuilder(MultiplyMybatisAutoConfiguration.PREFIX).append(db).append(".").toString();
-        Map<String,Object> map = Maps.newHashMap();
+        Map<String, Object> map = Maps.newHashMap();
         PropertyDescriptor[] descriptors = BeanUtils.getPropertyDescriptors(org.apache.tomcat.jdbc.pool.DataSource.class);
         for (PropertyDescriptor descriptor : descriptors) {
             String name = descriptor.getName();
-            if(!"class".equals(name)){
+            if (!"class".equals(name)) {
                 Iterable<String> relaxedTargetNames = new RelaxedNames(name);
                 Iterator<String> iterator = relaxedTargetNames.iterator();
                 while (iterator.hasNext()) {
                     String key = propertyPrefixKey + iterator.next();
-                    if(environment.containsProperty(key)){
-                        map.put(name,environment.getProperty(key));
+                    if (environment.containsProperty(key)) {
+                        map.put(name, environment.getProperty(key));
                         break;
-                    }else{
+                    } else {
                         iterator.remove();
                     }
                 }
-                if(!iterator.hasNext()){//set default property
+                if (!iterator.hasNext()) {//set default property
                     Iterable<String> names = new RelaxedNames(name);
                     for (String s : names) {
                         String key = "spring.datasource.tomcat." + s;
-                        if(environment.containsProperty(key)){
-                            map.put(name,environment.getProperty(key));
+                        if (environment.containsProperty(key)) {
+                            map.put(name, environment.getProperty(key));
                             break;
                         }
                     }

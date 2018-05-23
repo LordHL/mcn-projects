@@ -19,20 +19,16 @@ class MapperScannerRegistry implements ImportBeanDefinitionRegistrar,Environment
     @Override
     public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
         String[] dbs = environment.getProperty(MultiplyMybatisAutoConfiguration.PREFIX+"name", String[].class);
-        if(dbs != null && dbs.length > 1){
-            String daoBasePackage = environment.getProperty((McnPropertiesPostProcessor.APP_BASE_PACKAGE_PROPERTY))+".dao.";
-            for (String db : dbs) {
-                ClassPathMapperScanner scanner = new ClassPathMapperScanner(registry);
-                if (resourceLoader != null) {
-                    scanner.setResourceLoader(resourceLoader);
-                }
-                scanner.setSqlSessionFactoryBeanName(db+"SqlSessionFactory");
-                scanner.registerFilters();
-                scanner.doScan(daoBasePackage+db);
+        String daoBasePackage = environment.getProperty((McnPropertiesPostProcessor.APP_BASE_PACKAGE_PROPERTY))+".dao.";
+        for (String db : dbs) {
+            ClassPathMapperScanner scanner = new ClassPathMapperScanner(registry);
+            if (resourceLoader != null) {
+                scanner.setResourceLoader(resourceLoader);
             }
+            scanner.setSqlSessionFactoryBeanName(db+"SqlSessionFactory");
+            scanner.registerFilters();
+            scanner.doScan(daoBasePackage+db);
         }
-
-
     }
 
     @Override
