@@ -12,6 +12,8 @@ import java.util.Map;
 
 class OnMultiplyDatasourceCondition implements Condition {
 
+    public static final String BEAN_NAME = MultiplyDataSourceRegistryPostProcessor.class.getPackage().getName()+".multiplyDataSourceRegistryPostProcessor";
+
     @Override
     public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
         Map<String, Object> attributes = metadata.getAnnotationAttributes(ConditionOnMultiplyDatasource.class.getName());
@@ -27,9 +29,11 @@ class OnMultiplyDatasourceCondition implements Condition {
         }
         //register multiply datasource post processor
         BeanDefinitionRegistry registry = context.getRegistry();
-        RootBeanDefinition beanDefinition = new RootBeanDefinition(MultiplyDataSourceRegistryPostProcessor.class);
-        beanDefinition.getConstructorArgumentValues().addGenericArgumentValue(environment);
-        registry.registerBeanDefinition("multiplyDataSourceRegistryPostProcessor",beanDefinition);
+        if(!registry.containsBeanDefinition(BEAN_NAME)){
+            RootBeanDefinition beanDefinition = new RootBeanDefinition(MultiplyDataSourceRegistryPostProcessor.class);
+            beanDefinition.getConstructorArgumentValues().addGenericArgumentValue(environment);
+            registry.registerBeanDefinition(BEAN_NAME,beanDefinition);
+        }
         return true;
     }
 

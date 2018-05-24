@@ -6,25 +6,16 @@ import com.hiekn.boot.autoconfigure.base.exception.handler.BaseExceptionHandler;
 import com.hiekn.boot.autoconfigure.base.exception.handler.ExceptionHandler;
 import com.hiekn.boot.autoconfigure.base.exception.handler.ValidationExceptionMapper;
 import com.hiekn.boot.autoconfigure.base.exception.handler.WebApplicationExceptionHandler;
-import com.hiekn.boot.autoconfigure.context.McnPropertiesPostProcessor;
 import io.swagger.jaxrs.config.BeanConfig;
 import io.swagger.jaxrs.listing.ApiListingResource;
 import io.swagger.jaxrs.listing.SwaggerSerializers;
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.glassfish.jersey.client.JerseyClient;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.ServerProperties;
 import org.mybatis.spring.annotation.MapperScan;
-import org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration;
-import org.mybatis.spring.mapper.ClassPathMapperScanner;
 import org.mybatis.spring.mapper.MapperFactoryBean;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.BeanFactoryAware;
-import org.springframework.beans.factory.support.BeanDefinitionRegistry;
-import org.springframework.boot.autoconfigure.AutoConfigurationPackages;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -33,13 +24,9 @@ import org.springframework.boot.autoconfigure.jersey.JerseyAutoConfiguration;
 import org.springframework.boot.autoconfigure.jersey.ResourceConfigCustomizer;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContextException;
-import org.springframework.context.EnvironmentAware;
-import org.springframework.context.ResourceLoaderAware;
-import org.springframework.context.annotation.*;
-import org.springframework.core.env.Environment;
-import org.springframework.core.io.DefaultResourceLoader;
-import org.springframework.core.io.ResourceLoader;
-import org.springframework.core.type.AnnotationMetadata;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
@@ -52,7 +39,6 @@ import javax.sql.DataSource;
 import javax.ws.rs.Path;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -156,39 +142,11 @@ public class JerseySwaggerAutoConfiguration extends ResourceConfig {
     }
 
     @Configuration
-    @Import({ AutoConfiguredMapperScannerRegistrar.class })
     @ConditionalOnClass({DataSource.class,SqlSessionFactory.class,MapperScan.class})
     @ConditionalOnMissingBean(MapperFactoryBean.class)
+    @ConditionOnSingleDatasource
     public static class QuickConfigMapperScan{
 
     }
 
-    public static class AutoConfiguredMapperScannerRegistrar
-            implements EnvironmentAware, ImportBeanDefinitionRegistrar, ResourceLoaderAware {
-
-        private Environment environment;
-
-        private ResourceLoader resourceLoader;
-
-        @Override
-        public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
-            ClassPathMapperScanner scanner = new ClassPathMapperScanner(registry);
-            if (this.resourceLoader != null) {
-                scanner.setResourceLoader(this.resourceLoader);
-            }
-            scanner.registerFilters();
-            String daoPackage = environment.getProperty((McnPropertiesPostProcessor.APP_BASE_PACKAGE_PROPERTY))+".dao";
-            scanner.doScan(daoPackage);
-        }
-
-        @Override
-        public void setResourceLoader(ResourceLoader resourceLoader) {
-            this.resourceLoader = resourceLoader;
-        }
-
-        @Override
-        public void setEnvironment(Environment environment) {
-            this.environment = environment;
-        }
-    }
 }
