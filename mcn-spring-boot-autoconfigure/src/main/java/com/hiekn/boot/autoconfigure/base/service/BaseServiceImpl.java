@@ -51,4 +51,9 @@ public class BaseServiceImpl<T,PK> implements BaseService<T,PK> {
         params.put("pageSize",pageModel.getPageSize());
         return new RestData<>(baseMapper.pageSelect(params),baseMapper.pageCount(params));
     }
+
+    @Override
+    public T selectByCondition(T pojo) {
+        return baseMapper.selectByCondition(pojo);
+    }
 }

@@ -11,5 +11,6 @@ public interface BaseMapper<T,PK> {
     int updateByPrimaryKeySelective(T pojo);
     List<T> pageSelect(Map<String, Object> params);
     int pageCount(Map<String, Object> params);
+    T selectByCondition(T pojo);
 
 }

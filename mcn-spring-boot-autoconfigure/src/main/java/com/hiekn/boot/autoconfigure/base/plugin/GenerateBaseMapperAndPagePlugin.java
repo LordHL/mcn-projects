@@ -97,11 +97,11 @@ public class GenerateBaseMapperAndPagePlugin extends PluginAdapter {
         select.addAttribute(new Attribute("id", "pageSelect"));
         select.addAttribute(new Attribute("resultMap", "BaseResultMap"));
         select.addAttribute(new Attribute("parameterType", "java.util.Map"));
-        select.addElement(new TextElement(" select * from " + tableName));
+        select.addElement(new TextElement("select * from " + tableName));
         XmlElement include = new XmlElement("include");
         include.addAttribute(new Attribute("refid", "sql_where"));
         select.addElement(include);
-        select.addElement(new TextElement(" LIMIT #{pageNo},#{pageSize}"));
+        select.addElement(new TextElement(" ORDER BY update_time DESC LIMIT #{pageNo},#{pageSize}"));
         parentElement.addElement(select);
 
         //添加pageCount
@@ -109,11 +109,18 @@ public class GenerateBaseMapperAndPagePlugin extends PluginAdapter {
         pageCount.addAttribute(new Attribute("id", "pageCount"));
         pageCount.addAttribute(new Attribute("resultType", "java.lang.Integer"));
         pageCount.addAttribute(new Attribute("parameterType", "java.util.Map"));
-        pageCount.addElement(new TextElement(" select COUNT(*) from " + tableName));
-        XmlElement include2 = new XmlElement("include");
-        include2.addAttribute(new Attribute("refid", "sql_where"));
-        pageCount.addElement(include2);
+        pageCount.addElement(new TextElement("select COUNT(*) from " + tableName));
+        pageCount.addElement(include);
         parentElement.addElement(pageCount);
+
+        //add selectByCondition
+        XmlElement con = new XmlElement("select");
+        con.addAttribute(new Attribute("id", "selectByCondition"));
+        con.addAttribute(new Attribute("resultMap", "BaseResultMap"));
+        con.addAttribute(new Attribute("parameterType", introspectedTable.getBaseRecordType()));
+        con.addElement(new TextElement("select * from " + tableName));
+        con.addElement(include);
+        parentElement.addElement(con);
 
         return true;
     }
