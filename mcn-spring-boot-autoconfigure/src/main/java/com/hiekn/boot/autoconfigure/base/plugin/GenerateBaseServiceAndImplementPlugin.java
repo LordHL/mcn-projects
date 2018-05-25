@@ -93,7 +93,6 @@ public class GenerateBaseServiceAndImplementPlugin extends PluginAdapter {
                 restClass.addImportedType("com.hiekn.boot.autoconfigure.base.util.BeanValidator");
                 restClass.addImportedType("com.hiekn.boot.autoconfigure.base.util.JsonUtils");
                 restClass.addImportedType("com.hiekn.boot.autoconfigure.base.model.PageModel");
-                restClass.addImportedType("com.hiekn.builder.ie.util.CommonUtils");
                 restClass.addImportedType("com.google.common.collect.Maps");
                 restClass.addImportedType("java.util.Map");
                 restClass.addImportedType(serviceInterfaceFullName);
@@ -206,7 +205,6 @@ public class GenerateBaseServiceAndImplementPlugin extends PluginAdapter {
         update.getParameters().add(parameter);
         update.getBodyLines().add(""+Bean+" "+bean+" = JsonUtils.fromJson(bean, "+Bean+".class);");
         update.getBodyLines().add(""+bean+".setId(id);");
-        update.getBodyLines().add(""+bean+".setUpdateTime(CommonUtils.getTime());");
         update.getBodyLines().add(""+xService+".updateByPrimaryKeySelective("+bean+");");
         update.getBodyLines().add("return new RestResp<>();");
         restClass.getMethods().add(update);
