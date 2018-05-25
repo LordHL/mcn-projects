@@ -101,7 +101,7 @@ public class GenerateBaseMapperAndPagePlugin extends PluginAdapter {
         XmlElement include = new XmlElement("include");
         include.addAttribute(new Attribute("refid", "sql_where"));
         select.addElement(include);
-        select.addElement(new TextElement(" ORDER BY update_time DESC LIMIT #{pageNo},#{pageSize}"));
+        select.addElement(new TextElement(" ORDER BY create_time DESC LIMIT #{pageNo},#{pageSize}"));
         parentElement.addElement(select);
 
         //添加pageCount
