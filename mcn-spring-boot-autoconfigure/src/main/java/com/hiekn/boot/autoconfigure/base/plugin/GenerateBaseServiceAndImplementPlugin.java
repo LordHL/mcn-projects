@@ -101,7 +101,7 @@ public class GenerateBaseServiceAndImplementPlugin extends PluginAdapter {
                 String path = Introspector.decapitalize(shortName.replace("Mapper", ""));
                 restClass.getAnnotations().add("@Path(\"/"+path+"\")");
                 restClass.getAnnotations().add("@Produces(MediaType.APPLICATION_JSON)");
-                restClass.getAnnotations().add("@Api");
+                restClass.getAnnotations().add("@Api(\""+shortName.replace("Mapper", "RestApi")+"\")");
                 restClass.getAnnotations().add("@ApiImplicitParams({@ApiImplicitParam(paramType = \"header\", dataType = \"string\", name = \"Authorization\",required = true)})\n");
                 String xService = Introspector.decapitalize(shortName.replace("Mapper", "Service"));
                 Field field = new Field(xService, new FullyQualifiedJavaType(serviceInterfaceFullName));
@@ -166,7 +166,7 @@ public class GenerateBaseServiceAndImplementPlugin extends PluginAdapter {
         restClass.getMethods().add(get);
 
         Method add = new Method("add");
-        add.getAnnotations().add("@GET");
+        add.getAnnotations().add("@POST");
         add.getAnnotations().add("@Path(\"/add\")");
         add.getAnnotations().add("@ApiOperation(\"新增\")");
         add.setVisibility(JavaVisibility.PUBLIC);
