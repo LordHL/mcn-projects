@@ -1,13 +1,8 @@
 package com.hiekn.boot.autoconfigure.base.service;
 
-import com.google.common.collect.Maps;
 import com.hiekn.boot.autoconfigure.base.mapper.BaseMapper;
-import com.hiekn.boot.autoconfigure.base.model.PageModel;
 import com.hiekn.boot.autoconfigure.base.model.result.RestData;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.Map;
-import java.util.Objects;
 
 public class BaseServiceImpl<T,PK> implements BaseService<T,PK> {
 
@@ -43,13 +38,8 @@ public class BaseServiceImpl<T,PK> implements BaseService<T,PK> {
 
 
     @Override
-    public RestData<T> listByPage(PageModel pageModel, Map<String, Object> params) {
-        if(Objects.isNull(params)){
-            params = Maps.newHashMap();
-        }
-        params.put("pageNo",pageModel.getPageNo());
-        params.put("pageSize",pageModel.getPageSize());
-        return new RestData<>(baseMapper.pageSelect(params),baseMapper.pageCount(params));
+    public RestData<T> listByPage(T pojo) {
+        return new RestData<>(baseMapper.pageSelect(pojo),baseMapper.pageCount(pojo));
     }
 
     @Override

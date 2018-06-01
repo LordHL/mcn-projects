@@ -96,7 +96,7 @@ public class GenerateBaseMapperAndPagePlugin extends PluginAdapter {
         XmlElement select = new XmlElement("select");
         select.addAttribute(new Attribute("id", "pageSelect"));
         select.addAttribute(new Attribute("resultMap", "BaseResultMap"));
-        select.addAttribute(new Attribute("parameterType", "java.util.Map"));
+        select.addAttribute(new Attribute("parameterType", introspectedTable.getBaseRecordType()));
         select.addElement(new TextElement("select * from " + tableName));
         XmlElement include = new XmlElement("include");
         include.addAttribute(new Attribute("refid", "sql_where"));
@@ -108,7 +108,7 @@ public class GenerateBaseMapperAndPagePlugin extends PluginAdapter {
         XmlElement pageCount = new XmlElement("select");
         pageCount.addAttribute(new Attribute("id", "pageCount"));
         pageCount.addAttribute(new Attribute("resultType", "java.lang.Integer"));
-        pageCount.addAttribute(new Attribute("parameterType", "java.util.Map"));
+        pageCount.addAttribute(new Attribute("parameterType", introspectedTable.getBaseRecordType()));
         pageCount.addElement(new TextElement("select COUNT(*) from " + tableName));
         pageCount.addElement(include);
         parentElement.addElement(pageCount);

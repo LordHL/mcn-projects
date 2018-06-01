@@ -6,7 +6,7 @@ import javax.ws.rs.DefaultValue;
 import javax.ws.rs.QueryParam;
 import java.util.Objects;
 
-public class PageModel {
+public class PageModel extends BaseModel{
 
     @ApiParam("当前页，默认1")
     @DefaultValue("1")
