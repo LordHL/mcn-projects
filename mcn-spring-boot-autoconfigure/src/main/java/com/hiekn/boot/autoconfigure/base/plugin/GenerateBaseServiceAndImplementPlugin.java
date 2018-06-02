@@ -93,8 +93,6 @@ public class GenerateBaseServiceAndImplementPlugin extends PluginAdapter {
                 restClass.addImportedType("com.hiekn.boot.autoconfigure.base.util.BeanValidator");
                 restClass.addImportedType("com.hiekn.boot.autoconfigure.base.util.JsonUtils");
                 restClass.addImportedType("com.hiekn.boot.autoconfigure.base.model.PageModel");
-                restClass.addImportedType("com.google.common.collect.Maps");
-                restClass.addImportedType("java.util.Map");
                 restClass.addImportedType(serviceInterfaceFullName);
                 restClass.addImportedType(introspectedTable.getBaseRecordType());
                 restClass.getAnnotations().add("@Controller");
@@ -149,8 +147,10 @@ public class GenerateBaseServiceAndImplementPlugin extends PluginAdapter {
                 + introspectedTable.getFullyQualifiedTable().getDomainObjectName() + ">>"));
         Parameter parameter = new Parameter(new FullyQualifiedJavaType("@BeanParam PageModel"),"pageModel");
         listByPage.getParameters().add(parameter);
-        listByPage.getBodyLines().add("Map<String,Object> params = Maps.newHashMap();");
-        listByPage.getBodyLines().add("return new RestResp<>("+xService+".listByPage(pageModel,params));");
+        listByPage.getBodyLines().add(Bean+" "+bean+" = new "+Bean+"();");
+        listByPage.getBodyLines().add(bean+".setPageNo(pageModel.getPageNo());");
+        listByPage.getBodyLines().add(bean+".setPageSize(pageModel.getPageSize());");
+        listByPage.getBodyLines().add("return new RestResp<>("+xService+".listByPage("+bean+"));");
         restClass.getMethods().add(listByPage);
 
         Method get = new Method("get");
