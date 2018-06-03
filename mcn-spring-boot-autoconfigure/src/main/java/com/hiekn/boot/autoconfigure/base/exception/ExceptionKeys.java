@@ -19,6 +19,7 @@ public interface ExceptionKeys {
     Integer GET_MOBILE_CODE_ERROR = 30009;
     Integer VERIFY_MOBILE_CODE_ERROR = 30010;
     Integer UPLOAD_ERROR = 30011;
+    Integer PERMISSION_NOT_ENOUGH_ERROR = 30012;
 
     Integer UN_LOGIN_ERROR = 50001;
     Integer AUTHENTICATION_ERROR = 50002;

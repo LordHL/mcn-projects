@@ -8,6 +8,7 @@ import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -21,10 +22,18 @@ import java.util.Objects;
 
 public class JwtToken {
 
-    private JwtProperties jwtProperties;
+    private static JwtProperties jwtProperties;
 
-    public JwtToken(JwtProperties jwtProperties) {
-        this.jwtProperties = jwtProperties;
+    private HttpServletRequest request;
+    private HttpServletResponse response;
+
+    public JwtToken(JwtProperties jwtProperties){
+        JwtToken.jwtProperties = jwtProperties;
+    }
+
+    public JwtToken(HttpServletRequest request, HttpServletResponse response) {
+        this.request = request;
+        this.response = response;
     }
 
     public String createToken(Object identifier) {
@@ -53,7 +62,9 @@ public class JwtToken {
                 .withIssuedAt(iaDate)
                 .withIssuer(jwtProperties.getIssuer());
         convertDataToActualType(data,builder);
-        return builder.sign(getAlgorithm());
+        String token = builder.sign(getAlgorithm());
+        returnToken(token);
+        return token;
     }
 
     private void convertDataToActualType(Map<String,Object> data,JWTCreator.Builder builder){
@@ -104,8 +115,7 @@ public class JwtToken {
         //通过之后，检查是否要返回新token
         String newToken = createNewToken(jwt);
         if(newToken != null){
-            HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
-            response.setHeader("Authorization",newToken);
+            returnToken(token);
         }
         return jwt;
     }
@@ -142,13 +152,45 @@ public class JwtToken {
     }
 
     public String getToken(){
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        HttpServletRequest request = getRequest();
+        if(request == null){
+            return null;
+        }
         String authorization = request.getHeader("Authorization");
         if(StringUtils.isBlank(authorization)){
             return null;
         }
         String[] str = authorization.split(" ");
         return str.length == 2?str[1]:null;
+    }
+
+    private HttpServletRequest getRequest(){
+        RequestAttributes attributes = RequestContextHolder.getRequestAttributes();
+        if(Objects.nonNull(attributes)){
+            HttpServletRequest request = ((ServletRequestAttributes) attributes).getRequest();
+            if(Objects.nonNull(request)){
+                this.request = request;
+            }
+        }
+        return this.request;
+    }
+
+    private HttpServletResponse getResponse(){
+        RequestAttributes attributes = RequestContextHolder.getRequestAttributes();
+        if(Objects.nonNull(attributes)){
+            HttpServletResponse response = ((ServletRequestAttributes) attributes).getResponse();
+            if(Objects.nonNull(response)){
+                this.response = response;
+            }
+        }
+        return this.response;
+    }
+
+    private void returnToken(String token){
+        HttpServletResponse response = getResponse();
+        if(response != null){
+            response.setHeader("Authorization",token);
+        }
     }
 
 }
