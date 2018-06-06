@@ -84,7 +84,7 @@ public class JwtToken {
         });
     }
 
-    private String createNewToken(DecodedJWT jwt) {
+    private String checkIsCreateNewToken(DecodedJWT jwt) {
         Date issuedAt = jwt.getIssuedAt();
         if(System.currentTimeMillis() - issuedAt.getTime() > jwtProperties.getRefreshInterval()){
             Map<String, Claim> claims = jwt.getClaims();
@@ -113,10 +113,7 @@ public class JwtToken {
         DecodedJWT jwt = verifier.verify(token);
 
         //通过之后，检查是否要返回新token
-        String newToken = createNewToken(jwt);
-        if(newToken != null){
-            returnToken(token);
-        }
+        checkIsCreateNewToken(jwt);
         return jwt;
     }
 

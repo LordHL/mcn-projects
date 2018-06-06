@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hiekn.boot.autoconfigure.base.exception.handler.JwtAuthenticationEntryPoint;
 import com.hiekn.boot.autoconfigure.base.filter.JwtAuthenticationTokenFilter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
@@ -24,15 +25,17 @@ import org.springframework.security.web.context.AbstractSecurityWebApplicationIn
 @Configuration
 @ConditionalOnWebApplication
 @ConditionalOnClass({ AbstractSecurityWebApplicationInitializer.class, SessionCreationPolicy.class,JWT.class })
-@ConditionalOnProperty(prefix = "mcn.security", name = "login", havingValue = "true")
+@ConditionalOnProperty(prefix = "jwt.security", name = "login", havingValue = "true")
 @EnableConfigurationProperties
 @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
 public class WebSecurityAutoConfiguration extends WebSecurityConfigurerAdapter {
 
     private Environment environment;
+    private JwtProperties jwtProperties;
 
-    public WebSecurityAutoConfiguration( Environment environment) {
+    public WebSecurityAutoConfiguration( Environment environment,JwtProperties jwtProperties) {
         this.environment = environment;
+        this.jwtProperties = jwtProperties;
     }
 
     @Override
@@ -56,8 +59,14 @@ public class WebSecurityAutoConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        String[] ignoreUrls = environment.getProperty("ignore_url", String[].class, new String[]{});
+        String[] ignoreUrls = jwtProperties.getSecurity().getIgnoreUrls();
         web.ignoring().antMatchers(ignoreUrls);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public JwtProperties jwtProperties(){
+        return new JwtProperties();
     }
 
     @Bean
