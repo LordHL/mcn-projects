@@ -91,7 +91,7 @@ public class JwtToken {
             Map<String,Object> data = Maps.newHashMap();
             claims.forEach((k,v) -> {
                 if(!"iat".equals(k) && !"exp".equals(k) && !"iss".equals(k)){
-                    data.put(k,v);
+                    data.put(k,v.as(Object.class));
                 }
             });
             return createToken(data);
