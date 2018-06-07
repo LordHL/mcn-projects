@@ -11,7 +11,7 @@ public class ThirdPartyException extends BaseException {
     }
 
     public static ThirdPartyException newInstance(){
-        return newInstance(ExceptionKeys.SERVICE_ERROR);
+        return newInstance(ExceptionKeys.REMOTE_SERVICE_ERROR);
     }
 
     public static ThirdPartyException newInstance(Integer code){
