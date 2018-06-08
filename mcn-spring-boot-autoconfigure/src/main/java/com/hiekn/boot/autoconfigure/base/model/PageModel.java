@@ -1,7 +1,12 @@
 package com.hiekn.boot.autoconfigure.base.model;
 
 import io.swagger.annotations.ApiParam;
+import org.hibernate.validator.constraints.NotBlank;
 
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.QueryParam;
 import java.util.Objects;
@@ -10,10 +15,12 @@ public class PageModel extends BaseModel{
 
     @ApiParam("当前页，默认1")
     @DefaultValue("1")
+    @Min(1)
     @QueryParam("pageNo")
     private Integer pageNo;
     @ApiParam("每页数，默认10")
     @DefaultValue("10")
+    @Max(50)
     @QueryParam("pageSize")
     private Integer pageSize;
 

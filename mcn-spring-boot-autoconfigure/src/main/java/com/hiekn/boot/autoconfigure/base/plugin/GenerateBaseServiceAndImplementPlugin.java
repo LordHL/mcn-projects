@@ -93,6 +93,7 @@ public class GenerateBaseServiceAndImplementPlugin extends PluginAdapter {
                 restClass.addImportedType("com.hiekn.boot.autoconfigure.base.util.BeanValidator");
                 restClass.addImportedType("com.hiekn.boot.autoconfigure.base.util.JsonUtils");
                 restClass.addImportedType("com.hiekn.boot.autoconfigure.base.model.PageModel");
+                restClass.addImportedType("javax.validation.Valid");
                 restClass.addImportedType(serviceInterfaceFullName);
                 restClass.addImportedType(introspectedTable.getBaseRecordType());
                 restClass.getAnnotations().add("@Controller");
@@ -145,7 +146,7 @@ public class GenerateBaseServiceAndImplementPlugin extends PluginAdapter {
         listByPage.setVisibility(JavaVisibility.PUBLIC);
         listByPage.setReturnType(new FullyQualifiedJavaType("RestResp<RestData<"
                 + introspectedTable.getFullyQualifiedTable().getDomainObjectName() + ">>"));
-        Parameter parameter = new Parameter(new FullyQualifiedJavaType("@BeanParam PageModel"),"pageModel");
+        Parameter parameter = new Parameter(new FullyQualifiedJavaType("@Valid @BeanParam PageModel"),"pageModel");
         listByPage.getParameters().add(parameter);
         listByPage.getBodyLines().add(Bean+" "+bean+" = new "+Bean+"();");
         listByPage.getBodyLines().add(bean+".setPageNo(pageModel.getPageNo());");
