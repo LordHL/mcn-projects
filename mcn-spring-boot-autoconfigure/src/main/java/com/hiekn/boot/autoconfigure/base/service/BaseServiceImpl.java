@@ -4,6 +4,8 @@ import com.hiekn.boot.autoconfigure.base.mapper.BaseMapper;
 import com.hiekn.boot.autoconfigure.base.model.result.RestData;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
+
 public class BaseServiceImpl<T,PK> implements BaseService<T,PK> {
 
     @Autowired
@@ -43,7 +45,7 @@ public class BaseServiceImpl<T,PK> implements BaseService<T,PK> {
     }
 
     @Override
-    public T selectByCondition(T pojo) {
+    public List<T> selectByCondition(T pojo) {
         return baseMapper.selectByCondition(pojo);
     }
 }
