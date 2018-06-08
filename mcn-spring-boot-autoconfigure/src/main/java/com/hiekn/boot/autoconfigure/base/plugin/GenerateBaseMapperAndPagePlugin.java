@@ -97,7 +97,11 @@ public class GenerateBaseMapperAndPagePlugin extends PluginAdapter {
         select.addAttribute(new Attribute("id", "pageSelect"));
         select.addAttribute(new Attribute("resultMap", "BaseResultMap"));
         select.addAttribute(new Attribute("parameterType", introspectedTable.getBaseRecordType()));
-        select.addElement(new TextElement("select * from " + tableName));
+        select.addElement(new TextElement("select"));
+        XmlElement baseColumnList = new XmlElement("include");
+        baseColumnList.addAttribute(new Attribute("refid", "Base_Column_List"));
+        select.addElement(baseColumnList);
+        select.addElement(new TextElement("from " + tableName));
         XmlElement include = new XmlElement("include");
         include.addAttribute(new Attribute("refid", "sql_where"));
         select.addElement(include);
@@ -118,7 +122,9 @@ public class GenerateBaseMapperAndPagePlugin extends PluginAdapter {
         con.addAttribute(new Attribute("id", "selectByCondition"));
         con.addAttribute(new Attribute("resultMap", "BaseResultMap"));
         con.addAttribute(new Attribute("parameterType", introspectedTable.getBaseRecordType()));
-        con.addElement(new TextElement("select * from " + tableName));
+        con.addElement(new TextElement("select"));
+        con.addElement(baseColumnList);
+        con.addElement(new TextElement("from " + tableName));
         con.addElement(include);
         parentElement.addElement(con);
 
