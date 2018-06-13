@@ -2,6 +2,7 @@ package com.hiekn.boot.autoconfigure.jwt;
 
 import com.auth0.jwt.JWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Lists;
 import com.hiekn.boot.autoconfigure.base.exception.handler.JwtAuthenticationEntryPoint;
 import com.hiekn.boot.autoconfigure.base.filter.JwtAuthenticationTokenFilter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -21,6 +22,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
+
+import java.util.List;
+import java.util.Objects;
 
 @Configuration
 @ConditionalOnWebApplication
@@ -59,8 +63,19 @@ public class WebSecurityAutoConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        String[] ignoreUrls = jwtProperties.getSecurity().getIgnoreUrls();
-        web.ignoring().antMatchers(ignoreUrls);
+        String basePath = environment.getProperty("spring.jersey.application-path");
+        List<String> defaultIgnoreUrls = Lists.newArrayList("/"+basePath+"/swagger.json","/"+basePath+"/Swagger.html","/css/**","/fonts/**","/images/**","/lang/**","/lib/**","/*.js");
+        List<String> ignoreUrls = jwtProperties.getSecurity().getIgnoreUrls();
+        if(Objects.nonNull(ignoreUrls) && !ignoreUrls.isEmpty()){
+            for (String ignoreUrl : ignoreUrls) {
+                if(ignoreUrl.indexOf("/") == 0){
+                    defaultIgnoreUrls.add("/"+basePath+ignoreUrl);
+                }else {
+                    defaultIgnoreUrls.add("/"+basePath+"/"+ignoreUrl);
+                }
+            }
+        }
+        web.ignoring().antMatchers(defaultIgnoreUrls.toArray(new String[defaultIgnoreUrls.size()]));
     }
 
     @Bean

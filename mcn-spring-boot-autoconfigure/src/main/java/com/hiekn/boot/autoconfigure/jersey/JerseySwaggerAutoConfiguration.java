@@ -6,6 +6,7 @@ import com.hiekn.boot.autoconfigure.base.exception.handler.BaseExceptionHandler;
 import com.hiekn.boot.autoconfigure.base.exception.handler.ExceptionHandler;
 import com.hiekn.boot.autoconfigure.base.exception.handler.ValidationExceptionMapper;
 import com.hiekn.boot.autoconfigure.base.exception.handler.WebApplicationExceptionHandler;
+import com.hiekn.boot.autoconfigure.base.rest.SwaggerView;
 import io.swagger.jaxrs.config.BeanConfig;
 import io.swagger.jaxrs.listing.ApiListingResource;
 import io.swagger.jaxrs.listing.SwaggerSerializers;
@@ -14,6 +15,7 @@ import org.glassfish.jersey.client.JerseyClient;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.ServerProperties;
+import org.glassfish.jersey.server.mvc.freemarker.FreemarkerMvcFeature;
 import org.mybatis.spring.annotation.MapperScan;
 import org.mybatis.spring.mapper.MapperFactoryBean;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
@@ -110,7 +112,7 @@ public class JerseySwaggerAutoConfiguration extends ResourceConfig {
     @ConditionalOnClass({ApiListingResource.class, SwaggerSerializers.class})
     @ConditionalOnProperty(prefix = "jersey.swagger", name = {"init"}, havingValue = "true", matchIfMissing = true)
     public BeanConfig initSwagger(JerseySwaggerAutoConfiguration jerseySwaggerConfig) {
-        jerseySwaggerConfig.registerClasses(Sets.newHashSet(ApiListingResource.class, SwaggerSerializers.class));
+        jerseySwaggerConfig.registerClasses(Sets.newHashSet(ApiListingResource.class, SwaggerSerializers.class,SwaggerView.class));
         BeanConfig beanConfig = new BeanConfig();
         beanConfig.setVersion(jersey.getVersion());
         beanConfig.setTitle(jersey.getTitle());
@@ -118,6 +120,12 @@ public class JerseySwaggerAutoConfiguration extends ResourceConfig {
         beanConfig.setBasePath(jersey.getBasePath());
         beanConfig.setResourcePackage(jersey.getResourcePackage());
         beanConfig.setScan();
+        //is init embed swagger2 ui
+        if(ClassUtils.isPresent("org.glassfish.jersey.server.mvc.freemarker.FreemarkerMvcFeature",null)){
+            jerseySwaggerConfig.property(FreemarkerMvcFeature.TEMPLATE_BASE_PATH, "META-INF/resources")
+                    .property(FreemarkerMvcFeature.CACHE_TEMPLATES, new Boolean(false))
+                    .register(FreemarkerMvcFeature.class);
+        }
         return beanConfig;
     }
 

@@ -3,6 +3,7 @@ package com.hiekn.boot.autoconfigure.jwt;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.security.Security;
+import java.util.List;
 
 @ConfigurationProperties("jwt")
 public class JwtProperties {
@@ -54,7 +55,7 @@ public class JwtProperties {
 
     public static class Security{
         private Boolean login = false;
-        private String[] ignoreUrls = {"/api/swagger.json"};
+        private List<String> ignoreUrls;
 
         public Boolean getLogin() {
             return login;
@@ -64,11 +65,11 @@ public class JwtProperties {
             this.login = login;
         }
 
-        public String[] getIgnoreUrls() {
+        public List<String> getIgnoreUrls() {
             return ignoreUrls;
         }
 
-        public void setIgnoreUrls(String[] ignoreUrls) {
+        public void setIgnoreUrls(List<String> ignoreUrls) {
             this.ignoreUrls = ignoreUrls;
         }
     }
