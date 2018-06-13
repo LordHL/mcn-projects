@@ -12,14 +12,17 @@ public interface ExceptionKeys {
     Integer JSON_PARSE_ERROR = 30002;
     Integer INIT_ERROR = 30003;
     Integer VERIFY_CODE_ERROR = 30004;
-    Integer USER_EXIST_ERROR = 30005;
-    Integer USER_NOT_FOUND_ERROR = 30006;
+    Integer EXIST_ERROR = 30005;
+    Integer NOT_FOUND_ERROR = 30006;
     Integer USER_PWD_ERROR = 30007;
     Integer PWD_ERROR = 30008;
     Integer GET_MOBILE_CODE_ERROR = 30009;
     Integer VERIFY_MOBILE_CODE_ERROR = 30010;
     Integer UPLOAD_ERROR = 30011;
     Integer PERMISSION_NOT_ENOUGH_ERROR = 30012;
+    Integer ADD_ERROR = 30013;
+    Integer DELETE_ERROR = 30014;
+    Integer UPDATE_ERROR = 30015;
 
     Integer UN_LOGIN_ERROR = 50001;
     Integer AUTHENTICATION_ERROR = 50002;

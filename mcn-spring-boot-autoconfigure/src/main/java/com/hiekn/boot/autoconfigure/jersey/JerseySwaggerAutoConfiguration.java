@@ -19,10 +19,7 @@ import org.glassfish.jersey.server.mvc.freemarker.FreemarkerMvcFeature;
 import org.mybatis.spring.annotation.MapperScan;
 import org.mybatis.spring.mapper.MapperFactoryBean;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
+import org.springframework.boot.autoconfigure.condition.*;
 import org.springframework.boot.autoconfigure.jersey.JerseyAutoConfiguration;
 import org.springframework.boot.autoconfigure.jersey.ResourceConfigCustomizer;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -111,22 +108,28 @@ public class JerseySwaggerAutoConfiguration extends ResourceConfig {
     @Bean
     @ConditionalOnClass({ApiListingResource.class, SwaggerSerializers.class})
     @ConditionalOnProperty(prefix = "jersey.swagger", name = {"init"}, havingValue = "true", matchIfMissing = true)
-    public BeanConfig initSwagger(JerseySwaggerAutoConfiguration jerseySwaggerConfig) {
-        jerseySwaggerConfig.registerClasses(Sets.newHashSet(ApiListingResource.class, SwaggerSerializers.class,SwaggerView.class));
-        BeanConfig beanConfig = new BeanConfig();
-        beanConfig.setVersion(jersey.getVersion());
-        beanConfig.setTitle(jersey.getTitle());
-        beanConfig.setHost(jersey.getIp() + ":" + jersey.getPort());
-        beanConfig.setBasePath(jersey.getBasePath());
-        beanConfig.setResourcePackage(jersey.getResourcePackage());
-        beanConfig.setScan();
-        //is init embed swagger2 ui
-        if(ClassUtils.isPresent("org.glassfish.jersey.server.mvc.freemarker.FreemarkerMvcFeature",null)){
-            jerseySwaggerConfig.property(FreemarkerMvcFeature.TEMPLATE_BASE_PATH, "META-INF/resources")
-                    .property(FreemarkerMvcFeature.CACHE_TEMPLATES, new Boolean(false))
-                    .register(FreemarkerMvcFeature.class);
-        }
-        return beanConfig;
+    public ResourceConfigCustomizer initSwagger2() {
+        return config -> {
+            config.registerClasses(ApiListingResource.class, SwaggerSerializers.class);
+            BeanConfig beanConfig = new BeanConfig();
+            beanConfig.setVersion(jersey.getVersion());
+            beanConfig.setTitle(jersey.getTitle());
+            beanConfig.setHost(jersey.getIp() + ":" + jersey.getPort());
+            beanConfig.setBasePath(jersey.getBasePath());
+            beanConfig.setResourcePackage(jersey.getResourcePackage());
+            beanConfig.setScan();
+        };
+    }
+
+    @Bean
+    @ConditionalOnClass({FreemarkerMvcFeature.class})
+    @ConditionalOnBean(name = "initSwagger2")
+    public ResourceConfigCustomizer initSwagger2UI() {
+        return config ->
+            config.property(FreemarkerMvcFeature.TEMPLATE_BASE_PATH, "META-INF/resources")
+                .property(FreemarkerMvcFeature.CACHE_TEMPLATES, new Boolean(false))
+                .registerClasses(FreemarkerMvcFeature.class,SwaggerView.class)
+        ;
     }
 
     @Bean
