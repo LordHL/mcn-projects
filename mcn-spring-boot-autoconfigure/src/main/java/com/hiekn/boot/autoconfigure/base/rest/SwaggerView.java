@@ -1,5 +1,6 @@
 package com.hiekn.boot.autoconfigure.base.rest;
 
+import com.hiekn.boot.autoconfigure.base.util.CommonHelper;
 import com.hiekn.boot.autoconfigure.jersey.JerseySwaggerProperties;
 import org.glassfish.jersey.server.mvc.Template;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,8 @@ public class SwaggerView {
         Map<String, Object> map = new HashMap<>();
         map.put("ip",jerseySwaggerProperties.getIp());
         map.put("port",jerseySwaggerProperties.getPort());
-        map.put("path",jerseySwaggerProperties.getBasePath());
+        map.put("path",CommonHelper.parsePath(jerseySwaggerProperties.getBasePath()));
         return map;
     }
+
 }
