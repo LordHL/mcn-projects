@@ -23,9 +23,9 @@ public interface ExceptionKeys {
     Integer ADD_ERROR = 30013;
     Integer DELETE_ERROR = 30014;
     Integer UPDATE_ERROR = 30015;
+    Integer AUTHENTICATION_ERROR = 30016;
 
     Integer UN_LOGIN_ERROR = 50001;
-    Integer AUTHENTICATION_ERROR = 50002;
 
     Integer UNKNOWN_ERROR = 70001;
 
