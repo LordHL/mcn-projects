@@ -12,13 +12,13 @@ public class BaseException extends RuntimeException {
     private String msg;
 
     protected BaseException(Integer code) {
-        this(code, ErrorMsgUtil.getErrMsg(code));
+        this(code, null);
     }
 
     protected BaseException(Integer code,String msg) {
-        super(msg);
+        super(msg==null?ErrorMsgUtil.getErrMsg(code):ErrorMsgUtil.getErrMsg(code)+msg);
         this.code = code;
-        this.msg = msg;
+        this.msg = msg==null?ErrorMsgUtil.getErrMsg(code):ErrorMsgUtil.getErrMsg(code)+msg;
     }
 
     public Integer getCode() {
