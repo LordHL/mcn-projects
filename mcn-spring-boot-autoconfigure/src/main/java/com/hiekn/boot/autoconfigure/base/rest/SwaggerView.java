@@ -4,8 +4,8 @@ import com.hiekn.boot.autoconfigure.base.util.CommonHelper;
 import com.hiekn.boot.autoconfigure.jersey.JerseySwaggerProperties;
 import org.glassfish.jersey.server.mvc.Template;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 
+import javax.inject.Singleton;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -13,7 +13,7 @@ import javax.ws.rs.core.MediaType;
 import java.util.HashMap;
 import java.util.Map;
 
-@Controller
+@Singleton
 @Path("/")
 @Produces(MediaType.TEXT_HTML)
 public class SwaggerView {
