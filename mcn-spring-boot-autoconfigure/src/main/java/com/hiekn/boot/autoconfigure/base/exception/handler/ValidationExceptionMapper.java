@@ -27,17 +27,14 @@ public final class ValidationExceptionMapper implements ExceptionMapper<Validati
     public Response toResponse(final ValidationException exception) {
         RestResp<List<ValidationErrorBean>> objectRestResp = new RestResp<>();
         objectRestResp.setActionStatus(RestResp.ActionStatusMethod.FAIL.toString());
-        objectRestResp.setErrorCode(ExceptionKeys.UNKNOWN_ERROR);
-        objectRestResp.setErrorInfo(ErrorMsgUtil.getErrMsg(ExceptionKeys.UNKNOWN_ERROR));
+        objectRestResp.setErrorCode(ExceptionKeys.PARAM_PARSE_ERROR);
+        objectRestResp.setErrorInfo(ErrorMsgUtil.getErrMsg(ExceptionKeys.PARAM_PARSE_ERROR));
         if (exception instanceof ConstraintViolationException) {
 
             final ConstraintViolationException cve = (ConstraintViolationException) exception;
             final Response.ResponseBuilder response = Response.status(ValidationHelper.getResponseStatus(cve));
 
             final Object property = config.getProperty(ServerProperties.BV_SEND_ERROR_IN_RESPONSE);
-
-            objectRestResp.setErrorCode(ExceptionKeys.PARAM_PARSE_ERROR);
-            objectRestResp.setErrorInfo(ErrorMsgUtil.getErrMsg(ExceptionKeys.PARAM_PARSE_ERROR));
 
             if (property != null && Boolean.valueOf(property.toString())) {
                 response.type(MediaType.APPLICATION_JSON_TYPE);
