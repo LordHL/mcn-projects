@@ -23,11 +23,11 @@ import java.beans.PropertyDescriptor;
 import java.util.Iterator;
 import java.util.Map;
 
-public class MultiplyDataSourceRegistryPostProcessor implements BeanDefinitionRegistryPostProcessor {
+public class MultipleDataSourceRegistryPostProcessor implements BeanDefinitionRegistryPostProcessor {
 
     private Environment environment;
 
-    public MultiplyDataSourceRegistryPostProcessor(Environment environment) {
+    public MultipleDataSourceRegistryPostProcessor(Environment environment) {
         this.environment = environment;
     }
 
@@ -35,7 +35,7 @@ public class MultiplyDataSourceRegistryPostProcessor implements BeanDefinitionRe
     public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) throws BeansException {
         if (environment instanceof ConfigurableEnvironment) {
             ConfigurableEnvironment env = (ConfigurableEnvironment) environment;
-            String[] dbs = env.getProperty(MultiplyMybatisAutoConfiguration.PREFIX + "name", String[].class);
+            String[] dbs = env.getProperty(MultipleMybatisAutoConfiguration.PREFIX + "name", String[].class);
             String basePackage = env.getProperty((McnPropertiesPostProcessor.APP_BASE_PACKAGE_PROPERTY));
             for (String db : dbs) {
                 GenericBeanDefinition beanDefinition = new GenericBeanDefinition();
@@ -90,7 +90,7 @@ public class MultiplyDataSourceRegistryPostProcessor implements BeanDefinitionRe
     }
 
     private void configConnectPool(GenericBeanDefinition beanDefinition, String db) {
-        String propertyPrefixKey = new StringBuilder(MultiplyMybatisAutoConfiguration.PREFIX).append(db).append(".").toString();
+        String propertyPrefixKey = new StringBuilder(MultipleMybatisAutoConfiguration.PREFIX).append(db).append(".").toString();
         Map<String, Object> map = Maps.newHashMap();
         PropertyDescriptor[] descriptors = BeanUtils.getPropertyDescriptors(org.apache.tomcat.jdbc.pool.DataSource.class);
         for (PropertyDescriptor descriptor : descriptors) {

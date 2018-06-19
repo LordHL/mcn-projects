@@ -9,8 +9,8 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.TYPE, ElementType.METHOD })
-@Conditional(OnMultiplyDatasourceCondition.class)
-public @interface ConditionOnMultiplyDatasource {
+@Conditional(OnMultipleDatasourceCondition.class)
+public @interface ConditionOnMultipleDatasource {
     String prefix() default "";
     String name() default "";
 }

@@ -1,7 +1,7 @@
 package com.hiekn.boot.autoconfigure.jersey;
 
 import com.hiekn.boot.autoconfigure.context.McnPropertiesPostProcessor;
-import com.hiekn.boot.autoconfigure.mybatis.MultiplyMybatisAutoConfiguration;
+import com.hiekn.boot.autoconfigure.mybatis.MultipleMybatisAutoConfiguration;
 import org.mybatis.spring.mapper.ClassPathMapperScanner;
 import org.springframework.context.annotation.Condition;
 import org.springframework.context.annotation.ConditionContext;
@@ -13,7 +13,7 @@ public class OnSingleDatasourceCondition implements Condition {
     @Override
     public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
         Environment environment = context.getEnvironment();
-        String[] dbs = environment.getProperty(MultiplyMybatisAutoConfiguration.PREFIX+"name", String[].class);
+        String[] dbs = environment.getProperty(MultipleMybatisAutoConfiguration.PREFIX+"name", String[].class);
         if(dbs == null || dbs.length == 0) {
             ClassPathMapperScanner scanner = new ClassPathMapperScanner(context.getRegistry());
             ResourceLoader resourceLoader = context.getResourceLoader();

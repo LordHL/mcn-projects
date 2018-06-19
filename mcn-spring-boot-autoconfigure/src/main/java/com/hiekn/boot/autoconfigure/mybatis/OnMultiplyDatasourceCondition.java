@@ -10,13 +10,13 @@ import org.springframework.util.StringUtils;
 
 import java.util.Map;
 
-class OnMultiplyDatasourceCondition implements Condition {
+class OnMultipleDatasourceCondition implements Condition {
 
-    public static final String BEAN_NAME = MultiplyDataSourceRegistryPostProcessor.class.getPackage().getName()+".multiplyDataSourceRegistryPostProcessor";
+    public static final String BEAN_NAME = MultipleDataSourceRegistryPostProcessor.class.getPackage().getName()+".multiplyDataSourceRegistryPostProcessor";
 
     @Override
     public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
-        Map<String, Object> attributes = metadata.getAnnotationAttributes(ConditionOnMultiplyDatasource.class.getName());
+        Map<String, Object> attributes = metadata.getAnnotationAttributes(ConditionOnMultipleDatasource.class.getName());
         String prefix = attributes.get("prefix").toString();
         String name = attributes.get("name").toString();
         if(!StringUtils.hasText(prefix) || !StringUtils.hasText(name)){
@@ -30,7 +30,7 @@ class OnMultiplyDatasourceCondition implements Condition {
         //register multiply datasource post processor
         BeanDefinitionRegistry registry = context.getRegistry();
         if(!registry.containsBeanDefinition(BEAN_NAME)){
-            RootBeanDefinition beanDefinition = new RootBeanDefinition(MultiplyDataSourceRegistryPostProcessor.class);
+            RootBeanDefinition beanDefinition = new RootBeanDefinition(MultipleDataSourceRegistryPostProcessor.class);
             beanDefinition.getConstructorArgumentValues().addGenericArgumentValue(environment);
             registry.registerBeanDefinition(BEAN_NAME,beanDefinition);
         }

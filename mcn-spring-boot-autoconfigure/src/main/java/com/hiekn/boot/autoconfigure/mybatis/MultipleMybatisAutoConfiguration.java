@@ -10,8 +10,8 @@ import javax.sql.DataSource;
 
 @Configuration
 @ConditionalOnClass({DataSource.class,SqlSessionFactory.class})
-@ConditionOnMultiplyDatasource(prefix = "multiply.datasource",name = "name")
-public class MultiplyMybatisAutoConfiguration {
+@ConditionOnMultipleDatasource(prefix = "multiply.datasource",name = "name")
+public class MultipleMybatisAutoConfiguration {
 
     public static final String PREFIX = "multiply.datasource.";
 

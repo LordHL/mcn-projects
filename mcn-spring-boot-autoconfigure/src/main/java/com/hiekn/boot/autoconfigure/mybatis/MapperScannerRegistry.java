@@ -18,7 +18,7 @@ class MapperScannerRegistry implements ImportBeanDefinitionRegistrar,Environment
 
     @Override
     public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
-        String[] dbs = environment.getProperty(MultiplyMybatisAutoConfiguration.PREFIX+"name", String[].class);
+        String[] dbs = environment.getProperty(MultipleMybatisAutoConfiguration.PREFIX+"name", String[].class);
         String daoBasePackage = environment.getProperty((McnPropertiesPostProcessor.APP_BASE_PACKAGE_PROPERTY))+".dao.";
         for (String db : dbs) {
             ClassPathMapperScanner scanner = new ClassPathMapperScanner(registry);
