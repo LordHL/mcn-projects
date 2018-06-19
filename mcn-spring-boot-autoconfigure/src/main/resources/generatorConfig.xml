@@ -43,7 +43,7 @@
             <!-- 在targetPackage的基础上，根据数据库的schema再生成一层package，最终生成的类放在这个package下，默认为false -->
             <property name="enableSubPackages" value="true"/>
             <!-- 设置是否在getter方法中，对String类型字段调用trim()方法 -->
-            <property name="trimStrings" value="true"/>
+            <property name="trimStrings" value="false"/>
             <property name="rootClass" value="com.hiekn.boot.autoconfigure.base.model.BaseModel"/>
         </javaModelGenerator>
         <!--对应的xml mapper文件  -->
