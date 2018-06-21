@@ -14,10 +14,10 @@ public class BaseModel {
     private Integer pageSize;
 
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8" )
-    private Date createTime;
+    private transient Date createTime;
 
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8" )
-    private Date updateTime;
+    private transient Date updateTime;
 
     public Integer getPageNo() {
         return pageNo;
