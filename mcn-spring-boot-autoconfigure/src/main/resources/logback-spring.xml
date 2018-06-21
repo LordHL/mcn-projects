@@ -20,10 +20,10 @@
             <level>${logging.filter.file}</level>
         </filter>
         <!--当天生成的日志文件名称-->
-        <file>${LOG_PATH}/error-${profile}.log</file>
+        <file>${LOG_PATH}error-${profile}.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!--日志文件输出的文件名-->
-            <FileNamePattern>${LOG_PATH}/error-${profile}-%d{yyyy-MM-dd}.log.gz</FileNamePattern>
+            <FileNamePattern>${LOG_PATH}error-${profile}-%d{yyyy-MM-dd}.log.gz</FileNamePattern>
             <!--归档日志文件保留天数-->
             <MaxHistory>30</MaxHistory>
         </rollingPolicy>
