@@ -2,15 +2,14 @@ package com.hiekn.boot.autoconfigure.jwt;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import java.security.Security;
 import java.util.List;
 
 @ConfigurationProperties("jwt")
 public class JwtProperties {
     private String secretKey = "SECRET";
     private String issuer = "hiekn";
-    private Long refreshInterval = 24*60*60*1000L;
-    private Integer expireDate = 7;
+    private Long refreshInterval = 3L;
+    private Integer expireDate = 14;
     private Security security = new Security();
 
     public String getSecretKey() {
