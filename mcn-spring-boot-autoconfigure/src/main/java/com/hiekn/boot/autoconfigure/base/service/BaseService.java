@@ -11,6 +11,8 @@ public interface BaseService<T,PK> {
     T getByPrimaryKey(PK id);
     void updateByPrimaryKeySelective(T pojo);
     RestData<T> listByPage(T pojo);
+    List<T> pageSelect(T pojo);
+    int pageCount(T pojo);
     List<T> selectByCondition(T pojo);
 
 }

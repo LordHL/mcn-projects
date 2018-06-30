@@ -41,7 +41,17 @@ public class BaseServiceImpl<T,PK> implements BaseService<T,PK> {
 
     @Override
     public RestData<T> listByPage(T pojo) {
-        return new RestData<>(baseMapper.pageSelect(pojo),baseMapper.pageCount(pojo));
+        return new RestData<>(pageSelect(pojo),pageCount(pojo));
+    }
+
+    @Override
+    public List<T> pageSelect(T pojo) {
+        return baseMapper.pageSelect(pojo);
+    }
+
+    @Override
+    public int pageCount(T pojo) {
+        return baseMapper.pageCount(pojo);
     }
 
     @Override
