@@ -1,6 +1,5 @@
 package com.hiekn.boot.autoconfigure.base.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.util.Date;
@@ -13,10 +12,8 @@ public class BaseModel {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Integer pageSize;
 
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8" )
     private transient Date createTime;
 
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8" )
     private transient Date updateTime;
 
     public Integer getPageNo() {
