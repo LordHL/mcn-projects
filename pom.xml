@@ -36,7 +36,7 @@
         <commons-io.version>2.6</commons-io.version>
         <fastjson.version>1.2.47</fastjson.version>
         <boot-admin.version>1.5.7</boot-admin.version>
-        <qiniu.version>7.0.7</qiniu.version>
+        <qiniu.version>7.2.11</qiniu.version>
     </properties>
 
     <dependencyManagement>
