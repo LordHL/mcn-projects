@@ -13,7 +13,7 @@ import javax.ws.rs.ext.ExceptionMapper;
 
 public final class WebApplicationExceptionHandler  implements ExceptionMapper<WebApplicationException> {
 
-    private final Log logger = LogFactory.getLog(WebApplicationExceptionHandler.class);
+    private static final Log logger = LogFactory.getLog(WebApplicationExceptionHandler.class);
 
     @Override
     public Response toResponse(final WebApplicationException exception) {

@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 public final class BaseExceptionHandler implements ExceptionMapper<BaseException> {
 
-    private final Log logger = LogFactory.getLog(BaseExceptionHandler.class);
+    private static final Log logger = LogFactory.getLog(BaseExceptionHandler.class);
 
     private String basePackage = BeanUtils.getBean(JerseySwaggerProperties.class).getBasePackage();
 

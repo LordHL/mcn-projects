@@ -12,7 +12,7 @@ import javax.ws.rs.ext.ExceptionMapper;
 
 public final class ExceptionHandler implements ExceptionMapper<Exception> {
 
-    private final Log logger = LogFactory.getLog(ExceptionHandler.class);
+    private static final Log logger = LogFactory.getLog(ExceptionHandler.class);
 
     @Override
     public Response toResponse(final Exception exception) {
