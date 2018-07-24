@@ -17,7 +17,7 @@ public class GenerateBaseServiceAndImplementPlugin extends PluginAdapter {
     private String serviceTargetPackage;
     private String service;
 
-    private ShellCallback shellCallback = null;
+    private ShellCallback shellCallback;
 
     public GenerateBaseServiceAndImplementPlugin() {
         shellCallback = new DefaultShellCallback(false);
@@ -98,7 +98,7 @@ public class GenerateBaseServiceAndImplementPlugin extends PluginAdapter {
                 restClass.addImportedType(introspectedTable.getBaseRecordType());
                 restClass.getAnnotations().add("@Controller");
                 String path = Introspector.decapitalize(shortName.replace("Mapper", ""));
-                restClass.getAnnotations().add("@Path(\"/"+path+"\")");
+                restClass.getAnnotations().add("@Path(\""+path+"\")");
                 restClass.getAnnotations().add("@Produces(MediaType.APPLICATION_JSON)");
                 restClass.getAnnotations().add("@Api(\""+shortName.replace("Mapper", "RestApi")+"\")");
                 restClass.getAnnotations().add("@ApiImplicitParams({@ApiImplicitParam(paramType = \"header\", dataType = \"string\", name = \"Authorization\",required = true)})\n");
@@ -141,7 +141,7 @@ public class GenerateBaseServiceAndImplementPlugin extends PluginAdapter {
 
         Method listByPage = new Method("listByPage");
         listByPage.getAnnotations().add("@GET");
-        listByPage.getAnnotations().add("@Path(\"/list/page\")");
+        listByPage.getAnnotations().add("@Path(\"list/page\")");
         listByPage.getAnnotations().add("@ApiOperation(\"分页\")");
         listByPage.setVisibility(JavaVisibility.PUBLIC);
         listByPage.setReturnType(new FullyQualifiedJavaType("RestResp<RestData<"
@@ -156,19 +156,19 @@ public class GenerateBaseServiceAndImplementPlugin extends PluginAdapter {
 
         Method get = new Method("get");
         get.getAnnotations().add("@GET");
-        get.getAnnotations().add("@Path(\"/get\")");
+        get.getAnnotations().add("@Path(\"{id}\")");
         get.getAnnotations().add("@ApiOperation(\"详情\")");
         get.setVisibility(JavaVisibility.PUBLIC);
         get.setReturnType(new FullyQualifiedJavaType("RestResp<"
                 + introspectedTable.getFullyQualifiedTable().getDomainObjectName() + ">"));
-        parameter = new Parameter(new FullyQualifiedJavaType("@ApiParam(required = true)@QueryParam(\"id\") "+pk+""),"id");
+        parameter = new Parameter(new FullyQualifiedJavaType("@PathParam(\"id\") "+pk+""),"id");
         get.getParameters().add(parameter);
         get.getBodyLines().add("return new RestResp<>("+xService+".getByPrimaryKey(id));");
         restClass.getMethods().add(get);
 
         Method add = new Method("add");
         add.getAnnotations().add("@POST");
-        add.getAnnotations().add("@Path(\"/add\")");
+        add.getAnnotations().add("@Path(\"add\")");
         add.getAnnotations().add("@ApiOperation(\"新增\")");
         add.setVisibility(JavaVisibility.PUBLIC);
         add.setReturnType(new FullyQualifiedJavaType("RestResp<"
@@ -183,29 +183,30 @@ public class GenerateBaseServiceAndImplementPlugin extends PluginAdapter {
         restClass.getMethods().add(add);
 
         Method delete = new Method("delete");
-        delete.getAnnotations().add("@GET");
-        delete.getAnnotations().add("@Path(\"/delete\")");
+        delete.getAnnotations().add("@DELETE");
+        delete.getAnnotations().add("@Path(\"{id}\")");
         delete.getAnnotations().add("@ApiOperation(\"删除\")");
         delete.setVisibility(JavaVisibility.PUBLIC);
         delete.setReturnType(new FullyQualifiedJavaType("RestResp"));
-        parameter = new Parameter(new FullyQualifiedJavaType("@ApiParam(required = true)@QueryParam(\"id\") "+pk+""),"id");
+        parameter = new Parameter(new FullyQualifiedJavaType("@PathParam(\"id\") "+pk+""),"id");
         delete.getParameters().add(parameter);
         delete.getBodyLines().add(""+xService+".deleteByPrimaryKey(id);");
         delete.getBodyLines().add("return new RestResp<>();");
         restClass.getMethods().add(delete);
 
         Method update = new Method("update");
-        update.getAnnotations().add("@POST");
-        update.getAnnotations().add("@Path(\"/update\")");
+        update.getAnnotations().add("@PUT");
+        update.getAnnotations().add("@Path(\"{id}\")");
         update.getAnnotations().add("@ApiOperation(\"修改\")");
         update.setVisibility(JavaVisibility.PUBLIC);
         update.setReturnType(new FullyQualifiedJavaType("RestResp"));
-        parameter = new Parameter(new FullyQualifiedJavaType("@ApiParam(required = true)@QueryParam(\"id\") "+pk+""),"id");
+        parameter = new Parameter(new FullyQualifiedJavaType("@PathParam(\"id\") "+pk+""),"id");
         update.getParameters().add(parameter);
         parameter = new Parameter(new FullyQualifiedJavaType("@ApiParam(required = true)@FormParam(\"bean\") String"),"bean");
         update.getParameters().add(parameter);
         update.getBodyLines().add(""+Bean+" "+bean+" = JsonUtils.fromJson(bean, "+Bean+".class);");
         update.getBodyLines().add(""+bean+".setId(id);");
+        update.getBodyLines().add("BeanValidator.validate("+bean+");");
         update.getBodyLines().add(""+xService+".updateByPrimaryKeySelective("+bean+");");
         update.getBodyLines().add("return new RestResp<>();");
         restClass.getMethods().add(update);
