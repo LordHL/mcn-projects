@@ -9,7 +9,7 @@ public class InvalidAuthenticationTokenException extends AuthenticationException
     }
 
     public static InvalidAuthenticationTokenException newInstance(Throwable cause){
-        return new InvalidAuthenticationTokenException(ExceptionKeys.AUTHENTICATION_ERROR.toString(),cause);
+        return new InvalidAuthenticationTokenException(ExceptionKeys.AUTHENTICATION_ERROR+"",cause);
     }
 
 }

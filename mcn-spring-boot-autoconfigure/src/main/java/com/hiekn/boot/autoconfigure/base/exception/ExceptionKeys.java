@@ -8,32 +8,32 @@ package com.hiekn.boot.autoconfigure.base.exception;
  */
 public interface ExceptionKeys {
 
-    Integer PARAM_PARSE_ERROR = 30001;
-    Integer JSON_PARSE_ERROR = 30002;
-    Integer INIT_ERROR = 30003;
-    Integer VERIFY_CODE_ERROR = 30004;
-    Integer EXIST_ERROR = 30005;
-    Integer NOT_FOUND_ERROR = 30006;
-    Integer USER_PWD_ERROR = 30007;
-    Integer PWD_ERROR = 30008;
-    Integer GET_MOBILE_CODE_ERROR = 30009;
-    Integer VERIFY_MOBILE_CODE_ERROR = 30010;
-    Integer UPLOAD_ERROR = 30011;
-    Integer PERMISSION_NOT_ENOUGH_ERROR = 30012;
-    Integer ADD_ERROR = 30013;
-    Integer DELETE_ERROR = 30014;
-    Integer UPDATE_ERROR = 30015;
-    Integer AUTHENTICATION_ERROR = 30016;
+    int PARAM_PARSE_ERROR = 30001;
+    int JSON_PARSE_ERROR = 30002;
+    int INIT_ERROR = 30003;
+    int VERIFY_CODE_ERROR = 30004;
+    int EXIST_ERROR = 30005;
+    int NOT_FOUND_ERROR = 30006;
+    int USER_PWD_ERROR = 30007;
+    int PWD_ERROR = 30008;
+    int GET_MOBILE_CODE_ERROR = 30009;
+    int VERIFY_MOBILE_CODE_ERROR = 30010;
+    int UPLOAD_ERROR = 30011;
+    int PERMISSION_NOT_ENOUGH_ERROR = 30012;
+    int ADD_ERROR = 30013;
+    int DELETE_ERROR = 30014;
+    int UPDATE_ERROR = 30015;
+    int AUTHENTICATION_ERROR = 30016;
 
-    Integer UN_LOGIN_ERROR = 50001;
+    int UN_LOGIN_ERROR = 50001;
 
-    Integer UNKNOWN_ERROR = 70001;
+    int UNKNOWN_ERROR = 70001;
 
-    Integer HTTP_ERROR = 80001;
+    int HTTP_ERROR = 80001;
 
-    Integer SERVICE_ERROR = 90000;
-    Integer THIRD_PARTY_ERROR = 90001;
-    Integer REMOTE_SERVICE_ERROR = 90002;
-    Integer REMOTE_DATA_PARSE_ERROR = 90003;
+    int SERVICE_ERROR = 90000;
+    int THIRD_PARTY_ERROR = 90001;
+    int REMOTE_SERVICE_ERROR = 90002;
+    int REMOTE_DATA_PARSE_ERROR = 90003;
 
 }
