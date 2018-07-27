@@ -4,33 +4,33 @@
   <meta charset="UTF-8">
   <meta http-equiv="x-ua-compatible" content="IE=edge">
   <title>Swagger UI</title>
-  <link rel="icon" type="image/png" href="/images/favicon-32x32.png" sizes="32x32" />
-  <link rel="icon" type="image/png" href="/images/favicon-16x16.png" sizes="16x16" />
-  <link href='/css/typography.css' media='screen' rel='stylesheet' type='text/css'/>
-  <link href='/css/reset.css' media='screen' rel='stylesheet' type='text/css'/>
-  <link href='/css/screen.css' media='screen' rel='stylesheet' type='text/css'/>
-  <link href='/css/reset.css' media='print' rel='stylesheet' type='text/css'/>
-  <link href='/css/print.css' media='print' rel='stylesheet' type='text/css'/>
+  <link rel="icon" type="image/png" href="${cdn}images/favicon-32x32.png" sizes="32x32" />
+  <link rel="icon" type="image/png" href="${cdn}images/favicon-16x16.png" sizes="16x16" />
+  <link href='${cdn}css/typography.css' media='screen' rel='stylesheet' type='text/css'/>
+  <link href='${cdn}css/reset.css' media='screen' rel='stylesheet' type='text/css'/>
+  <link href='${cdn}css/screen.css' media='screen' rel='stylesheet' type='text/css'/>
+  <link href='${cdn}css/reset.css' media='print' rel='stylesheet' type='text/css'/>
+  <link href='${cdn}css/print.css' media='print' rel='stylesheet' type='text/css'/>
 
-  <script src='/lib/object-assign-pollyfill.js' type='text/javascript'></script>
-  <script src='/lib/jquery-1.8.0.min.js' type='text/javascript'></script>
-  <script src='/lib/jquery.slideto.min.js' type='text/javascript'></script>
-  <script src='/lib/jquery.wiggle.min.js' type='text/javascript'></script>
-  <script src='/lib/jquery.ba-bbq.min.js' type='text/javascript'></script>
-  <script src='/lib/handlebars-4.0.5.js' type='text/javascript'></script>
-  <script src='/lib/lodash.min.js' type='text/javascript'></script>
-  <script src='/lib/backbone-min.js' type='text/javascript'></script>
-  <script src='/swagger-ui.js' type='text/javascript'></script>
-  <script src='/lib/highlight.9.1.0.pack.js' type='text/javascript'></script>
-  <script src='/lib/highlight.9.1.0.pack_extended.js' type='text/javascript'></script>
-  <script src='/lib/jsoneditor.min.js' type='text/javascript'></script>
-  <script src='/lib/marked.js' type='text/javascript'></script>
-  <script src='/lib/swagger-oauth.js' type='text/javascript'></script>
+  <script src='${cdn}lib/object-assign-pollyfill.js' type='text/javascript'></script>
+  <script src='${cdn}lib/jquery-1.8.0.min.js' type='text/javascript'></script>
+  <script src='${cdn}lib/jquery.slideto.min.js' type='text/javascript'></script>
+  <script src='${cdn}lib/jquery.wiggle.min.js' type='text/javascript'></script>
+  <script src='${cdn}lib/jquery.ba-bbq.min.js' type='text/javascript'></script>
+  <script src='${cdn}lib/handlebars-4.0.5.js' type='text/javascript'></script>
+  <script src='${cdn}lib/lodash.min.js' type='text/javascript'></script>
+  <script src='${cdn}lib/backbone-min.js' type='text/javascript'></script>
+  <script src='${cdn}swagger-ui.js' type='text/javascript'></script>
+  <script src='${cdn}lib/highlight.9.1.0.pack.js' type='text/javascript'></script>
+  <script src='${cdn}lib/highlight.9.1.0.pack_extended.js' type='text/javascript'></script>
+  <script src='${cdn}lib/jsoneditor.min.js' type='text/javascript'></script>
+  <script src='${cdn}lib/marked.js' type='text/javascript'></script>
+  <script src='${cdn}lib/swagger-oauth.js' type='text/javascript'></script>
 
   <!-- Some basic translations -->
-  <script src='/lang/translator.js' type='text/javascript'></script>
+  <script src='${cdn}lang/translator.js' type='text/javascript'></script>
   <!-- <script src='lang/ru.js' type='text/javascript'></script> -->
-  <script src='/lang/zh-cn.js' type='text/javascript'></script>
+  <script src='${cdn}lang/zh-cn.js' type='text/javascript'></script>
 
   <script type="text/javascript">
     $(function () {
@@ -98,7 +98,7 @@
 <body class="swagger-section">
 <div id='header'>
   <div class="swagger-ui-wrap">
-    <a id="logo" href="https://github.com/kse-music"><img class="logo__img" alt="swagger" height="30" width="30" src="/images/logo_small.png" /><span class="logo__title">Swagger</span></a>
+    <a id="logo" href="https://github.com/kse-music"><img class="logo__img" alt="swagger" height="30" width="30" src="${cdn}images/logo_small.png" /><span class="logo__title">Swagger</span></a>
     <form id='api_selector'>
       <div class='input'><input placeholder="http://example.com/api" id="input_baseUrl" name="baseUrl" type="text"/></div>
       <div id='auth_container'></div>

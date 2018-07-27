@@ -24,6 +24,8 @@ public class JerseySwaggerProperties {
      */
     private String otherResourcePackage;
 
+    private String cdn;
+
     public String getBasePackage() {
         return basePackage;
     }
@@ -102,5 +104,13 @@ public class JerseySwaggerProperties {
 
     public void setOtherResourcePackage(String otherResourcePackage) {
         this.otherResourcePackage = otherResourcePackage;
+    }
+
+    public String getCdn() {
+        return cdn;
+    }
+
+    public void setCdn(String cdn) {
+        this.cdn = cdn;
     }
 }
