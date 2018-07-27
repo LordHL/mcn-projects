@@ -13,12 +13,25 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 public class MybatisGenUtil {
 
     public static void genMapperAndXml(){
+        Properties prop = new Properties();
+        try {
+            prop.load(MybatisGenUtil.class.getClassLoader().getResourceAsStream("generator.properties"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        genMapperAndXml(Boolean.valueOf(prop.getProperty("overwrite","false")));//默认不进行覆盖
+    }
+
+    /**
+     * @param overwrite 如果已经生成过了是否进行覆盖
+     */
+    private static void genMapperAndXml(boolean overwrite){
         List<String> warnings = new ArrayList<>();
-        boolean overwrite = true;//如果已经生成过了是否进行覆盖
         String genCfg = "/generatorConfig.xml";//配置文件的路径:默认放到classpath下面
         URL url = MybatisGenUtil.class.getResource(genCfg);
         String file = url.getFile();

@@ -16,11 +16,12 @@ public class GenerateBaseServiceAndImplementPlugin extends PluginAdapter {
     private String serviceTargetDir;
     private String serviceTargetPackage;
     private String service;
+    private boolean overwrite;
 
     private ShellCallback shellCallback;
 
     public GenerateBaseServiceAndImplementPlugin() {
-        shellCallback = new DefaultShellCallback(false);
+        shellCallback = new DefaultShellCallback(true);
     }
 
     @Override
@@ -28,6 +29,7 @@ public class GenerateBaseServiceAndImplementPlugin extends PluginAdapter {
         serviceTargetDir = properties.getProperty("targetProject");
         serviceTargetPackage = properties.getProperty("targetPackage");
         service = properties.getProperty("service");
+        overwrite = Boolean.valueOf(properties.getProperty("overwrite"));
         return stringHasValue(serviceTargetDir) && stringHasValue(serviceTargetPackage) && stringHasValue(service);
     }
 
@@ -55,7 +57,8 @@ public class GenerateBaseServiceAndImplementPlugin extends PluginAdapter {
 
                 String rootInterface = properties.getProperty("rootInterface");
 
-                TopLevelClass topLevelClass = new TopLevelClass(new FullyQualifiedJavaType(serviceTargetPackage+".impl."+shortName.replace("Mapper", "ServiceImpl")));
+                String implServicePkg = serviceTargetPackage+".impl";
+                TopLevelClass topLevelClass = new TopLevelClass(new FullyQualifiedJavaType(implServicePkg+"."+shortName.replace("Mapper", "ServiceImpl")));
                 topLevelClass.setVisibility(JavaVisibility.PUBLIC);
                 topLevelClass.addImportedType(service);
                 topLevelClass.addImportedType(serviceInterfaceFullName);
@@ -79,8 +82,8 @@ public class GenerateBaseServiceAndImplementPlugin extends PluginAdapter {
                     topLevelClass.addImportedType(rootInterface.replace("BaseService","BaseServiceImpl"));
                     topLevelClass.setSuperClass(baseServiceImpl);
                 }
-
-                TopLevelClass restClass = new TopLevelClass(new FullyQualifiedJavaType(serviceTargetPackage.replace(".service",".rest.")+shortName.replace("Mapper", "RestApi")));
+                String restPkg = serviceTargetPackage.replace(".service",".rest");
+                TopLevelClass restClass = new TopLevelClass(new FullyQualifiedJavaType(restPkg+"."+shortName.replace("Mapper", "RestApi")));
                 restClass.setVisibility(JavaVisibility.PUBLIC);
                 restClass.addImportedType("org.springframework.stereotype.Controller");
                 restClass.addImportedType("javax.ws.rs.*");
@@ -112,11 +115,11 @@ public class GenerateBaseServiceAndImplementPlugin extends PluginAdapter {
                 try {
                     JavaFormatter javaFormatter = context.getJavaFormatter();
                     //gen XxxService
-                    checkAndAddJavaFile(new GeneratedJavaFile(serviceInterface, serviceTargetDir, javaFormatter),javaFiles);
+                    checkAndAddJavaFile(new GeneratedJavaFile(serviceInterface, serviceTargetDir, javaFormatter),javaFiles,serviceTargetPackage);
                     //gen XxxServiceImpl
-                    checkAndAddJavaFile(new GeneratedJavaFile(topLevelClass, serviceTargetDir, javaFormatter),javaFiles);
+                    checkAndAddJavaFile(new GeneratedJavaFile(topLevelClass, serviceTargetDir, javaFormatter),javaFiles,implServicePkg);
                     //gen XxxRestApi
-                    checkAndAddJavaFile(new GeneratedJavaFile(restClass, serviceTargetDir, javaFormatter),javaFiles);
+                    checkAndAddJavaFile(new GeneratedJavaFile(restClass, serviceTargetDir, javaFormatter),javaFiles,restPkg);
                 } catch (ShellException e) {
                     e.printStackTrace();
                 }
@@ -125,15 +128,30 @@ public class GenerateBaseServiceAndImplementPlugin extends PluginAdapter {
         return javaFiles;
     }
 
-    private void checkAndAddJavaFile(GeneratedJavaFile javaFile,List<GeneratedJavaFile> javaFiles) throws ShellException {
-        File dir = shellCallback.getDirectory(serviceTargetDir, serviceTargetPackage);
+    private void checkAndAddJavaFile(GeneratedJavaFile javaFile,List<GeneratedJavaFile> javaFiles,String pkg) throws ShellException {
+        File dir = shellCallback.getDirectory(serviceTargetDir, pkg);
         File file = new File(dir, javaFile.getFileName());
-        if (file.exists()) {
-            file.delete();
+        if(file.exists()){
+            if(overwrite){
+                javaFiles.add(javaFile);
+            }
+        }else{
+            javaFiles.add(javaFile);
         }
-        javaFiles.add(javaFile);
     }
 
+
+    @Override
+    public boolean sqlMapGenerated(GeneratedXmlFile sqlMap, IntrospectedTable introspectedTable) {
+        try {
+            java.lang.reflect.Field field = sqlMap.getClass().getDeclaredField("isMergeable");
+            field.setAccessible(true);
+            field.setBoolean(sqlMap, !overwrite);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
 
     private void addBaseMethod(IntrospectedTable introspectedTable,TopLevelClass restClass,String xService,String pk){
         String bean = Introspector.decapitalize(introspectedTable.getFullyQualifiedTable().getDomainObjectName());
