@@ -41,7 +41,7 @@ public class McnPropertiesPostProcessor implements EnvironmentPostProcessor,Orde
         try{
             //add global config file diff environment
             String[] activeProfiles = environment.getActiveProfiles();
-            StringBuilder globalConfigName = new StringBuilder("classpath:").append("mcn-global");
+            StringBuilder globalConfigName = new StringBuilder(ResourceUtils.CLASSPATH_URL_PREFIX).append("mcn-global");
             if(Objects.nonNull(activeProfiles) && activeProfiles.length > 0){
                 globalConfigName.append("-").append(activeProfiles[0]);
             }
