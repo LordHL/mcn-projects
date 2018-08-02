@@ -7,9 +7,7 @@ import org.mybatis.generator.exception.InvalidConfigurationException;
 import org.mybatis.generator.exception.XMLParserException;
 import org.mybatis.generator.internal.DefaultShellCallback;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,14 +30,10 @@ public class MybatisGenUtil {
      */
     private static void genMapperAndXml(boolean overwrite){
         List<String> warnings = new ArrayList<>();
-        String genCfg = "/generatorConfig.xml";//配置文件的路径:默认放到classpath下面
-        URL url = MybatisGenUtil.class.getResource(genCfg);
-        String file = url.getFile();
-        File configFile = new File(file);
         ConfigurationParser cfgParser = new ConfigurationParser(warnings);//配置文件解析器
         Configuration config = null;
         try {
-            config = cfgParser.parseConfiguration(configFile);
+            config = cfgParser.parseConfiguration(MybatisGenUtil.class.getClassLoader().getResourceAsStream("generatorConfig.xml"));
         } catch (IOException e) {
             e.printStackTrace();
         } catch (XMLParserException e) {
