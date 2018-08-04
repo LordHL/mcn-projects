@@ -39,6 +39,7 @@ import javax.sql.DataSource;
 import javax.ws.rs.Path;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -114,7 +115,11 @@ public class JerseySwaggerAutoConfiguration extends ResourceConfig {
             BeanConfig beanConfig = new BeanConfig();
             beanConfig.setVersion(jersey.getVersion());
             beanConfig.setTitle(jersey.getTitle());
-            beanConfig.setHost(jersey.getHost());
+            if(Objects.nonNull(jersey.getHost())){
+                beanConfig.setHost(jersey.getHost());
+            }else{
+                beanConfig.setHost(jersey.getIp() + ":" + jersey.getPort());
+            }
             beanConfig.setBasePath(jersey.getBasePath());
             beanConfig.setResourcePackage(jersey.getResourcePackage());
             beanConfig.setScan();

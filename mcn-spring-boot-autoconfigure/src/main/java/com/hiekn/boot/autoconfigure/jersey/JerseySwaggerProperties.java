@@ -12,6 +12,8 @@ public class JerseySwaggerProperties {
     private String version;
     private String title = "API";
     private String host;
+    private String ip;
+    private Integer port;
     private String basePath = "";
     private String resourcePackage;
     /*
@@ -63,6 +65,22 @@ public class JerseySwaggerProperties {
 
     public void setHost(String host) {
         this.host = host;
+    }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
+    public Integer getPort() {
+        return port;
+    }
+
+    public void setPort(Integer port) {
+        this.port = port;
     }
 
     public String getBasePath() {
