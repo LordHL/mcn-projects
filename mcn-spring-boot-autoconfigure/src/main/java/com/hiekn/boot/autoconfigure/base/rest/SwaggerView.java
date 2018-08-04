@@ -12,7 +12,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 @Singleton
 @Path("/")
@@ -27,11 +26,7 @@ public class SwaggerView {
     @Template(name = "/index")
     public Map<String, Object> indexView() {
         Map<String, Object> map = new HashMap<>();
-        if(Objects.nonNull(jerseySwaggerProperties.getHost())) {
-            map.put("host",jerseySwaggerProperties.getHost());
-        }else{
-            map.put("host",jerseySwaggerProperties.getIp()+":"+jerseySwaggerProperties.getPort());
-        }
+        map.put("host",jerseySwaggerProperties.getHost());
         map.put("path",CommonHelper.parsePath(jerseySwaggerProperties.getBasePath()));
         map.put("cdn",jerseySwaggerProperties.getCdn());
         return map;
