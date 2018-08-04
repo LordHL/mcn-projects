@@ -26,10 +26,8 @@ public class SwaggerView {
     @Template(name = "/index")
     public Map<String, Object> indexView() {
         Map<String, Object> map = new HashMap<>();
-        map.put("ip",jerseySwaggerProperties.getIp());
-        map.put("port",jerseySwaggerProperties.getPort());
-        map.put("path",CommonHelper.parsePath(jerseySwaggerProperties.getBasePath()));
         map.put("cdn",jerseySwaggerProperties.getCdn());
+        map.put("url",jerseySwaggerProperties.getIp()+":"+jerseySwaggerProperties.getPort()+CommonHelper.parsePath(jerseySwaggerProperties.getBasePath())+"/swagger.json");
         return map;
     }
 

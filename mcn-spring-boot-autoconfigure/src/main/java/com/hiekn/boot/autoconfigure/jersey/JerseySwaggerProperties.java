@@ -13,7 +13,7 @@ public class JerseySwaggerProperties {
     private String title = "API";
     private String ip = "127.0.0.1";
     private Integer port = 8080;
-    private String basePath = "/";
+    private String basePath = "";
     private String resourcePackage;
     /*
         指定单个资源(全路径)并将其注册进jersey
