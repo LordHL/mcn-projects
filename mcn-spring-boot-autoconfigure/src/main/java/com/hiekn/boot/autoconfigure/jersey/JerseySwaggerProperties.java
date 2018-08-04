@@ -11,8 +11,11 @@ public class JerseySwaggerProperties {
     private Boolean init = true;
     private String version;
     private String title = "API";
-    private String ip = "127.0.0.1";
-    private Integer port = 8080;
+    private String host;
+    @Deprecated
+    private String ip;
+    @Deprecated
+    private Integer port;
     private String basePath = "";
     private String resourcePackage;
     /*
@@ -56,6 +59,14 @@ public class JerseySwaggerProperties {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getHost() {
+        return host;
+    }
+
+    public void setHost(String host) {
+        this.host = host;
     }
 
     public String getIp() {

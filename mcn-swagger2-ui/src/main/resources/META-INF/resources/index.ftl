@@ -38,7 +38,7 @@
       if (url && url.length > 1) {
         url = decodeURIComponent(url[1]);
       } else {
-        url = window.location.protocol+"//${url}";
+        url = window.location.protocol+"//${host}${path}/swagger.json";
       }
 
       hljs.configure({
