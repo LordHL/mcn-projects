@@ -6,12 +6,12 @@ import com.hiekn.boot.autoconfigure.base.exception.handler.BaseExceptionHandler;
 import com.hiekn.boot.autoconfigure.base.exception.handler.ExceptionHandler;
 import com.hiekn.boot.autoconfigure.base.exception.handler.ValidationExceptionMapper;
 import com.hiekn.boot.autoconfigure.base.exception.handler.WebApplicationExceptionHandler;
+import com.hiekn.boot.autoconfigure.base.filter.CheckCertificateFilter;
 import com.hiekn.boot.autoconfigure.base.rest.SwaggerView;
 import io.swagger.jaxrs.config.BeanConfig;
 import io.swagger.jaxrs.listing.ApiListingResource;
 import io.swagger.jaxrs.listing.SwaggerSerializers;
 import org.apache.ibatis.session.SqlSessionFactory;
-import org.glassfish.jersey.client.JerseyClient;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.ServerProperties;
@@ -23,6 +23,7 @@ import org.springframework.boot.autoconfigure.condition.*;
 import org.springframework.boot.autoconfigure.jersey.JerseyAutoConfiguration;
 import org.springframework.boot.autoconfigure.jersey.ResourceConfigCustomizer;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.ApplicationContextException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
@@ -74,8 +75,7 @@ public class JerseySwaggerAutoConfiguration extends ResourceConfig {
                 }
             }
 
-            Set<Class<?>> allClasses = Sets.newHashSet(MultiPartFeature.class, JacksonJsonProvider.class,ValidationExceptionMapper.class,ExceptionHandler.class,BaseExceptionHandler.class, WebApplicationExceptionHandler.class);
-
+            Set<Class<?>> allClasses = Sets.newHashSet(JacksonJsonProvider.class,ValidationExceptionMapper.class,ExceptionHandler.class,BaseExceptionHandler.class, WebApplicationExceptionHandler.class);
             for (String pkg : packages) {
                 Set<Class<?>> collect = scanner.findCandidateComponents(pkg).stream()
                         .map(beanDefinition -> ClassUtils.resolveClassName(beanDefinition.getBeanClassName(), this.getClassLoader()))
@@ -107,7 +107,7 @@ public class JerseySwaggerAutoConfiguration extends ResourceConfig {
     }
 
     @Bean
-    @ConditionalOnClass({ApiListingResource.class, SwaggerSerializers.class})
+    @ConditionalOnClass(name={"io.swagger.jaxrs.listing.ApiListingResource"})
     @ConditionalOnProperty(prefix = "jersey.swagger", name = {"init"}, havingValue = "true", matchIfMissing = true)
     public ResourceConfigCustomizer initSwagger2() {
         return config -> {
@@ -127,7 +127,13 @@ public class JerseySwaggerAutoConfiguration extends ResourceConfig {
     }
 
     @Bean
-    @ConditionalOnClass({FreemarkerMvcFeature.class})
+    @ConditionalOnClass(name={"org.glassfish.jersey.media.multipart.MultiPartFeature"})
+    public ResourceConfigCustomizer registerMultiPartFeature() {
+        return config -> config.registerClasses(MultiPartFeature.class);
+    }
+
+    @Bean
+    @ConditionalOnClass(name={"org.glassfish.jersey.server.mvc.freemarker.FreemarkerMvcFeature"})
     @ConditionalOnBean(name = "initSwagger2")
     public ResourceConfigCustomizer initSwagger2UI() {
         return config ->
@@ -139,7 +145,7 @@ public class JerseySwaggerAutoConfiguration extends ResourceConfig {
 
     @Bean
     @ConditionalOnWebApplication
-    @ConditionalOnClass(UrlBasedCorsConfigurationSource.class)
+    @ConditionalOnClass(name = "org.springframework.web.cors.CorsConfigurationSource")
     @ConditionalOnProperty(prefix = "filter", name = {"cross"}, havingValue = "true", matchIfMissing = true)
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -153,7 +159,17 @@ public class JerseySwaggerAutoConfiguration extends ResourceConfig {
     }
 
     @Bean
-    @ConditionalOnClass(JerseyClient.class)
+    @ConditionalOnClass(name = "com.hiekn.licence.verify.VerifyLicense")
+    public FilterRegistrationBean checkCertificateFilter() {
+        FilterRegistrationBean registration = new FilterRegistrationBean();
+        registration.setFilter(new CheckCertificateFilter());
+        registration.addUrlPatterns("/*");
+        registration.setOrder(1);
+        return registration;
+    }
+
+    @Bean
+    @ConditionalOnClass(name={"org.glassfish.jersey.client.JerseyClient","org.glassfish.jersey.media.multipart.MultiPartFeature"})
     @ConditionalOnMissingBean(name = "jerseyHttp")
     public JerseyHttp jerseyHttp(JerseyClientProperties clientProperties) {
         return new JerseyHttp(clientProperties);

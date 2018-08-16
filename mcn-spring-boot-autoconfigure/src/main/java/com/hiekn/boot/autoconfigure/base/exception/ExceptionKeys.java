@@ -24,6 +24,7 @@ public interface ExceptionKeys {
     int DELETE_ERROR = 30014;
     int UPDATE_ERROR = 30015;
     int AUTHENTICATION_ERROR = 30016;
+    int INVALID_CERTIFICATE_ERROR = 30017;
 
     int UN_LOGIN_ERROR = 50001;
 
