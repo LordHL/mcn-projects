@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -49,6 +50,10 @@ public final class HttpUtils {
         }
         url = url + f + parseParam(getParam);
         return url;
+    }
+
+    public static String sendGet(String url) {
+	    return sendGet(url,new HashMap<>());
     }
 
     public static String sendGet(String url, Map<String,String> getParam) {
