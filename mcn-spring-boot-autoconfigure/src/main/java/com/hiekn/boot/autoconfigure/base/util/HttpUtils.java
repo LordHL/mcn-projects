@@ -1,14 +1,12 @@
 package com.hiekn.boot.autoconfigure.base.util;
 
-import com.google.common.collect.Lists;
-import org.apache.commons.lang3.StringUtils;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -30,11 +28,18 @@ public final class HttpUtils {
     }
 
 	private static String parseParam(Map<String,String> param){
-        List<String> list = Lists.newArrayList();
+        List<String> list = new ArrayList<>();
         param.forEach((k,v) -> {
             list.add(k+"="+v);
         });
-        return StringUtils.join(list,"&");
+	    StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < list.size(); i++) {
+            if(i > 0){
+                sb.append("&");
+            }
+            sb.append(list.get(i));
+        }
+        return sb.toString();
     }
 
     private static String dealGetParam(String url, Map<String,String> getParam){
