@@ -15,7 +15,7 @@ import java.util.Map;
 /**
  * 建立在URLConnection的http
  * @author DingHao
- *
+ * @since 2018年9月4日14:49:53
  */
 public final class HttpUtils {
 
@@ -140,6 +140,7 @@ public final class HttpUtils {
             }
 		}
 		return result.toString();
-	}    
+	}
+
 }
 
