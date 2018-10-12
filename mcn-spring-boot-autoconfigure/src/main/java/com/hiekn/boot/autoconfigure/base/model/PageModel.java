@@ -1,12 +1,9 @@
 package com.hiekn.boot.autoconfigure.base.model;
 
 import io.swagger.annotations.ApiParam;
-import org.hibernate.validator.constraints.NotBlank;
 
-import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.QueryParam;
 import java.util.Objects;
