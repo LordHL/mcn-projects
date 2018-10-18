@@ -17,15 +17,18 @@ public final class WebApplicationExceptionHandler  implements ExceptionMapper<We
 
     @Override
     public Response toResponse(final WebApplicationException exception) {
-        Integer code = ExceptionKeys.HTTP_ERROR;
+        Integer code = ExceptionKeys.HTTP_ERROR_500;
         String errMsg = ErrorMsgUtil.getErrMsg(code);
         Response.Status statusCode = Response.Status.OK;
         if (exception instanceof NotFoundException) {
             statusCode = Response.Status.NOT_FOUND;
+            code = ExceptionKeys.HTTP_ERROR_404;
         } else if (exception instanceof NotAllowedException) {
             statusCode = Response.Status.METHOD_NOT_ALLOWED;
+            code = ExceptionKeys.HTTP_ERROR_405;
         } else if (exception instanceof NotAcceptableException) {
             statusCode = Response.Status.NOT_ACCEPTABLE;
+            code = ExceptionKeys.HTTP_ERROR_406;
         } else if (exception instanceof InternalServerErrorException) {
             statusCode = Response.Status.INTERNAL_SERVER_ERROR;
         }

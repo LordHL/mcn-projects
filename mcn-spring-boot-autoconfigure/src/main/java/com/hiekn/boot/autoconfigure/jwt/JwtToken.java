@@ -86,7 +86,7 @@ public class JwtToken {
 
     private String checkIsCreateNewToken(DecodedJWT jwt) {
         Date issuedAt = jwt.getIssuedAt();
-        if(System.currentTimeMillis() - issuedAt.getTime() > jwtProperties.getRefreshInterval()*24*60*60*1000){
+        if(System.currentTimeMillis() - issuedAt.getTime() > jwtProperties.getRefreshInterval()*jwtProperties.getUnit()){
             Map<String, Claim> claims = jwt.getClaims();
             Map<String,Object> data = Maps.newHashMap();
             claims.forEach((k,v) -> {

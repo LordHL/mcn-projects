@@ -30,7 +30,10 @@ public interface ExceptionKeys {
 
     int UNKNOWN_ERROR = 70001;
 
-    int HTTP_ERROR = 80001;
+    int HTTP_ERROR_404 = 80001;
+    int HTTP_ERROR_405 = 80002;
+    int HTTP_ERROR_406 = 80003;
+    int HTTP_ERROR_500 = 80004;
 
     int SERVICE_ERROR = 90000;
     int THIRD_PARTY_ERROR = 90001;

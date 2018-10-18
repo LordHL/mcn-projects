@@ -9,6 +9,7 @@ public class JwtProperties {
     private String secretKey = "SECRET";
     private String issuer = "hiekn";
     private Long refreshInterval = 3L;
+    private Integer unit = 1000;
     private Integer expireDate = 14;
     private Security security = new Security();
 
@@ -34,6 +35,14 @@ public class JwtProperties {
 
     public void setRefreshInterval(Long refreshInterval) {
         this.refreshInterval = refreshInterval;
+    }
+
+    public Integer getUnit() {
+        return unit;
+    }
+
+    public void setUnit(Integer unit) {
+        this.unit = unit;
     }
 
     public Integer getExpireDate() {
