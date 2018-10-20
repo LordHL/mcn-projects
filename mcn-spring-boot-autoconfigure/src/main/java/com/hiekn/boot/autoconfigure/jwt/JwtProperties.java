@@ -10,7 +10,7 @@ public class JwtProperties {
     private String issuer = "hiekn";
     private Long refreshInterval = 3L;
     private Integer unit = 1000;
-    private Integer expireDate = 14;
+    private Integer expireDate = 14*24*3600;
     private Security security = new Security();
 
     public String getSecretKey() {
