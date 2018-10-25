@@ -27,7 +27,10 @@ public class McnPropertiesPostProcessor implements EnvironmentPostProcessor,Orde
         MutablePropertySources propertySources = environment.getPropertySources();
         //add map config
         Map<String, Object> mapProp = Maps.newHashMap();
-        mapProp.put(APP_BASE_PACKAGE_PROPERTY,ClassUtils.getPackageName(application.getMainApplicationClass()));
+        Class<?> mainApplicationClass = application.getMainApplicationClass();//maybe is null
+        if(Objects.nonNull(mainApplicationClass)){
+            mapProp.put(APP_BASE_PACKAGE_PROPERTY,ClassUtils.getPackageName(mainApplicationClass));
+        }
         mapProp.put("mcn.version",this.getClass().getPackage().getImplementationVersion());
         mapProp.put("logging.level."+mapProp.get(APP_BASE_PACKAGE_PROPERTY)+".dao","info");//do not println query statement
         propertySources.addLast(new MapPropertySource("mcn-map",mapProp));
