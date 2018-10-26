@@ -65,7 +65,7 @@ public class WebSecurityAutoConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         String basePath = CommonHelper.parsePath(environment.getProperty("spring.jersey.application-path"));
-        List<String> defaultIgnoreUrls = Lists.newArrayList(basePath+"/swagger.json",basePath+"/Swagger.html","/css/**","/fonts/**","/images/**","/lang/**","/lib/**","/*.js");
+        List<String> defaultIgnoreUrls = Lists.newArrayList(basePath+"/swagger.json",basePath+"/Swagger.html","/swagger/**");
         List<String> ignoreUrls = jwtProperties.getSecurity().getIgnoreUrls();
         if(Objects.nonNull(ignoreUrls) && !ignoreUrls.isEmpty()){
             for (String ignoreUrl : ignoreUrls) {

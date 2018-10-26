@@ -33,7 +33,7 @@ public class SwaggerView {
             map.put("host",jerseySwaggerProperties.getIp()+":"+jerseySwaggerProperties.getPort());
         }
         map.put("path",CommonHelper.parsePath(jerseySwaggerProperties.getBasePath()));
-        map.put("cdn",jerseySwaggerProperties.getCdn());
+        map.put("cdn","/swagger/");
         return map;
     }
 
