@@ -26,14 +26,12 @@ public class SwaggerView {
     @GET
     @Template(name = "/index")
     public Map<String, Object> indexView() {
-        Map<String, Object> map = new HashMap<>();
-        if(Objects.nonNull(jerseySwaggerProperties.getHost())) {
-            map.put("host",jerseySwaggerProperties.getHost());
-        }else{
-            map.put("host",jerseySwaggerProperties.getIp()+":"+jerseySwaggerProperties.getPort());
-        }
-        map.put("path",CommonHelper.parsePath(jerseySwaggerProperties.getBasePath()));
-        map.put("cdn","/swagger/");
+        Map<String, Object> map = new HashMap();
+        String host = this.jerseySwaggerProperties.getHost();
+        map.put("host", Objects.nonNull(host) ? host : this.jerseySwaggerProperties.getIp() + ":" + this.jerseySwaggerProperties.getPort());
+        map.put("path", CommonHelper.parsePath(this.jerseySwaggerProperties.getBasePath()));
+        String cdn = this.jerseySwaggerProperties.getCdn();
+        map.put("cdn", Objects.nonNull(cdn) ? cdn : "/Swagger/");
         return map;
     }
 

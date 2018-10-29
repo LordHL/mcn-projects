@@ -137,7 +137,7 @@ public class JerseySwaggerAutoConfiguration extends ResourceConfig {
     @ConditionalOnBean(name = "initSwagger2")
     public ResourceConfigCustomizer initSwagger2UI() {
         return config ->
-            config.property(FreemarkerMvcFeature.TEMPLATE_BASE_PATH, "META-INF/resources/swagger")
+            config.property(FreemarkerMvcFeature.TEMPLATE_BASE_PATH, "META-INF/resources/Swagger")
                 .property(FreemarkerMvcFeature.CACHE_TEMPLATES, new Boolean(false))
                 .registerClasses(FreemarkerMvcFeature.class,SwaggerView.class)
         ;
