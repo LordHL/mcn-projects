@@ -14,7 +14,6 @@ public final class WebApplicationExceptionHandler extends AbstractExceptionHandl
     @Override
     public Response toResponse(final WebApplicationException exception) {
         Integer code = ExceptionKeys.HTTP_ERROR_500;
-        String errMsg = ErrorMsgUtil.getErrMsg(code);
         Response.Status statusCode = Response.Status.OK;
         if (exception instanceof NotFoundException) {
             statusCode = Response.Status.NOT_FOUND;
@@ -28,6 +27,7 @@ public final class WebApplicationExceptionHandler extends AbstractExceptionHandl
         } else if (exception instanceof InternalServerErrorException) {
             statusCode = Response.Status.INTERNAL_SERVER_ERROR;
         }
+        String errMsg = ErrorMsgUtil.getErrMsg(code);
         logger.error("ErrorMsg = {}",errMsg,exception);
         return Response.ok(new RestResp<>(code, errMsg)).status(statusCode).type(MediaType.APPLICATION_JSON_TYPE).build();
     }
