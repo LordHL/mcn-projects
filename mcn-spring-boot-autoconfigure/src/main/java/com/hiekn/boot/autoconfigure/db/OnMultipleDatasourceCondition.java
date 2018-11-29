@@ -1,4 +1,4 @@
-package com.hiekn.boot.autoconfigure.mybatis;
+package com.hiekn.boot.autoconfigure.db;
 
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.RootBeanDefinition;

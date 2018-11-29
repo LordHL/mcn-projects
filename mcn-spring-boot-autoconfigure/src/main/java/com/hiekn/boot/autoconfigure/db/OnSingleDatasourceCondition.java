@@ -1,7 +1,6 @@
-package com.hiekn.boot.autoconfigure.jersey;
+package com.hiekn.boot.autoconfigure.db;
 
 import com.hiekn.boot.autoconfigure.context.McnPropertiesPostProcessor;
-import com.hiekn.boot.autoconfigure.mybatis.MultipleMybatisAutoConfiguration;
 import org.mybatis.spring.mapper.ClassPathMapperScanner;
 import org.springframework.context.annotation.Condition;
 import org.springframework.context.annotation.ConditionContext;
@@ -10,6 +9,7 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.type.AnnotatedTypeMetadata;
 
 public class OnSingleDatasourceCondition implements Condition {
+
     @Override
     public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
         Environment environment = context.getEnvironment();
@@ -26,4 +26,5 @@ public class OnSingleDatasourceCondition implements Condition {
         }
         return false;
     }
+
 }

@@ -1,4 +1,4 @@
-package com.hiekn.boot.autoconfigure.mybatis;
+package com.hiekn.boot.autoconfigure.db;
 
 import com.google.common.collect.Maps;
 import com.hiekn.boot.autoconfigure.context.McnPropertiesPostProcessor;

@@ -3,17 +3,13 @@ package com.hiekn.boot.autoconfigure.base.exception.handler;
 import com.hiekn.boot.autoconfigure.base.exception.ExceptionKeys;
 import com.hiekn.boot.autoconfigure.base.model.result.RestResp;
 import com.hiekn.boot.autoconfigure.base.util.ErrorMsgUtil;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 
-public final class WebApplicationExceptionHandler  implements ExceptionMapper<WebApplicationException> {
-
-    private static final Log logger = LogFactory.getLog(WebApplicationExceptionHandler.class);
+public final class WebApplicationExceptionHandler extends AbstractExceptionHandler implements ExceptionMapper<WebApplicationException> {
 
     @Override
     public Response toResponse(final WebApplicationException exception) {
@@ -32,7 +28,8 @@ public final class WebApplicationExceptionHandler  implements ExceptionMapper<We
         } else if (exception instanceof InternalServerErrorException) {
             statusCode = Response.Status.INTERNAL_SERVER_ERROR;
         }
-        logger.error(code, exception);
+        logger.error("ErrorMsg = {} , Stack Exception = {}",errMsg,exception);
         return Response.ok(new RestResp<>(code, errMsg)).status(statusCode).type(MediaType.APPLICATION_JSON_TYPE).build();
     }
+
 }

@@ -11,13 +11,10 @@ import com.hiekn.boot.autoconfigure.base.rest.SwaggerView;
 import io.swagger.jaxrs.config.BeanConfig;
 import io.swagger.jaxrs.listing.ApiListingResource;
 import io.swagger.jaxrs.listing.SwaggerSerializers;
-import org.apache.ibatis.session.SqlSessionFactory;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.ServerProperties;
 import org.glassfish.jersey.server.mvc.freemarker.FreemarkerMvcFeature;
-import org.mybatis.spring.annotation.MapperScan;
-import org.mybatis.spring.mapper.MapperFactoryBean;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.*;
 import org.springframework.boot.autoconfigure.jersey.JerseyAutoConfiguration;
@@ -36,7 +33,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
-import javax.sql.DataSource;
 import javax.ws.rs.Path;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
@@ -173,14 +169,6 @@ public class JerseySwaggerAutoConfiguration extends ResourceConfig {
     @ConditionalOnMissingBean(name = "jerseyHttp")
     public JerseyHttp jerseyHttp(JerseyClientProperties clientProperties) {
         return new JerseyHttp(clientProperties);
-    }
-
-    @Configuration
-    @ConditionalOnClass({DataSource.class,SqlSessionFactory.class,MapperScan.class})
-    @ConditionalOnMissingBean(MapperFactoryBean.class)
-    @ConditionOnSingleDatasource
-    public static class QuickConfigMapperScan{
-
     }
 
 }
