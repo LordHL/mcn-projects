@@ -1,6 +1,5 @@
-/.idea/
-/*.iml
-/*/*.iml
-/*/target/
-/*/pom.xml.versionsBackup
+*.idea
+*.iml
+target/
+pom.xml.versionsBackup
 
