@@ -14,7 +14,7 @@ public final class ExceptionHandler extends AbstractExceptionHandler implements 
     public Response toResponse(final Exception exception) {
         Integer code = ExceptionKeys.SERVICE_ERROR;
         String errMsg = ErrorMsgUtil.getErrMsg(code);
-        logger.error("ErrorMsg = {} , Stack Exception = {}",errMsg,exception);
+        logger.error("ErrorMsg = {}",errMsg,exception);
         return Response.ok(new RestResp<>(code, errMsg)).type(MediaType.APPLICATION_JSON_TYPE).build();
     }
 

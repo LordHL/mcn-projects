@@ -28,7 +28,7 @@ public final class WebApplicationExceptionHandler extends AbstractExceptionHandl
         } else if (exception instanceof InternalServerErrorException) {
             statusCode = Response.Status.INTERNAL_SERVER_ERROR;
         }
-        logger.error("ErrorMsg = {} , Stack Exception = {}",errMsg,exception);
+        logger.error("ErrorMsg = {}",errMsg,exception);
         return Response.ok(new RestResp<>(code, errMsg)).status(statusCode).type(MediaType.APPLICATION_JSON_TYPE).build();
     }
 
