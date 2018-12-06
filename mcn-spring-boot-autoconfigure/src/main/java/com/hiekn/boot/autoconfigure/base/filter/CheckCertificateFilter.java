@@ -18,6 +18,7 @@ public class CheckCertificateFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         vLicense = new VerifyLicense("lic-verify.properties");
+        vLicense.verify();
     }
 
     @Override
