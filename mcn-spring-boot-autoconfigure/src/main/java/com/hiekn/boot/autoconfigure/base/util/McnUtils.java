@@ -19,6 +19,8 @@ import java.util.UUID;
  */
 public abstract class McnUtils {
 
+    private static final String FILE_PREFIX = "file:";
+
     private static Cache<String, Object> cache = CacheBuilder.newBuilder().build();
 
     public static void setCache(String key,Object value){
@@ -91,8 +93,8 @@ public abstract class McnUtils {
 
     private static Properties loadProperties(String fileName,ClassLoader cls){
         Properties properties = new Properties();
-        if(fileName.startsWith("file:")){
-            try(InputStream in = new FileInputStream(fileName)){
+        if(fileName.startsWith(FILE_PREFIX)){
+            try(InputStream in = new FileInputStream(fileName.substring(FILE_PREFIX.length()))){
                 properties.load(in);
             }catch (IOException e) {
                 //ignore not found file
