@@ -2,9 +2,8 @@ package com.hiekn.boot.autoconfigure.base.util;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 
-public class BeanUtils implements ApplicationContextAware {
+public class SpringBeanUtils{
 	
 	private static ApplicationContext ac;
 	
@@ -23,8 +22,7 @@ public class BeanUtils implements ApplicationContextAware {
 		return ac.getBean(clazz);
 	} 
 
-	@Override
-	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+	public static void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
 		ac = applicationContext;
 	}
 	

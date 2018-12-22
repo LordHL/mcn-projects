@@ -1,6 +1,6 @@
 package com.hiekn.boot.autoconfigure.base.exception.handler;
 
-import com.hiekn.boot.autoconfigure.base.util.BeanUtils;
+import com.hiekn.boot.autoconfigure.base.util.SpringBeanUtils;
 import com.hiekn.boot.autoconfigure.jersey.JerseySwaggerProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class AbstractExceptionHandler {
 
-    protected String basePackage = BeanUtils.getBean(JerseySwaggerProperties.class).getBasePackage();
+    protected String basePackage = SpringBeanUtils.getBean(JerseySwaggerProperties.class).getBasePackage();
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
 }

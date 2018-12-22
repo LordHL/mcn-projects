@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 import com.hiekn.boot.autoconfigure.base.exception.handler.JwtAuthenticationEntryPoint;
 import com.hiekn.boot.autoconfigure.base.filter.JwtAuthenticationTokenFilter;
-import com.hiekn.boot.autoconfigure.base.util.CommonHelper;
+import com.hiekn.boot.autoconfigure.base.util.McnUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -64,12 +64,12 @@ public class WebSecurityAutoConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        String basePath = CommonHelper.parsePath(environment.getProperty("spring.jersey.application-path"));
+        String basePath = McnUtils.parsePath(environment.getProperty("spring.jersey.application-path"));
         List<String> defaultIgnoreUrls = Lists.newArrayList(basePath+"/swagger.json",basePath+"/Swagger.html","/Swagger/**");
         List<String> ignoreUrls = jwtProperties.getSecurity().getIgnoreUrls();
         if(Objects.nonNull(ignoreUrls) && !ignoreUrls.isEmpty()){
             for (String ignoreUrl : ignoreUrls) {
-                defaultIgnoreUrls.add(basePath+CommonHelper.parsePath(ignoreUrl));
+                defaultIgnoreUrls.add(basePath+McnUtils.parsePath(ignoreUrl));
             }
         }
         web.ignoring().antMatchers(defaultIgnoreUrls.toArray(new String[defaultIgnoreUrls.size()]));
