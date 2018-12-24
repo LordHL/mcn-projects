@@ -23,7 +23,7 @@ SpringBoot-->SpringCloud
 <parent>
     <groupId>com.hiekn.boot</groupId>
     <artifactId>mcn-projects</artifactId>
-    <version>1.5.18</version>
+    <version>1.5.19</version>
 </parent>
 ```
 
@@ -93,35 +93,39 @@ spring.datasource.password=root
 ```
 
 2.自动生成基础CRUD代码
-- 在src/test/java,新建一个com.hiekn.test基础包，并新建一个普通java类，如下所示:
+- 将制mcn里面的generatorConfig.xml复制到src/main/resources下
+
+- 引入maven插件，示例如下
 
 ```
-package com.hiekn.test;
-
-import com.hiekn.boot.autoconfigure.base.util.MybatisGenUtil;
-
-public class DemoTest {
-    public static void main(String[] args) {
-        MybatisGenUtil.genMapperAndXml();
-    }
-}
-```
-
-- 将制mcn里面的generatorConfig.xml和generator.properties复制到src/test/resources下
-
-- 修改generator.properties，示例如下
-
-```
-#下面修改为你的项目所使用的数据库地址
-db.driver=com.mysql.jdbc.Driver
-db.url=jdbc:mysql://192.168.1.159:3306/test?characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false&useSSL=false
-db.user=root
-db.password=root
-
-#下面三个只需修改基础包名即可
-bean-package=com.hiekn.test.bean
-service-package=com.hiekn.test.service
-dao-package=com.hiekn.test.dao
+<plugin>
+    <groupId>com.hiekn.generator</groupId>
+    <artifactId>mcn-maven-plugin</artifactId>
+    <configuration>
+        <propConfig>
+            <property>
+                <name>db.driver</name>
+                <value>com.mysql.jdbc.Driver</value>
+            </property>
+            <property>
+                <name>db.url</name>
+                <value>jdbc:mysql://192.168.1.159:3306/test?characterEncoding=utf8&amp;autoReconnect=true&amp;failOverReadOnly=false&amp;useSSL=false</value>
+            </property>
+            <property>
+                <name>db.user</name>
+                <value>root</value>
+            </property>
+            <property>
+                <name>db.password</name>
+                <value>root@hiekn</value>
+            </property>
+            <property>
+                <name>basePkg</name>
+                <value>com.hiekn.test</value>
+            </property>
+        </propConfig>
+    </configuration>
+</plugin>
 ```
 
 - 使用generatorConfig.xml自动生成代码，只需要在context标签最下面添加要自动生成映射的表名，示例如下
@@ -141,7 +145,7 @@ dao-package=com.hiekn.test.dao
     </table>
 ```
 
-- 运行DemoTest，生成所有代码
+- 点击IDEA maven插件mcn:genrate，生成所有代码
 - 运行TestApplication
 - 浏览器打开[http://127.0.0.1:8080/api/Swagger.html](http://127.0.0.1:8080/api/Swagger.html)即可查看API接口
 - 可直接在swagger测试每一个接口了
@@ -242,7 +246,9 @@ update_time表示最后修改时间（随数据的每一次修改而改变）
 ```
 - 使用
  
-7.系统默认配置
+7.日志配置
+
+8.系统默认配置
 
 ```
 #servlet拦截路径默认api
