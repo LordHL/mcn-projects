@@ -1,4 +1,4 @@
-package com.hiekn.boot.autoconfigure.base.plugin;
+package com.hiekn.generator.plugin;
 
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;

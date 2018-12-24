@@ -10,6 +10,7 @@
         <module>mcn-spring-boot-starter</module>
         <module>mcn-spring-boot-autoconfigure</module>
         <module>mcn-swagger2-ui</module>
+        <module>mcn-maven-plugin</module>
     </modules>
     <modelVersion>4.0.0</modelVersion>
 
@@ -157,11 +158,28 @@
             <plugins>
                 <plugin>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.1</version>
+                    <version>3.2</version>
                     <configuration>
                         <source>${java.version}</source>
                         <target>${java.version}</target>
                     </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>com.hiekn.generator</groupId>
+                    <artifactId>mcn-maven-plugin</artifactId>
+                    <version>${mcn.version}</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>mysql</groupId>
+                            <artifactId>mysql-connector-java</artifactId>
+                            <version>${mysql.version}</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>com.hiekn.boot</groupId>
+                            <artifactId>mcn-spring-boot-starter</artifactId>
+                            <version>${mcn.version}</version>
+                        </dependency>
+                    </dependencies>
                 </plugin>
             </plugins>
         </pluginManagement>
