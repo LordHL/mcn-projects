@@ -280,19 +280,21 @@ server.tomcat.max-threads=800
 server.tomcat.accept-count=1000
 server.tomcat.uri-encoding=UTF-8
 #默认服务器路径
-server.tomcat.basedir=/work/tomcat/
-server.tomcat.access-log-enabled=true
+server.tomcat.basedir=/tmp/tomcat/
+#server.tomcat.access-log-enabled=true
 server.compression.enabled=true
 
 spring.http.encoding.force=true
 
 #log，默认日志配置
-logging.path=${server.tomcat.basedir}project_logs/${spring.application.name}/
-logging.filter.console=debug
-logging.filter.file=debug
+logging.path=/project_logs/${spring.application.name}/
 logging.level.root=info
 logging.level.org=warn
 logging.level.io=warn
+mcn.log.errorFileName=error
+mcn.log.infoFileName=info
+mcn.log.maxHistory=30
+
 
 #默认api版本，读取pom version
 jersey.swagger.version=@project.version@
