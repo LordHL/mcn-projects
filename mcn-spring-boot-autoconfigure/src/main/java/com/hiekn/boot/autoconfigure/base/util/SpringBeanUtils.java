@@ -25,8 +25,12 @@ public class SpringBeanUtils{
 	public static void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
 		ac = applicationContext;
 	}
-	
-	private static void checkApplicationContext() { 
+
+	public static ApplicationContext getAc() {
+		return ac;
+	}
+
+	private static void checkApplicationContext() {
 		if (ac == null) { 
 			throw new IllegalStateException("applicationContext not inject yet");
 		}

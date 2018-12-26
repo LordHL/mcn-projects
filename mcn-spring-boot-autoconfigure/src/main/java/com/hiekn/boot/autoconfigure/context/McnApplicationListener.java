@@ -16,7 +16,7 @@ public class McnApplicationListener implements GenericApplicationListener {
     private int order = DEFAULT_ORDER;
 
     private static Class<?>[] EVENT_TYPES = { ApplicationStartingEvent.class, ApplicationEnvironmentPreparedEvent.class,
-            ApplicationPreparedEvent.class, ApplicationFailedEvent.class };
+            ApplicationPreparedEvent.class, ApplicationFailedEvent.class};
 
     private static Class<?>[] SOURCE_TYPES = { SpringApplication.class };
 
@@ -24,14 +24,11 @@ public class McnApplicationListener implements GenericApplicationListener {
     public void onApplicationEvent(ApplicationEvent applicationEvent) {
         if(applicationEvent instanceof ApplicationStartingEvent){
 
-        }
-        if(applicationEvent instanceof ApplicationEnvironmentPreparedEvent){
+        }else if(applicationEvent instanceof ApplicationEnvironmentPreparedEvent){
 
-        }
-        if(applicationEvent instanceof ApplicationPreparedEvent){
+        }else if(applicationEvent instanceof ApplicationPreparedEvent){
 
-        }
-        if(applicationEvent instanceof ApplicationFailedEvent){
+        }else if(applicationEvent instanceof ApplicationFailedEvent){
 
         }
     }
