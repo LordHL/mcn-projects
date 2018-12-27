@@ -2,9 +2,10 @@ package com.hiekn.boot.autoconfigure.base.util;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Objects;
@@ -19,7 +20,7 @@ import java.util.UUID;
  */
 public abstract class McnUtils {
 
-    private static final String FILE_PREFIX = "file:";
+    private static final Logger logger = LoggerFactory.getLogger(McnUtils.class);
 
     private static Cache<String, Object> cache = CacheBuilder.newBuilder().build();
 
@@ -83,7 +84,7 @@ public abstract class McnUtils {
     }
 
     /**
-     * 默认加载classpath下属性文件，如果加载文件系统的以file:开头
+     * 默认加载classpath下属性文件，找不到尝试从外部加载
      * @param fileName
      * @return
      */
@@ -91,19 +92,32 @@ public abstract class McnUtils {
         return loadProperties(fileName,McnUtils.class.getClassLoader());
     }
 
+    /**
+     * 从系统环境或者系统属性获取指定key的值，前者优先级高，然后解析(如果是/结尾，则拼上fileName)
+     * @param fileName
+     * @param key
+     * @return
+     *
+     */
+    public static Properties loadProperties(String fileName,String key){
+        String value = getFromSysEnvOrProp(key, fileName);
+        if(value.endsWith("/")){
+            value += fileName;
+        }
+        return loadProperties(value);
+    }
+
     private static Properties loadProperties(String fileName,ClassLoader cls){
         Properties properties = new Properties();
-        if(fileName.startsWith(FILE_PREFIX)){
-            try(InputStream in = new FileInputStream(fileName.substring(FILE_PREFIX.length()))){
+        try(InputStream in = cls.getResourceAsStream(fileName)){
+            properties.load(in);
+        }catch (Exception e) {
+            //try from out load
+            try(InputStream in = new FileInputStream(fileName)){
                 properties.load(in);
-            }catch (IOException e) {
+            }catch (Exception e2) {
                 //ignore not found file
-            }
-        }else{
-            try(InputStream in = cls.getResourceAsStream(fileName)){
-                properties.load(in);
-            }catch (IOException e) {
-                //ignore not found file
+
             }
         }
         return properties;
@@ -123,6 +137,24 @@ public abstract class McnUtils {
      */
     public static String simpleUUID(){
         return randomUUID().replace("-","");
+    }
+
+    /**
+     * 从系统环境或者系统属性获取指定key的值，前者优先级高
+     * @param key
+     * @return
+     */
+    public static String getFromSysEnvOrProp(String key){
+        String value = System.getenv(key);
+        if(isNullOrEmpty(value)){
+            value = System.getProperty(key);
+        }
+        return value;
+    }
+
+    public static String getFromSysEnvOrProp(String key,String defaultValue){
+        String value = getFromSysEnvOrProp(key);
+        return isNullOrEmpty(value) ? defaultValue : value;
     }
 
 
