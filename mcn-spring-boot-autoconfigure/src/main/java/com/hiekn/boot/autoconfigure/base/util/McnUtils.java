@@ -7,10 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.util.List;
-import java.util.Objects;
-import java.util.Properties;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * 集合一些常用的工具
@@ -62,6 +59,15 @@ public abstract class McnUtils {
      * @return null or empty is true
      */
     public static boolean isNullOrEmpty(String value){
+        return Objects.isNull(value) || value.isEmpty();
+    }
+
+    /**
+     *判断集合为null或者为空集合
+     * @param value
+     * @return
+     */
+    public static boolean isNullOrEmpty(Collection<?> value){
         return Objects.isNull(value) || value.isEmpty();
     }
 
