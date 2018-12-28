@@ -88,13 +88,21 @@ public class JerseySwaggerAutoConfiguration extends ResourceConfig {
             config.registerClasses(allClasses)
                     .property(ServerProperties.BV_SEND_ERROR_IN_RESPONSE, true)
                     .property(ServerProperties.BV_DISABLE_VALIDATE_ON_EXECUTABLE_OVERRIDE_CHECK, true);
+
+            //register MultiPartFeature
+            if(ClassUtils.isPresent("org.glassfish.jersey.media.multipart.MultiPartFeature",null)){
+                config.registerClasses(MultiPartFeature.class);
+            }
+
+            //init swagger
+            initSwagger(config);
+
         };
     }
 
     private Class<?> getExceptionHandlerClass(String className) throws LinkageError {
         try {
-            Class<?> exceptionClass = ClassUtils.forName(className,
-                    ClassUtils.getDefaultClassLoader());
+            Class<?> exceptionClass = ClassUtils.forName(className, null);
             Assert.isAssignable(ExceptionMapper.class, exceptionClass);
             return exceptionClass;
         } catch (ClassNotFoundException ex) {
@@ -102,11 +110,8 @@ public class JerseySwaggerAutoConfiguration extends ResourceConfig {
         }
     }
 
-    @Bean
-    @ConditionalOnClass(name={"io.swagger.jaxrs.listing.ApiListingResource"})
-    @ConditionalOnProperty(prefix = "jersey.swagger", name = {"init"}, havingValue = "true", matchIfMissing = true)
-    public ResourceConfigCustomizer initSwagger2() {
-        return config -> {
+    private void initSwagger(ResourceConfig config){
+        if(jersey.getInit() && ClassUtils.isPresent("io.swagger.jaxrs.listing.ApiListingResource",null)){
             config.registerClasses(ApiListingResource.class, SwaggerSerializers.class);
             BeanConfig beanConfig = new BeanConfig();
             beanConfig.setVersion(jersey.getVersion());
@@ -119,24 +124,12 @@ public class JerseySwaggerAutoConfiguration extends ResourceConfig {
             beanConfig.setBasePath(jersey.getBasePath());
             beanConfig.setResourcePackage(jersey.getResourcePackage());
             beanConfig.setScan();
-        };
-    }
-
-    @Bean
-    @ConditionalOnClass(name={"org.glassfish.jersey.media.multipart.MultiPartFeature"})
-    public ResourceConfigCustomizer registerMultiPartFeature() {
-        return config -> config.registerClasses(MultiPartFeature.class);
-    }
-
-    @Bean
-    @ConditionalOnClass(name={"org.glassfish.jersey.server.mvc.freemarker.FreemarkerMvcFeature"})
-    @ConditionalOnBean(name = "initSwagger2")
-    public ResourceConfigCustomizer initSwagger2UI() {
-        return config ->
-            config.property(FreemarkerMvcFeature.TEMPLATE_BASE_PATH, "META-INF/resources/Swagger")
-                .property(FreemarkerMvcFeature.CACHE_TEMPLATES, new Boolean(false))
-                .registerClasses(FreemarkerMvcFeature.class,SwaggerView.class)
-        ;
+            if(ClassUtils.isPresent("org.glassfish.jersey.server.mvc.freemarker.FreemarkerMvcFeature",null)){
+                config.property(FreemarkerMvcFeature.TEMPLATE_BASE_PATH, "META-INF/resources/Swagger")
+                        .property(FreemarkerMvcFeature.CACHE_TEMPLATES, new Boolean(false))
+                        .registerClasses(FreemarkerMvcFeature.class,SwaggerView.class);
+            }
+        }
     }
 
     @Bean
