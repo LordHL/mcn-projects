@@ -8,11 +8,11 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.core.annotation.Order;
 
 @Order(McnApplicationListener.DEFAULT_ORDER)
-public class McnContextInitializer implements ApplicationContextInitializer{
+public class McnContextInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext>{
 
     @Override
     public void initialize(ConfigurableApplicationContext configurableApplicationContext) {
-        //set beanUtils
+        //set SpringBeanUtils Listener
         configurableApplicationContext.addApplicationListener(new SpringBeanUtilsListener());
 
     }
@@ -27,4 +27,5 @@ public class McnContextInitializer implements ApplicationContextInitializer{
         }
 
     }
+
 }

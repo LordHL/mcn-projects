@@ -6,11 +6,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.*;
 
 /**
- * 集合一些常用的工具
+ * 封装一些常用的工具
  *
  * @author DingHao
  * @date 2018/12/22 13:23
@@ -90,7 +91,7 @@ public abstract class McnUtils {
     }
 
     /**
-     * 默认加载classpath下属性文件，找不到尝试从外部加载
+     * 默认先从文件系统加载，找不到尝试从classpath下加载
      * @param fileName
      * @return
      */
@@ -99,32 +100,37 @@ public abstract class McnUtils {
     }
 
     /**
-     * 从系统环境或者系统属性获取指定key的值，前者优先级高，然后解析(如果是/结尾，则拼上fileName)
+     * 从系统环境或者系统属性获取指定key的值，前者优先级高，然后解析(如果是/结尾，则自动拼上fileName)
      * @param fileName
      * @param key
      * @return
      *
      */
     public static Properties loadProperties(String fileName,String key){
-        String value = getFromSysEnvOrProp(key, fileName);
+        String value = getValueFromSystemEnvOrProp(key, fileName);
         if(value.endsWith("/")){
             value += fileName;
         }
         return loadProperties(value);
     }
 
+    private static InputStream getInputStream(String fileName,ClassLoader cls){
+        InputStream in;
+        try {
+            in = new FileInputStream(fileName);
+        } catch (FileNotFoundException e) {
+            in = cls.getResourceAsStream(fileName);
+        }
+        return in;
+    }
+
     private static Properties loadProperties(String fileName,ClassLoader cls){
         Properties properties = new Properties();
-        try(InputStream in = cls.getResourceAsStream(fileName)){
+        try(InputStream in = getInputStream(fileName,cls)){
             properties.load(in);
         }catch (Exception e) {
-            //try from out load
-            try(InputStream in = new FileInputStream(fileName)){
-                properties.load(in);
-            }catch (Exception e2) {
-                //ignore not found file
+            //ignore not found file
 
-            }
         }
         return properties;
     }
@@ -150,7 +156,7 @@ public abstract class McnUtils {
      * @param key
      * @return
      */
-    public static String getFromSysEnvOrProp(String key){
+    public static String getValueFromSystemEnvOrProp(String key){
         String value = System.getenv(key);
         if(isNullOrEmpty(value)){
             value = System.getProperty(key);
@@ -158,11 +164,27 @@ public abstract class McnUtils {
         return value;
     }
 
-    public static String getFromSysEnvOrProp(String key,String defaultValue){
-        String value = getFromSysEnvOrProp(key);
+    public static String getValueFromSystemEnvOrProp(String key,String defaultValue){
+        String value = getValueFromSystemEnvOrProp(key);
         return isNullOrEmpty(value) ? defaultValue : value;
     }
 
+    /**
+     * 检查字符串是否为数字
+     * @param value
+     * @return
+     */
+    public static boolean isDigital(String value){
+        if(isNullOrEmpty(value)){
+            return false;
+        }
+        for (char c : value.toCharArray()) {
+            if(c < 48 || c > 57){
+                return false;
+            }
+        }
+        return true;
+    }
 
 
 }

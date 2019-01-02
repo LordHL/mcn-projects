@@ -1,7 +1,7 @@
 package com.hiekn.boot.autoconfigure.base.exception;
 
 
-import com.hiekn.boot.autoconfigure.base.util.ErrorMsgUtil;
+import com.hiekn.boot.autoconfigure.base.exception.handler.ErrorMsg;
 
 /**
  * 异常基类，各个模块的运行期异常均继承与该类 
@@ -16,9 +16,9 @@ public class BaseException extends RuntimeException {
     }
 
     protected BaseException(Integer code,String msg) {
-        super(msg==null?ErrorMsgUtil.getErrMsg(code):ErrorMsgUtil.getErrMsg(code)+msg);
+        super(msg==null?ErrorMsg.getErrorMsg(code):ErrorMsg.getErrorMsg(code)+msg);
         this.code = code;
-        this.msg = msg==null?ErrorMsgUtil.getErrMsg(code):ErrorMsgUtil.getErrMsg(code)+msg;
+        this.msg = msg==null?ErrorMsg.getErrorMsg(code):ErrorMsg.getErrorMsg(code)+msg;
     }
 
     public Integer getCode() {

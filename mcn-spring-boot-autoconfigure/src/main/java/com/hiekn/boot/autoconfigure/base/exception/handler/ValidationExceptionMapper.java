@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import com.hiekn.boot.autoconfigure.base.exception.ExceptionKeys;
 import com.hiekn.boot.autoconfigure.base.model.ValidationErrorBean;
 import com.hiekn.boot.autoconfigure.base.model.result.RestResp;
-import com.hiekn.boot.autoconfigure.base.util.ErrorMsgUtil;
 import org.glassfish.jersey.server.ServerProperties;
 import org.glassfish.jersey.server.validation.ValidationError;
 import org.glassfish.jersey.server.validation.internal.ValidationHelper;
@@ -18,7 +17,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import java.util.List;
 
-public final class ValidationExceptionMapper extends AbstractExceptionHandler implements ExceptionMapper<ValidationException> {
+public final class ValidationExceptionMapper extends ErrorMsg implements ExceptionMapper<ValidationException> {
 
     @Context
     private Configuration config;
@@ -28,7 +27,7 @@ public final class ValidationExceptionMapper extends AbstractExceptionHandler im
         RestResp<List<ValidationErrorBean>> objectRestResp = new RestResp<>();
         objectRestResp.setActionStatus(RestResp.ActionStatusMethod.FAIL.toString());
         objectRestResp.setErrorCode(ExceptionKeys.PARAM_PARSE_ERROR);
-        objectRestResp.setErrorInfo(ErrorMsgUtil.getErrMsg(ExceptionKeys.PARAM_PARSE_ERROR));
+        objectRestResp.setErrorInfo(getErrorMsg(ExceptionKeys.PARAM_PARSE_ERROR));
         if (exception instanceof ConstraintViolationException) {
 
             final ConstraintViolationException cve = (ConstraintViolationException) exception;

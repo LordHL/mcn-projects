@@ -1,8 +1,8 @@
 package com.hiekn.boot.autoconfigure.base.filter;
 
 import com.hiekn.boot.autoconfigure.base.exception.ExceptionKeys;
+import com.hiekn.boot.autoconfigure.base.exception.handler.ErrorMsg;
 import com.hiekn.boot.autoconfigure.base.model.result.RestResp;
-import com.hiekn.boot.autoconfigure.base.util.ErrorMsgUtil;
 import com.hiekn.boot.autoconfigure.base.util.JsonUtils;
 import com.hiekn.licence.verify.VerifyLicense;
 import org.springframework.http.MediaType;
@@ -27,7 +27,7 @@ public class CheckCertificateFilter implements Filter {
         response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
         if(!vLicense.verify()){
             int code = ExceptionKeys.INVALID_CERTIFICATE_ERROR;
-            response.getWriter().write(JsonUtils.toJson(new RestResp(code,ErrorMsgUtil.getErrMsg(code))));
+            response.getWriter().write(JsonUtils.toJson(new RestResp(code, ErrorMsg.getErrorMsg(code))));
             return;
         }
         filterChain.doFilter(servletRequest,servletResponse);

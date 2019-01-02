@@ -2,14 +2,13 @@ package com.hiekn.boot.autoconfigure.base.exception.handler;
 
 import com.hiekn.boot.autoconfigure.base.exception.ExceptionKeys;
 import com.hiekn.boot.autoconfigure.base.model.result.RestResp;
-import com.hiekn.boot.autoconfigure.base.util.ErrorMsgUtil;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 
-public final class WebApplicationExceptionHandler extends AbstractExceptionHandler implements ExceptionMapper<WebApplicationException> {
+public final class WebApplicationExceptionHandler extends ErrorMsg implements ExceptionMapper<WebApplicationException> {
 
     @Override
     public Response toResponse(final WebApplicationException exception) {
@@ -27,7 +26,7 @@ public final class WebApplicationExceptionHandler extends AbstractExceptionHandl
         } else if (exception instanceof InternalServerErrorException) {
             statusCode = Response.Status.INTERNAL_SERVER_ERROR;
         }
-        String errMsg = ErrorMsgUtil.getErrMsg(code);
+        String errMsg = getErrorMsg(code);
         logger.error("ErrorMsg = {}",errMsg,exception);
         return Response.ok(new RestResp<>(code, errMsg)).status(statusCode).type(MediaType.APPLICATION_JSON_TYPE).build();
     }
