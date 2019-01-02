@@ -10,10 +10,6 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.Properties;
 
-/**
- * @Author: DingHao
- * @Date: 2018/11/29 10:44
- */
 public abstract class ErrorMsg {
 
     protected String basePackage = SpringBeanUtils.getBean(JerseySwaggerProperties.class).getBasePackage();
