@@ -7,7 +7,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 
-public final class ExceptionHandler extends ErrorMsg implements ExceptionMapper<Exception> {
+public final class ExceptionHandler extends AbstractExceptionHandler implements ExceptionMapper<Exception> {
 
     @Override
     public Response toResponse(final Exception exception) {

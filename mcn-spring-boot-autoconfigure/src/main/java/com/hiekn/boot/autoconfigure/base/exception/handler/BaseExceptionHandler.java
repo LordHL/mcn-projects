@@ -9,7 +9,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import java.util.stream.Collectors;
 
-public final class BaseExceptionHandler extends ErrorMsg implements ExceptionMapper<BaseException> {
+public final class BaseExceptionHandler extends AbstractExceptionHandler implements ExceptionMapper<BaseException> {
 
     @Override
     public Response toResponse(final BaseException exception) {
