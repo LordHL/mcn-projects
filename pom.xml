@@ -7,6 +7,7 @@
     <packaging>pom</packaging>
     <version>1.5.19</version>
     <modules>
+        <module>mcn-core</module>
         <module>mcn-spring-boot-starter</module>
         <module>mcn-spring-boot-autoconfigure</module>
         <module>mcn-swagger2-ui</module>
@@ -106,6 +107,11 @@
             <dependency>
                 <groupId>com.hiekn.boot</groupId>
                 <artifactId>mcn-spring-boot-starter</artifactId>
+                <version>${mcn.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.hiekn.boot</groupId>
+                <artifactId>mcn-core</artifactId>
                 <version>${mcn.version}</version>
             </dependency>
             <dependency>

@@ -1,22 +1,21 @@
 package com.hiekn.boot.autoconfigure.jersey;
 
-import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import com.google.common.collect.Sets;
-import com.hiekn.boot.autoconfigure.base.exception.handler.BaseExceptionHandler;
-import com.hiekn.boot.autoconfigure.base.exception.handler.ExceptionHandler;
-import com.hiekn.boot.autoconfigure.base.exception.handler.ValidationExceptionMapper;
-import com.hiekn.boot.autoconfigure.base.exception.handler.WebApplicationExceptionHandler;
-import com.hiekn.boot.autoconfigure.base.filter.CheckCertificateFilter;
-import com.hiekn.boot.autoconfigure.base.rest.SwaggerView;
+import com.hiekn.boot.autoconfigure.web.filter.CheckCertificateFilter;
+import com.hiekn.boot.autoconfigure.web.rest.SwaggerView;
 import io.swagger.jaxrs.config.BeanConfig;
 import io.swagger.jaxrs.listing.ApiListingResource;
 import io.swagger.jaxrs.listing.SwaggerSerializers;
+import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.ServerProperties;
 import org.glassfish.jersey.server.mvc.freemarker.FreemarkerMvcFeature;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
-import org.springframework.boot.autoconfigure.condition.*;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.autoconfigure.jersey.JerseyAutoConfiguration;
 import org.springframework.boot.autoconfigure.jersey.ResourceConfigCustomizer;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -70,8 +69,8 @@ public class JerseySwaggerAutoConfiguration extends ResourceConfig {
                     packages.add(className);
                 }
             }
-
-            Set<Class<?>> allClasses = Sets.newHashSet(JacksonJsonProvider.class,ValidationExceptionMapper.class,ExceptionHandler.class,BaseExceptionHandler.class, WebApplicationExceptionHandler.class);
+            packages.add("com.hiekn.boot.autoconfigure.web.exception.handler");
+            Set<Class<?>> allClasses = Sets.newHashSet(JacksonFeature.class);//JacksonJsonProvider.class
             for (String pkg : packages) {
                 Set<Class<?>> collect = scanner.findCandidateComponents(pkg).stream()
                         .map(beanDefinition -> ClassUtils.resolveClassName(beanDefinition.getBeanClassName(), this.getClassLoader()))

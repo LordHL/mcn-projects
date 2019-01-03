@@ -1,6 +1,6 @@
 package com.hiekn.boot.autoconfigure.context;
 
-import com.hiekn.boot.autoconfigure.base.util.SpringBeanUtils;
+import com.hiekn.boot.autoconfigure.web.util.SpringBeanUtils;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.ConfigurableApplicationContext;
