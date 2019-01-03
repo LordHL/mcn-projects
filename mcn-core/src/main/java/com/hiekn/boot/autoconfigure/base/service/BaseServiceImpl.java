@@ -1,15 +1,13 @@
-package com.hiekn.boot.autoconfigure.web.service;
+package com.hiekn.boot.autoconfigure.base.service;
 
 import com.hiekn.boot.autoconfigure.base.mapper.BaseMapper;
 import com.hiekn.boot.autoconfigure.base.model.result.RestData;
-import com.hiekn.boot.autoconfigure.base.service.BaseService;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
 public class BaseServiceImpl<T,PK> implements BaseService<T,PK> {
 
-    @Autowired
+    @Autowired2
     private BaseMapper<T,PK> baseMapper;
 
     @Override

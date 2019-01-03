@@ -12,8 +12,10 @@ public class McnContextInitializer implements ApplicationContextInitializer<Conf
 
     @Override
     public void initialize(ConfigurableApplicationContext configurableApplicationContext) {
-        //set SpringBeanUtils Listener
+
         configurableApplicationContext.addApplicationListener(new SpringBeanUtilsListener());
+
+        configurableApplicationContext.getBeanFactory().addBeanPostProcessor(new McnBeanPostProcessor());
 
     }
 
