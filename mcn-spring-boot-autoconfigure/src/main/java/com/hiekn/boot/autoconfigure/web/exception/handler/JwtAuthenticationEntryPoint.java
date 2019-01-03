@@ -2,7 +2,6 @@ package com.hiekn.boot.autoconfigure.web.exception.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hiekn.boot.autoconfigure.base.exception.ErrorMsg;
-import com.hiekn.boot.autoconfigure.base.exception.ExceptionKeys;
 import com.hiekn.boot.autoconfigure.base.model.result.RestResp;
 import com.hiekn.boot.autoconfigure.web.exception.InvalidAuthenticationTokenException;
 import org.springframework.http.HttpStatus;
@@ -30,12 +29,11 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
         restResp.setActionStatus(RestResp.ActionStatusMethod.FAIL.toString());
         if (authException instanceof InvalidAuthenticationTokenException) {
             status = HttpStatus.UNAUTHORIZED;
-            restResp.setErrorCode(ExceptionKeys.AUTHENTICATION_ERROR);
-            restResp.setErrorInfo(ErrorMsg.getErrorMsg(ExceptionKeys.AUTHENTICATION_ERROR));
+            restResp = ErrorMsg.authenticationError();
         } else {
             status = HttpStatus.FORBIDDEN;
-            restResp.setErrorCode(ExceptionKeys.PERMISSION_NOT_ENOUGH_ERROR);
-            restResp.setErrorInfo(ErrorMsg.getErrorMsg(ExceptionKeys.PERMISSION_NOT_ENOUGH_ERROR));
+            restResp = ErrorMsg.permissionNotEnough();
+
         }
 //      restResp.setErrorInfo(authException.getMessage());
 

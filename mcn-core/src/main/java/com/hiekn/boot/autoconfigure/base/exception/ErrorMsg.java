@@ -1,6 +1,7 @@
 package com.hiekn.boot.autoconfigure.base.exception;
 
 import com.google.common.collect.Lists;
+import com.hiekn.boot.autoconfigure.base.model.result.RestResp;
 import com.hiekn.boot.autoconfigure.base.util.McnUtils;
 
 import java.util.List;
@@ -24,6 +25,21 @@ public abstract class ErrorMsg implements ExceptionKeys {
             }
         }
         return null;
+    }
+
+    public static RestResp invalidCertificate(){
+        int code = ExceptionKeys.INVALID_CERTIFICATE_ERROR;
+        return new RestResp(code, ErrorMsg.getErrorMsg(code));
+    }
+
+    public static RestResp permissionNotEnough(){
+        int code = ExceptionKeys.PERMISSION_NOT_ENOUGH_ERROR;
+        return new RestResp(code, ErrorMsg.getErrorMsg(code));
+    }
+
+    public static RestResp authenticationError(){
+        int code = ExceptionKeys.AUTHENTICATION_ERROR;
+        return new RestResp(code, ErrorMsg.getErrorMsg(code));
     }
 
 }
