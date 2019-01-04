@@ -1,5 +1,7 @@
 package com.hiekn.boot.autoconfigure.base.util;
 
+import com.hiekn.boot.autoconfigure.base.exception.BaseException;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -156,7 +158,7 @@ public abstract class McnUtils {
         try {
             return Files.readAllLines(buildPath(filePath));
         } catch (IOException e) {
-           throw new RuntimeException(e);
+           throw new BaseException(e);
         }
     }
 
@@ -169,7 +171,7 @@ public abstract class McnUtils {
         try {
             return Files.readAllBytes(buildPath(filePath));
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new BaseException(e);
         }
     }
 
@@ -183,7 +185,7 @@ public abstract class McnUtils {
         try {
             return Files.copy(buildPath(source),Files.newOutputStream(buildPath(target)));
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new BaseException(e);
         }
     }
 

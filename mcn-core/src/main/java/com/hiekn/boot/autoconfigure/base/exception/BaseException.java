@@ -20,6 +20,14 @@ public class BaseException extends RuntimeException {
         this.msg = msg(code, msg);
     }
 
+    public BaseException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public BaseException(Throwable cause) {
+        super(cause);
+    }
+
     public Integer getCode() {
         return code;
     }
