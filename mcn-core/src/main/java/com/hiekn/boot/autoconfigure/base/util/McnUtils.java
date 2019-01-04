@@ -1,12 +1,10 @@
 package com.hiekn.boot.autoconfigure.base.util;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.util.Collection;
-import java.util.Objects;
-import java.util.Properties;
-import java.util.UUID;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
 
 /**
  * 封装一些常用的工具
@@ -147,6 +145,60 @@ public abstract class McnUtils {
             }
         }
         return true;
+    }
+
+    /**
+     * 读取文件所有行
+     * @param filePath
+     * @return
+     */
+    public static List<String> readAllLine(String filePath) {
+        try {
+            return Files.readAllLines(buildPath(filePath));
+        } catch (IOException e) {
+           throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 返回文件所有字节
+     * @param filePath 文件路径
+     * @return
+     */
+    public static byte[] readAllBytes(String filePath) {
+        try {
+            return Files.readAllBytes(buildPath(filePath));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 复制文件
+     * @param source 源文件
+     * @param target 目标文件
+     * @return
+     */
+    public static long copyFile(String source,String target) {
+        try {
+            return Files.copy(buildPath(source),Files.newOutputStream(buildPath(target)));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 复制文件
+     * @param source 源文件
+     * @param target 目标文件
+     * @return
+     */
+    public static long copyFile(File source,File target) {
+        return copyFile(source.getAbsolutePath(),target.getAbsolutePath());
+    }
+
+    private static Path buildPath(String filePath){
+        return Paths.get(filePath);
     }
 
 
