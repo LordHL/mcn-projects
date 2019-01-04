@@ -50,6 +50,8 @@ import java.util.stream.Collectors;
 @AutoConfigureBefore(JerseyAutoConfiguration.class)
 public class JerseySwaggerAutoConfiguration extends ResourceConfig {
 
+    private static final String EXCEPTION_HANDLER_PACKAGE = "com.hiekn.boot.autoconfigure.web.exception.handler";
+
     private final JerseySwaggerProperties jersey;
 
     public JerseySwaggerAutoConfiguration(JerseySwaggerProperties jersey) {
@@ -63,13 +65,12 @@ public class JerseySwaggerAutoConfiguration extends ResourceConfig {
             scanner.addIncludeFilter(new AnnotationTypeFilter(Path.class));
             scanner.addIncludeFilter(new AnnotationTypeFilter(Provider.class));
             String otherResourcePackage = jersey.getOtherResourcePackage();
-            Set<String> packages = Sets.newHashSet(jersey.getBasePackage());
+            Set<String> packages = Sets.newHashSet(jersey.getBasePackage(),EXCEPTION_HANDLER_PACKAGE);
             if (StringUtils.hasLength(otherResourcePackage)) {
                 for (String className : StringUtils.tokenizeToStringArray(otherResourcePackage, ",")) {
                     packages.add(className);
                 }
             }
-            packages.add("com.hiekn.boot.autoconfigure.web.exception.handler");
             Set<Class<?>> allClasses = Sets.newHashSet(JacksonFeature.class);//JacksonJsonProvider.class
             for (String pkg : packages) {
                 Set<Class<?>> collect = scanner.findCandidateComponents(pkg).stream()
