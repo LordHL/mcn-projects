@@ -38,7 +38,6 @@ public class BaseServiceImpl<T,PK> implements BaseService<T,PK> {
         baseMapper.updateByPrimaryKeySelective(pojo);
     }
 
-
     @Override
     public RestData<T> listByPage(T pojo) {
         return new RestData<>(pageSelect(pojo),pageCount(pojo));

@@ -28,18 +28,15 @@ public abstract class ErrorMsg implements ExceptionKeys {
     }
 
     public static RestResp invalidCertificate(){
-        int code = ExceptionKeys.INVALID_CERTIFICATE_ERROR;
-        return new RestResp(code, ErrorMsg.getErrorMsg(code));
+        return buildErrorMessage(ExceptionKeys.INVALID_CERTIFICATE_ERROR);
     }
 
-    public static RestResp permissionNotEnough(){
-        int code = ExceptionKeys.PERMISSION_NOT_ENOUGH_ERROR;
-        return new RestResp(code, ErrorMsg.getErrorMsg(code));
+    public static RestResp buildErrorMessage(int code){
+        return buildErrorMessage(code,getErrorMsg(code));
     }
 
-    public static RestResp authenticationError(){
-        int code = ExceptionKeys.AUTHENTICATION_ERROR;
-        return new RestResp(code, ErrorMsg.getErrorMsg(code));
+    public static RestResp buildErrorMessage(int code,String msg){
+        return new RestResp(code, msg);
     }
 
 }

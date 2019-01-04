@@ -14,10 +14,10 @@ public class BaseException extends RuntimeException {
         this(code, null);
     }
 
-    protected BaseException(Integer code,String msg) {
-        super(msg==null?ErrorMsg.getErrorMsg(code):ErrorMsg.getErrorMsg(code)+msg);
+    protected BaseException(Integer code, String msg) {
+        super(msg(code, msg));
         this.code = code;
-        this.msg = msg==null?ErrorMsg.getErrorMsg(code):ErrorMsg.getErrorMsg(code)+msg;
+        this.msg = msg(code, msg);
     }
 
     public Integer getCode() {
@@ -34,6 +34,10 @@ public class BaseException extends RuntimeException {
 
     public void setMsg(String msg) {
         this.msg = msg;
+    }
+
+    private static String msg(Integer code, String msg){
+        return msg == null ? ErrorMsg.getErrorMsg(code) : ErrorMsg.getErrorMsg(code) + msg;
     }
 
 }

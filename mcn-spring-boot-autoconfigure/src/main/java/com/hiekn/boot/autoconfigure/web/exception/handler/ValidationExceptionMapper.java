@@ -1,7 +1,6 @@
 package com.hiekn.boot.autoconfigure.web.exception.handler;
 
 import com.google.common.collect.Lists;
-import com.hiekn.boot.autoconfigure.base.exception.ExceptionKeys;
 import com.hiekn.boot.autoconfigure.base.model.ValidationErrorBean;
 import com.hiekn.boot.autoconfigure.base.model.result.RestResp;
 import org.glassfish.jersey.server.ServerProperties;
@@ -26,10 +25,7 @@ public final class ValidationExceptionMapper extends AbstractExceptionHandler im
 
     @Override
     public Response toResponse(final ValidationException exception) {
-        RestResp<List<ValidationErrorBean>> objectRestResp = new RestResp<>();
-        objectRestResp.setActionStatus(RestResp.ActionStatusMethod.FAIL.toString());
-        objectRestResp.setErrorCode(ExceptionKeys.PARAM_PARSE_ERROR);
-        objectRestResp.setErrorInfo(getErrorMsg(ExceptionKeys.PARAM_PARSE_ERROR));
+        RestResp<List<ValidationErrorBean>> objectRestResp = buildErrorMessage(PARAM_PARSE_ERROR);
         if (exception instanceof ConstraintViolationException) {
 
             final ConstraintViolationException cve = (ConstraintViolationException) exception;
