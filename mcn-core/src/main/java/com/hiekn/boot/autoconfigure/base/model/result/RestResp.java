@@ -29,6 +29,8 @@ public class RestResp<T> {
 	private String ErrorInfo = "";
 	private T data;
 
+	private Integer count;
+
 	public RestResp() {	}
 	
 	public RestResp(Integer code,String msg){
@@ -40,8 +42,13 @@ public class RestResp<T> {
 	public RestResp(T data){
 		this.data = data;
 	}
-	
-	@JsonIgnore
+
+    public RestResp(T data, Integer count) {
+        this(data);
+        this.count = count;
+    }
+
+    @JsonIgnore
 	public String getActionStatus() {
 		return ActionStatus;
 	}
@@ -74,5 +81,13 @@ public class RestResp<T> {
 
     public void setData(T data) {
         this.data = data;
+    }
+
+    public Integer getCount() {
+        return count;
+    }
+
+    public void setCount(Integer count) {
+        this.count = count;
     }
 }

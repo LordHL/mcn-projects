@@ -2,6 +2,7 @@ package com.hiekn.boot.autoconfigure.base.service;
 
 import com.hiekn.boot.autoconfigure.base.mapper.BaseMapper;
 import com.hiekn.boot.autoconfigure.base.model.result.RestData;
+import com.hiekn.boot.autoconfigure.base.model.result.RestResp;
 
 import java.util.List;
 
@@ -41,6 +42,11 @@ public class BaseServiceImpl<T,PK> implements BaseService<T,PK> {
     @Override
     public RestData<T> listByPage(T pojo) {
         return new RestData<>(pageSelect(pojo),pageCount(pojo));
+    }
+
+    @Override
+    public RestResp<List<T>> listPage(T pojo) {
+        return new RestResp<>(pageSelect(pojo),pageCount(pojo));
     }
 
     @Override

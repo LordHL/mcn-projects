@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface BaseMapper<T,PK> {
+
     int insert(T pojo);
     int insertSelective(T record);
     int deleteByPrimaryKey(PK id);
