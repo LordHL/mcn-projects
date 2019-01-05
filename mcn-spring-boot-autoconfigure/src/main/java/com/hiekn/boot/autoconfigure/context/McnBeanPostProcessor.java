@@ -1,6 +1,6 @@
 package com.hiekn.boot.autoconfigure.context;
 
-import com.hiekn.boot.autoconfigure.base.service.Autowired2;
+import com.hiekn.boot.autoconfigure.base.service.McnAutowired;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor;
 import org.springframework.beans.factory.config.BeanPostProcessor;
@@ -10,7 +10,7 @@ import java.lang.annotation.Annotation;
 import java.util.Set;
 
 /**
- * mainly deal annotation @Autowired2
+ * mainly deal annotation @McnAutowired
  */
 public class McnBeanPostProcessor implements BeanPostProcessor {
 
@@ -22,7 +22,7 @@ public class McnBeanPostProcessor implements BeanPostProcessor {
                 if(f.getName().equals("autowiredAnnotationTypes")){
                     ReflectionUtils.makeAccessible(f);
                     Set<Class<? extends Annotation>> autowiredAnnotationTypes = (Set<Class<? extends Annotation>>)f.get(abf);
-                    autowiredAnnotationTypes.add(Autowired2.class);
+                    autowiredAnnotationTypes.add(McnAutowired.class);
                 }
             });
         }

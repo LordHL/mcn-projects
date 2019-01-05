@@ -8,7 +8,7 @@ import java.util.List;
 
 public class BaseServiceImpl<T,PK> implements BaseService<T,PK> {
 
-    @Autowired2
+    @McnAutowired
     private BaseMapper<T,PK> baseMapper;
 
     @Override
