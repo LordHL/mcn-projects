@@ -71,10 +71,11 @@ public abstract class McnUtils {
      */
     public static Properties loadProperties(String fileName,String key){
         String value = getValueFromSystemEnvOrProp(key, fileName);
-        if(value.endsWith("/")){
-            value += fileName;
+        File file = new File(value);
+        if(file.isDirectory()){
+            file = new File(value,fileName);
         }
-        return loadProperties(value);
+        return loadProperties(file.getAbsolutePath());
     }
 
     private static InputStream getInputStream(String fileName,ClassLoader cls){
