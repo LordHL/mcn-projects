@@ -15,7 +15,6 @@ public class McnContextInitializer implements ApplicationContextInitializer<Conf
 
         configurableApplicationContext.addApplicationListener(new SpringBeanUtilsListener());
         configurableApplicationContext.addBeanFactoryPostProcessor(new McnBeanFactoryRegistryPostProcessor());
-        configurableApplicationContext.getBeanFactory().addBeanPostProcessor(new McnBeanPostProcessor());
 
     }
 

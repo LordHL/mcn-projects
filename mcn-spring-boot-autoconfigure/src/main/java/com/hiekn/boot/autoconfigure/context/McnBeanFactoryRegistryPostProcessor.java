@@ -24,6 +24,7 @@ public class McnBeanFactoryRegistryPostProcessor implements BeanDefinitionRegist
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
         beanFactory.getBeanDefinition(AnnotationConfigUtils.AUTOWIRED_ANNOTATION_PROCESSOR_BEAN_NAME).getPropertyValues().add("mcnAutowired", McnAutowired.class);
+        beanFactory.addBeanPostProcessor(new McnBeanPostProcessor());
     }
 
 }
