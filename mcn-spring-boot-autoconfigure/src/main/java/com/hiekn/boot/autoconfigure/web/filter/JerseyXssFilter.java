@@ -1,19 +1,15 @@
 package com.hiekn.boot.autoconfigure.web.filter;
 
-
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.PreMatching;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.UriBuilder;
-import javax.ws.rs.ext.Provider;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-
 @PreMatching
-@Provider
 public class JerseyXssFilter implements ContainerRequestFilter {
 
     @Override

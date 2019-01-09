@@ -88,7 +88,7 @@ public class JerseySwaggerAutoConfiguration extends ResourceConfig {
                 config.registerClasses(MultiPartFeature.class);
             }
 
-            //register MultiPartFeature
+            //register JerseyXssFilter
             if(jersey.getXss() && ClassUtils.isPresent("org.jsoup.Jsoup",null)){
                 config.registerClasses(JerseyXssFilter.class);
             }
