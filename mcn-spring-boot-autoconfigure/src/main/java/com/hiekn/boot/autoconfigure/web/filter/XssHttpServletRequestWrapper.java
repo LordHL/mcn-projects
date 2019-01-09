@@ -1,6 +1,5 @@
 package com.hiekn.boot.autoconfigure.web.filter;
 
-import com.hiekn.boot.autoconfigure.web.util.JsoupUtil;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;

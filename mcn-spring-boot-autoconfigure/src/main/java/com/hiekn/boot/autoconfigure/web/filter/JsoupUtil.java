@@ -1,4 +1,4 @@
-package com.hiekn.boot.autoconfigure.web.util;
+package com.hiekn.boot.autoconfigure.web.filter;
 
 import com.hiekn.boot.autoconfigure.base.util.McnUtils;
 import org.jsoup.Jsoup;
@@ -11,7 +11,7 @@ import org.jsoup.safety.Whitelist;
  * @author DingHao
  * @date 2019/1/9 11:06
  */
-public class JsoupUtil {
+class JsoupUtil {
 
 
     /**

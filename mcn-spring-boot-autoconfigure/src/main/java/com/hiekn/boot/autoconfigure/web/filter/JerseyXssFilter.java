@@ -1,8 +1,6 @@
 package com.hiekn.boot.autoconfigure.web.filter;
 
 
-import com.hiekn.boot.autoconfigure.web.util.JsoupUtil;
-
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.PreMatching;
