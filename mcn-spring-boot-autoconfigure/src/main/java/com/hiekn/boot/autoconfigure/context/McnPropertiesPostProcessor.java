@@ -2,6 +2,7 @@ package com.hiekn.boot.autoconfigure.context;
 
 import com.google.common.collect.Maps;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.context.config.ConfigFileApplicationListener;
 import org.springframework.boot.env.EnvironmentPostProcessor;
 import org.springframework.core.Ordered;
 import org.springframework.core.env.ConfigurableEnvironment;
@@ -13,6 +14,7 @@ import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.core.io.support.ResourcePropertySource;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.ResourceUtils;
+import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.util.Map;
@@ -31,9 +33,21 @@ public class McnPropertiesPostProcessor implements EnvironmentPostProcessor,Orde
         if(Objects.nonNull(mainApplicationClass)){
             mapProp.put(APP_BASE_PACKAGE_PROPERTY,ClassUtils.getPackageName(mainApplicationClass));
         }
+
+        String profiles = environment.getProperty(ConfigFileApplicationListener.ACTIVE_PROFILES_PROPERTY);
+        String logFileName = environment.getProperty("mcn.log.errorFileName","error");
+        if(StringUtils.hasText(profiles)){
+            logFileName += "-" + StringUtils.commaDelimitedListToStringArray(StringUtils.trimAllWhitespace(profiles))[0];
+        }
+        mapProp.put("mcn.log.errorFileName",logFileName);
+
         mapProp.put("mcn.version",this.getClass().getPackage().getImplementationVersion());
         mapProp.put("logging.level."+mapProp.get(APP_BASE_PACKAGE_PROPERTY)+".dao","info");//do not println query statement
-        propertySources.addLast(new MapPropertySource("mcn-map",mapProp));
+        if(propertySources.contains("systemEnvironment")){
+            propertySources.addAfter("systemEnvironment",new MapPropertySource("mcn-map",mapProp));
+        }else{
+            propertySources.addLast(new MapPropertySource("mcn-map",mapProp));
+        }
 
         try {
             //add global unique config file

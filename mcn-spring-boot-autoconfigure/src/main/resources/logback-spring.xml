@@ -5,7 +5,7 @@
     <property name="pattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n" />
 
     <springProperty name="fileFilter" source="mcn.log.filter"/>
-    <springProperty name="profile" source="spring.profiles.active"/>
+    <!--<springProperty name="profile" source="spring.profiles.active"/>-->
     <springProperty name="errorFileName" source="mcn.log.errorFileName"/>
     <!--<springProperty name="infoFileName" source="mcn.log.infoFileName"/>-->
     <springProperty name="maxHistory" source="mcn.log.maxHistory"/>
@@ -21,10 +21,10 @@
             <level>${fileFilter}</level>
         </filter>
         <!--当天生成的日志文件名称-->
-        <file>${LOG_PATH}${errorFileName}-${profile}.log</file>
+        <file>${LOG_PATH}${errorFileName}.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!--日志文件输出的文件名-->
-            <FileNamePattern>${LOG_PATH}${errorFileName}-${profile}-%d{yyyy-MM-dd}.log.gz</FileNamePattern>
+            <FileNamePattern>${LOG_PATH}${errorFileName}-%d{yyyy-MM-dd}.log.gz</FileNamePattern>
             <!--归档日志文件保留天数-->
             <MaxHistory>${maxHistory}</MaxHistory>
         </rollingPolicy>
@@ -39,9 +39,9 @@
             <onMatch>ACCEPT</onMatch>
             <onMismatch>DENY</onMismatch>
         </filter>
-        <file>${LOG_PATH}${infoFileName}-${profile}.log</file>
+        <file>${LOG_PATH}${infoFileName}.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <FileNamePattern>${LOG_PATH}${infoFileName}-${profile}-%d{yyyy-MM-dd}.log.gz</FileNamePattern>
+            <FileNamePattern>${LOG_PATH}${infoFileName}}-%d{yyyy-MM-dd}.log.gz</FileNamePattern>
             <MaxHistory>${maxHistory}</MaxHistory>
         </rollingPolicy>
         <encoder>
