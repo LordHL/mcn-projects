@@ -291,8 +291,8 @@ logging.path=/project_logs/${spring.application.name}/
 logging.level.root=info
 logging.level.org=warn
 logging.level.io=warn
-mcn.log.errorFileName=error
-mcn.log.infoFileName=info
+
+mcn.log.filter=info
 mcn.log.maxHistory=30
 
 
