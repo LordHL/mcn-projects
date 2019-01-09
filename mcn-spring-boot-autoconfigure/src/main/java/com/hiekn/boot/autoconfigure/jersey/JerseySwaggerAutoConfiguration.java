@@ -1,7 +1,7 @@
 package com.hiekn.boot.autoconfigure.jersey;
 
 import com.google.common.collect.Sets;
-import com.hiekn.boot.autoconfigure.web.filter.CheckCertificateFilter;
+import com.hiekn.boot.autoconfigure.web.filter.JerseyXssFilter;
 import com.hiekn.boot.autoconfigure.web.rest.SwaggerView;
 import io.swagger.jaxrs.config.BeanConfig;
 import io.swagger.jaxrs.listing.ApiListingResource;
@@ -14,12 +14,9 @@ import org.glassfish.jersey.server.mvc.freemarker.FreemarkerMvcFeature;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.autoconfigure.jersey.JerseyAutoConfiguration;
 import org.springframework.boot.autoconfigure.jersey.ResourceConfigCustomizer;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.ApplicationContextException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
@@ -28,9 +25,6 @@ import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
 
 import javax.ws.rs.Path;
 import javax.ws.rs.ext.ExceptionMapper;
@@ -94,6 +88,11 @@ public class JerseySwaggerAutoConfiguration extends ResourceConfig {
                 config.registerClasses(MultiPartFeature.class);
             }
 
+            //register MultiPartFeature
+            if(jersey.getXss() && ClassUtils.isPresent("org.jsoup.Jsoup",null)){
+                config.registerClasses(JerseyXssFilter.class);
+            }
+
             //init swagger
             initSwagger(config);
 
@@ -130,31 +129,6 @@ public class JerseySwaggerAutoConfiguration extends ResourceConfig {
                         .registerClasses(FreemarkerMvcFeature.class,SwaggerView.class);
             }
         }
-    }
-
-    @Bean
-    @ConditionalOnWebApplication
-    @ConditionalOnClass(name = "org.springframework.web.cors.CorsConfigurationSource")
-    @ConditionalOnProperty(prefix = "filter", name = {"cross"}, havingValue = "true", matchIfMissing = true)
-    public CorsFilter corsFilter() {
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.addAllowedOrigin(CorsConfiguration.ALL);
-        corsConfiguration.addAllowedHeader(CorsConfiguration.ALL);
-        corsConfiguration.addAllowedMethod(CorsConfiguration.ALL);
-        corsConfiguration.setMaxAge(3600L);
-        source.registerCorsConfiguration("/**", corsConfiguration);
-        return new CorsFilter(source);
-    }
-
-    @Bean
-    @ConditionalOnClass(name = "com.hiekn.licence.verify.VerifyLicense")
-    public FilterRegistrationBean checkCertificateFilter() {
-        FilterRegistrationBean registration = new FilterRegistrationBean();
-        registration.setFilter(new CheckCertificateFilter());
-        registration.addUrlPatterns("/*");
-        registration.setOrder(1);
-        return registration;
     }
 
     @Bean

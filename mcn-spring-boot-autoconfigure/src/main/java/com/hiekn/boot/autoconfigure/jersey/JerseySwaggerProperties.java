@@ -9,6 +9,7 @@ public class JerseySwaggerProperties {
 
     private String basePackage;
     private Boolean init = true;
+    private Boolean xss = false;
     private String version;
     private String title = "API";
     private String host;
@@ -41,6 +42,14 @@ public class JerseySwaggerProperties {
 
     public void setInit(Boolean init) {
         this.init = init;
+    }
+
+    public Boolean getXss() {
+        return xss;
+    }
+
+    public void setXss(Boolean xss) {
+        this.xss = xss;
     }
 
     public String getVersion() {

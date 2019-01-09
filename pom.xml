@@ -40,6 +40,7 @@
         <boot-admin.version>1.5.7</boot-admin.version>
         <qiniu.version>7.2.11</qiniu.version>
         <licence.version>1.0.2</licence.version>
+        <jsoup.version>1.11.3</jsoup.version>
     </properties>
 
     <dependencyManagement>
@@ -153,6 +154,12 @@
                 <groupId>com.hiekn</groupId>
                 <artifactId>licence</artifactId>
                 <version>${licence.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.jsoup</groupId>
+                <artifactId>jsoup</artifactId>
+                <version>${jsoup.version}</version>
             </dependency>
 
         </dependencies>
