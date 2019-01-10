@@ -1,7 +1,6 @@
 package com.hiekn.boot.autoconfigure.jersey;
 
 import com.hiekn.boot.autoconfigure.web.filter.CheckCertificateFilter;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
@@ -22,7 +21,6 @@ import org.springframework.web.filter.CorsFilter;
 @Configuration
 @ConditionalOnWebApplication
 @EnableConfigurationProperties(FilterProperties.class)
-@AutoConfigureAfter(JerseySwaggerAutoConfiguration.class)
 public class FilterAutoConfiguration {
 
     private FilterProperties filterProperties;
