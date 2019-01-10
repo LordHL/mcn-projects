@@ -1,10 +1,10 @@
 package com.hiekn.boot.autoconfigure.jersey;
 
-import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.client.JerseyClient;
 import org.glassfish.jersey.client.JerseyClientBuilder;
+import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 
@@ -32,7 +32,7 @@ public class JerseyHttp {
         ClientConfig clientConfig = new ClientConfig();
         clientConfig.property(ClientProperties.CONNECT_TIMEOUT, clientProperties.getConnectTimeout())
                 .property(ClientProperties.READ_TIMEOUT, clientProperties.getReadTimeout())
-                .register(JacksonJsonProvider.class).register(MultiPartFeature.class);
+                .register(JacksonFeature.class).register(MultiPartFeature.class);
         client = JerseyClientBuilder.createClient(clientConfig);
         this.clientProperties = clientProperties;
     }

@@ -32,7 +32,7 @@ import java.util.Objects;
 @ConditionalOnClass({ AbstractSecurityWebApplicationInitializer.class, SessionCreationPolicy.class,JWT.class })
 @ConditionalOnProperty(prefix = "jwt.security", name = "login", havingValue = "true")
 @EnableConfigurationProperties
-@Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
+@Order(SecurityProperties.BASIC_AUTH_ORDER)
 public class WebSecurityAutoConfiguration extends WebSecurityConfigurerAdapter {
 
     private Environment environment;

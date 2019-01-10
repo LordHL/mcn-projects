@@ -2,9 +2,9 @@ package com.hiekn.boot.autoconfigure.db;
 
 import com.google.common.collect.Maps;
 import com.hiekn.boot.autoconfigure.context.McnPropertiesPostProcessor;
+import com.zaxxer.hikari.HikariDataSource;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.boot.autoconfigure.SpringBootVFS;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
@@ -13,14 +13,11 @@ import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
 import org.springframework.beans.factory.support.RootBeanDefinition;
-import org.springframework.boot.bind.RelaxedNames;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 
-import java.beans.PropertyDescriptor;
-import java.util.Iterator;
 import java.util.Map;
 
 public class MultipleDataSourceRegistryPostProcessor implements BeanDefinitionRegistryPostProcessor {
@@ -39,10 +36,10 @@ public class MultipleDataSourceRegistryPostProcessor implements BeanDefinitionRe
             String basePackage = env.getProperty((McnPropertiesPostProcessor.APP_BASE_PACKAGE_PROPERTY));
             for (String db : dbs) {
                 GenericBeanDefinition beanDefinition = new GenericBeanDefinition();
-                beanDefinition.setBeanClass(org.apache.tomcat.jdbc.pool.DataSource.class);
+                beanDefinition.setBeanClass(HikariDataSource.class);
                 beanDefinition.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
                 beanDefinition.setSynthetic(true);
-                configConnectPool(beanDefinition, db);
+//                configConnectPool(beanDefinition, db);
                 StringBuilder sb = new StringBuilder();
                 registry.registerBeanDefinition(sb.append(db).append("DataSource").toString(), beanDefinition);
 
@@ -89,37 +86,5 @@ public class MultipleDataSourceRegistryPostProcessor implements BeanDefinitionRe
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
     }
 
-    private void configConnectPool(GenericBeanDefinition beanDefinition, String db) {
-        String propertyPrefixKey = new StringBuilder(MultipleMybatisAutoConfiguration.PREFIX).append(db).append(".").toString();
-        Map<String, Object> map = Maps.newHashMap();
-        PropertyDescriptor[] descriptors = BeanUtils.getPropertyDescriptors(org.apache.tomcat.jdbc.pool.DataSource.class);
-        for (PropertyDescriptor descriptor : descriptors) {
-            String name = descriptor.getName();
-            if (!"class".equals(name)) {
-                Iterable<String> relaxedTargetNames = new RelaxedNames(name);
-                Iterator<String> iterator = relaxedTargetNames.iterator();
-                while (iterator.hasNext()) {
-                    String key = propertyPrefixKey + iterator.next();
-                    if (environment.containsProperty(key)) {
-                        map.put(name, environment.getProperty(key));
-                        break;
-                    } else {
-                        iterator.remove();
-                    }
-                }
-                if (!iterator.hasNext()) {//set default property
-                    Iterable<String> names = new RelaxedNames(name);
-                    for (String s : names) {
-                        String key = "spring.datasource.tomcat." + s;
-                        if (environment.containsProperty(key)) {
-                            map.put(name, environment.getProperty(key));
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-        beanDefinition.getPropertyValues().addPropertyValues(map);
-    }
 
 }
