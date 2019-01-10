@@ -5,10 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.context.config.ConfigFileApplicationListener;
 import org.springframework.boot.env.EnvironmentPostProcessor;
 import org.springframework.core.Ordered;
-import org.springframework.core.env.ConfigurableEnvironment;
-import org.springframework.core.env.MapPropertySource;
-import org.springframework.core.env.MutablePropertySources;
-import org.springframework.core.env.PropertiesPropertySource;
+import org.springframework.core.env.*;
 import org.springframework.core.io.UrlResource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.core.io.support.ResourcePropertySource;
@@ -43,8 +40,8 @@ public class McnPropertiesPostProcessor implements EnvironmentPostProcessor,Orde
 
         mapProp.put("mcn.version",this.getClass().getPackage().getImplementationVersion());
         mapProp.put("logging.level."+mapProp.get(APP_BASE_PACKAGE_PROPERTY)+".dao","info");//do not println query statement
-        if(propertySources.contains("systemEnvironment")){
-            propertySources.addAfter("systemEnvironment",new MapPropertySource("mcn-map",mapProp));
+        if(propertySources.contains(StandardEnvironment.SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME)){
+            propertySources.addAfter(StandardEnvironment.SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME,new MapPropertySource("mcn-map",mapProp));
         }else{
             propertySources.addLast(new MapPropertySource("mcn-map",mapProp));
         }
