@@ -90,7 +90,8 @@ public abstract class McnUtils {
         try {
             in = new FileInputStream(fileName);
         } catch (FileNotFoundException e) {
-            in = cls.getResourceAsStream(fileName);
+            File file = new File(fileName);
+            in = cls.getResourceAsStream(file.getName());
         }
         return in;
     }
@@ -166,7 +167,7 @@ public abstract class McnUtils {
         try {
             return Files.readAllLines(buildPath(filePath));
         } catch (IOException e) {
-           throw new BaseException(e);
+            throw new BaseException(e);
         }
     }
 
