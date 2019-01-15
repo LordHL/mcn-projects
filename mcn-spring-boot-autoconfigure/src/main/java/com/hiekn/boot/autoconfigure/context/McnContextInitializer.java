@@ -22,9 +22,7 @@ public class McnContextInitializer implements ApplicationContextInitializer<Conf
 
         @Override
         public void onApplicationEvent(ContextRefreshedEvent event) {
-            if(SpringBeanUtils.getAc() == null){
-                SpringBeanUtils.setApplicationContext(event.getApplicationContext());
-            }
+            SpringBeanUtils.setApplicationContext(event.getApplicationContext());
         }
 
     }

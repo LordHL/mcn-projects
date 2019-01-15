@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
  * @author DingHao
  * @date 2019/1/2 19:04
  */
-public class AbstractExceptionHandler extends ErrorMsg {
+public abstract class AbstractExceptionHandler extends ErrorMsg {
 
     protected String basePackage = SpringBeanUtils.getBean(JerseySwaggerProperties.class).getBasePackage();
     protected final Logger logger = LoggerFactory.getLogger(getClass());
