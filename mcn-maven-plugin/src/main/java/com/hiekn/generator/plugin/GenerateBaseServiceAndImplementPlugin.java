@@ -95,6 +95,7 @@ public class GenerateBaseServiceAndImplementPlugin extends PluginAdapter {
                 restClass.addImportedType("com.hiekn.boot.autoconfigure.base.model.result.RestResp");
                 restClass.addImportedType("com.hiekn.boot.autoconfigure.web.util.BeanValidator");
                 restClass.addImportedType("com.hiekn.boot.autoconfigure.base.util.JsonUtils");
+                restClass.addImportedType("com.hiekn.boot.autoconfigure.base.util.McnUtils;");
                 restClass.addImportedType("com.hiekn.boot.autoconfigure.web.model.PageModel");
                 restClass.addImportedType("javax.validation.Valid");
                 restClass.addImportedType(serviceInterfaceFullName);
@@ -194,9 +195,10 @@ public class GenerateBaseServiceAndImplementPlugin extends PluginAdapter {
         parameter = new Parameter(new FullyQualifiedJavaType("@ApiParam(required = true)@FormParam(\"bean\") String"),"bean");
         add.getParameters().add(parameter);
 
-        add.getBodyLines().add(""+Bean+" "+bean+" = JsonUtils.fromJson(bean, "+Bean+".class);");
+        add.getBodyLines().add(Bean+" "+bean+" = JsonUtils.fromJson(bean, "+Bean+".class);");
         add.getBodyLines().add("BeanValidator.validate("+bean+");");
-        add.getBodyLines().add(""+xService+".save("+bean+");");
+        add.getBodyLines().add(bean+".setCreateTime(McnUtils.getTime());");
+        add.getBodyLines().add(xService+".save("+bean+");");
         add.getBodyLines().add("return new RestResp<>("+bean+");");
         restClass.getMethods().add(add);
 
@@ -208,7 +210,7 @@ public class GenerateBaseServiceAndImplementPlugin extends PluginAdapter {
         delete.setReturnType(new FullyQualifiedJavaType("RestResp"));
         parameter = new Parameter(new FullyQualifiedJavaType("@PathParam(\"id\") "+pk+""),"id");
         delete.getParameters().add(parameter);
-        delete.getBodyLines().add(""+xService+".deleteByPrimaryKey(id);");
+        delete.getBodyLines().add(xService+".deleteByPrimaryKey(id);");
         delete.getBodyLines().add("return new RestResp<>();");
         restClass.getMethods().add(delete);
 
@@ -222,10 +224,10 @@ public class GenerateBaseServiceAndImplementPlugin extends PluginAdapter {
         update.getParameters().add(parameter);
         parameter = new Parameter(new FullyQualifiedJavaType("@ApiParam(required = true)@FormParam(\"bean\") String"),"bean");
         update.getParameters().add(parameter);
-        update.getBodyLines().add(""+Bean+" "+bean+" = JsonUtils.fromJson(bean, "+Bean+".class);");
-        update.getBodyLines().add(""+bean+".setId(id);");
+        update.getBodyLines().add(Bean+" "+bean+" = JsonUtils.fromJson(bean, "+Bean+".class);");
+        update.getBodyLines().add(bean+".setId(id);");
         update.getBodyLines().add("BeanValidator.validate("+bean+");");
-        update.getBodyLines().add(""+xService+".updateByPrimaryKeySelective("+bean+");");
+        update.getBodyLines().add(xService+".updateByPrimaryKeySelective("+bean+");");
         update.getBodyLines().add("return new RestResp<>();");
         restClass.getMethods().add(update);
     }
