@@ -6,7 +6,6 @@ import com.hiekn.boot.autoconfigure.web.rest.SwaggerView;
 import io.swagger.jaxrs.config.BeanConfig;
 import io.swagger.jaxrs.listing.ApiListingResource;
 import io.swagger.jaxrs.listing.SwaggerSerializers;
-import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.ServerProperties;
@@ -65,7 +64,7 @@ public class JerseySwaggerAutoConfiguration extends ResourceConfig {
                     packages.add(className);
                 }
             }
-            Set<Class<?>> allClasses = Sets.newHashSet(JacksonFeature.class);//JacksonJsonProvider.class
+            Set<Class<?>> allClasses = Sets.newHashSet();//maybe need register JacksonJsonProvider.class
             for (String pkg : packages) {
                 Set<Class<?>> collect = scanner.findCandidateComponents(pkg).stream()
                         .map(beanDefinition -> ClassUtils.resolveClassName(beanDefinition.getBeanClassName(), this.getClassLoader()))
