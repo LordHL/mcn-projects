@@ -197,8 +197,7 @@ public class GenerateBaseServiceAndImplementPlugin extends PluginAdapter {
 
         add.getBodyLines().add(Bean+" "+bean+" = JsonUtils.fromJson(bean, "+Bean+".class);");
         add.getBodyLines().add("BeanValidator.validate("+bean+");");
-        add.getBodyLines().add(bean+".setCreateTime(McnUtils.getTime());");
-        add.getBodyLines().add(xService+".save("+bean+");");
+        add.getBodyLines().add(xService+".saveSelective("+bean+");");
         add.getBodyLines().add("return new RestResp<>("+bean+");");
         restClass.getMethods().add(add);
 
