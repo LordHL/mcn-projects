@@ -95,7 +95,6 @@ public class GenerateBaseServiceAndImplementPlugin extends PluginAdapter {
                 restClass.addImportedType("com.hiekn.boot.autoconfigure.base.model.result.RestResp");
                 restClass.addImportedType("com.hiekn.boot.autoconfigure.web.util.BeanValidator");
                 restClass.addImportedType("com.hiekn.boot.autoconfigure.base.util.JsonUtils");
-                restClass.addImportedType("com.hiekn.boot.autoconfigure.base.util.McnUtils;");
                 restClass.addImportedType("com.hiekn.boot.autoconfigure.web.model.PageModel");
                 restClass.addImportedType("javax.validation.Valid");
                 restClass.addImportedType(serviceInterfaceFullName);
@@ -197,8 +196,7 @@ public class GenerateBaseServiceAndImplementPlugin extends PluginAdapter {
 
         add.getBodyLines().add(Bean+" "+bean+" = JsonUtils.fromJson(bean, "+Bean+".class);");
         add.getBodyLines().add("BeanValidator.validate("+bean+");");
-        add.getBodyLines().add(bean+".setCreateTime(McnUtils.getTime());");
-        add.getBodyLines().add(xService+".save("+bean+");");
+        add.getBodyLines().add(xService+".saveSelective("+bean+");");
         add.getBodyLines().add("return new RestResp<>("+bean+");");
         restClass.getMethods().add(add);
 
