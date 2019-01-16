@@ -6,6 +6,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Instant;
 import java.util.*;
 
 /**
@@ -16,6 +17,9 @@ import java.util.*;
  */
 public abstract class McnUtils {
 
+    public static Date getTime(){
+        return Date.from(Instant.now());
+    }
 
     /**
      * 判断字符串为null或者为空

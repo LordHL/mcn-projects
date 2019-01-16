@@ -40,11 +40,8 @@ public class McnPropertiesPostProcessor implements EnvironmentPostProcessor,Orde
 
         mapProp.put("mcn.version",this.getClass().getPackage().getImplementationVersion());
         mapProp.put("logging.level."+mapProp.get(APP_BASE_PACKAGE_PROPERTY)+".dao","info");//do not println query statement
-        if(propertySources.contains(StandardEnvironment.SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME)){
-            propertySources.addAfter(StandardEnvironment.SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME,new MapPropertySource("mcn-map",mapProp));
-        }else{
-            propertySources.addLast(new MapPropertySource("mcn-map",mapProp));
-        }
+
+        propertySources.addLast(new MapPropertySource("mcn-map",mapProp));
 
         try {
             //add global unique config file
