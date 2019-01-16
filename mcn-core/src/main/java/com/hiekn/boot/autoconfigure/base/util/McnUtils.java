@@ -212,6 +212,18 @@ public abstract class McnUtils {
         return copyFile(source.getAbsolutePath(),target.getAbsolutePath());
     }
 
+    public static long copyFile(InputStream in,String target) {
+        try {
+            return Files.copy(in,buildPath(target));
+        } catch (IOException e) {
+            throw new BaseException(e);
+        }
+    }
+
+    public static long copyFile(InputStream in,File target) {
+        return copyFile(in,target.getAbsolutePath());
+    }
+
     private static Path buildPath(String filePath){
         return Paths.get(filePath);
     }
