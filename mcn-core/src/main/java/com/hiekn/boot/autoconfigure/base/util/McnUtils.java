@@ -176,6 +176,15 @@ public abstract class McnUtils {
     }
 
     /**
+     * 读取文件一行内容
+     * @param path
+     * @return
+     */
+    public static String readLine(String path){
+        return readAllLine(path).get(0);
+    }
+
+    /**
      * 返回文件所有字节
      * @param filePath 文件路径
      * @return
