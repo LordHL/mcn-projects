@@ -220,6 +220,10 @@ public abstract class McnUtils {
         }
     }
 
+    public static String readLine(String path){
+        return readAllLine(path).get(0);
+    }
+
     public static long copyFile(InputStream in,File target) {
         return copyFile(in,target.getAbsolutePath());
     }
